@@ -1,0 +1,286 @@
+
+var formLokasi_ModulOrg = Ext.create('Ext.form.Panel', {
+    id: 'formLokasi_ModulOrg',
+    width: 450,
+//    height: 300,
+    url: SITE_URL + 'backend/saveform/LokasiOrg/modulorg',
+    bodyStyle: 'padding:5px',
+    labelAlign: 'top',
+    autoScroll: true,
+    fieldDefaults: {
+        msgTarget: 'side',
+        blankText: 'Tidak Boleh Kosong',
+        labelWidth: 160,
+        anchor:'100%'
+//        width: 400
+    },
+    items: [{
+            xtype: 'hiddenfield',
+            name: 'statusformLokasi',
+            id: 'statusformLokasi_ModulOrg'
+        },{
+            xtype: 'hiddenfield',
+            fieldLabel: 'idcompany',
+            name: 'idcompany'
+        }, {
+            xtype: 'hiddenfield',
+            fieldLabel: 'idLokasi',
+            name: 'idLokasi'
+        }, {
+            xtype: 'textfield',
+            fieldLabel: 'Kode Lokasi',
+            allowBlank: false,
+            name: 'kodeLokasi'
+        }, {
+            xtype: 'textfield',
+            fieldLabel: 'Nama Lokasi',
+            allowBlank: false,
+            name: 'Lokasiname'
+        },{
+            xtype: 'numberfield',
+            fieldLabel: 'Urutan',
+            allowBlank: false,
+            name: 'urutan'
+        },{
+            xtype: 'textarea',
+            fieldLabel: 'Deskripsi',
+            // allowBlank: false,
+            name: 'description'
+        },{
+            xtype:'comboxstatus'
+        }],
+    buttons: [{
+            text: 'Batal',
+            handler: function() {
+                var win = Ext.getCmp('windowPopupLokasi_ModulOrg');
+                Ext.getCmp('formLokasi_ModulOrg').getForm().reset();
+                win.hide();
+            }
+        }, {
+            id: 'BtnLokasi_ModulOrgSimpan',
+            text: 'Simpan',
+            handler: function() {
+                var form = this.up('form').getForm();
+                if (form.isValid()) {
+                    form.submit({
+                        success: function(form, action) {
+
+                            Ext.Msg.alert('Success', action.result.message);
+                            Ext.getCmp('formLokasi_ModulOrg').getForm().reset();
+                            Ext.getCmp('windowPopupLokasi_ModulOrg').hide();
+                            storeGridLokasi_ModulOrg.load();
+                        },
+                        failure: function(form, action) {
+                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+//                            storeGridLokasi_ModulOrg.load();
+                        }
+                    });
+                } else {
+                    Ext.Msg.alert("Error!", "Your form is invalid!");
+                }
+            }
+        }]
+});
+var wLokasi_ModulOrg = Ext.create('widget.window', {
+    id: 'windowPopupLokasi_ModulOrg',
+    title: 'Form Produk',
+    header: {
+        titlePosition: 2,
+        titleAlign: 'center'
+    },
+    closable: true,
+    closeAction: 'hide',
+    autoWidth: true,
+    autoHeight: true,
+    layout: 'fit',
+    border: false,
+    items: [formLokasi_ModulOrg]
+});
+
+Ext.define('GridLokasi_ModulOrgModel', {
+    extend: 'Ext.data.Model',
+    fields: ['idLokasi','Lokasiname','description','status','idcompany','kodeLokasi','urutan','userin','datein'],
+    idProperty: 'id'
+});
+
+var storeGridLokasi_ModulOrg = Ext.create('Ext.data.Store', {
+    pageSize: 100,
+    model: 'GridLokasi_ModulOrgModel',
+    //remoteSort: true,
+    // autoload:true,
+    proxy: {
+        type: 'ajax',
+        url: SITE_URL + 'backend/ext_get_all/Lokasi/natadaya',
+        actionMethods: 'POST',
+        reader: {
+            root: 'rows',
+            totalProperty: 'results'
+        },
+        //simpleSortMode: true
+    },
+    sorters: [{
+            property: 'menu_name',
+            direction: 'DESC'
+        }]
+});
+Ext.define('MY.searchGridLokasi_ModulOrg', {
+    extend: 'Ext.ux.form.SearchField',
+    alias: 'widget.searchGridLokasi_ModulOrg',
+    store: storeGridLokasi_ModulOrg,
+    width: 180
+});
+var smGridLokasi_ModulOrg = Ext.create('Ext.selection.CheckboxModel', {
+    allowDeselect: true,
+    mode: 'SINGLE',
+    listeners: {
+        deselect: function(model, record, index) {
+            var selectedLen = smGridLokasi_ModulOrg.getSelection().length;
+            if (selectedLen == 0) {
+                console.log(selectedLen);
+                Ext.getCmp('btnDeleteLokasi_ModulOrg').disable();
+            }
+        },
+        select: function(model, record, index) {
+            Ext.getCmp('btnDeleteLokasi_ModulOrg').enable();
+        }
+    }
+});
+Ext.define('GridLokasi_ModulOrg', {
+    // renderTo:'mytabpanel',
+//    multiSelect: true,
+//    selModel: smGridLokasi_ModulOrg,
+    title: 'Lokasi Jabatan',
+    // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
+    itemId: 'GridLokasi_ModulOrgID',
+    id: 'GridLokasi_ModulOrgID',
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.GridLokasi_ModulOrg',
+    store: storeGridLokasi_ModulOrg,
+    loadMask: true,
+    columns: [
+        {header: 'idLokasi', dataIndex: 'idLokasi', hidden: true},
+        {header: 'Kode Lokasi', dataIndex: 'kodeLokasi', minWidth: 100},
+        {header: 'Nama Lokasi', dataIndex: 'Lokasiname', minWidth: 200,flex:1},
+        {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
+        {header: 'Urutan', dataIndex: 'urutan', minWidth: 150},
+        {header: 'Status', dataIndex: 'status', minWidth: 150},
+        {header: 'user in', dataIndex: 'userin', minWidth: 150},
+        {header: 'date in', dataIndex: 'datein', minWidth: 150}
+    ]
+    , dockedItems: [
+        {
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [
+                {
+                    text: 'Tambah',
+                    iconCls: 'add-icon',
+                    handler: function() {
+                        wLokasi_ModulOrg.show();
+                        Ext.getCmp('statusformLokasi_ModulOrg').setValue('input');
+                    }
+                },
+                {
+                    text: 'Ubah',
+                    iconCls: 'edit-icon',
+                    handler: function() {
+                        var grid = Ext.ComponentQuery.query('GridLokasi_ModulOrg')[0];
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0)
+                        {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
+                            var formLokasi_ModulOrg = Ext.getCmp('formLokasi_ModulOrg');
+                            formLokasi_ModulOrg.getForm().load({
+                                url: SITE_URL + 'backend/loadFormData/Lokasi/1/natadaya',
+                                params: {
+                                    extraparams: 'a.idLokasi:' + selectedRecord.data.idLokasi
+                                },
+                                success: function(form, action) {
+                                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+                                }
+                            })
+
+                            wLokasi_ModulOrg.show();
+                            Ext.getCmp('statusformLokasi_ModulOrg').setValue('edit');
+                        }
+
+                    }
+                }, {
+                    id: 'btnDeleteLokasi_ModulOrg',
+                    text: 'Hapus',
+                    iconCls: 'delete-icon',
+                    handler: function() {
+                        Ext.Msg.show({
+                            title: 'Confirm',
+                            msg: 'Delete Selected ?',
+                            buttons: Ext.Msg.YESNO,
+                            fn: function(btn) {
+                                if (btn == 'yes') {
+                                    var grid = Ext.ComponentQuery.query('GridLokasi_ModulOrg')[0];
+                                    var sm = grid.getSelectionModel();
+                                    selected = [];
+                                    Ext.each(sm.getSelection(), function(item) {
+                                        selected.push(item.data[Object.keys(item.data)[0]]);
+                                    });
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'backend/ext_delete/Lokasi/natadaya/hidden',
+                                        method: 'POST',
+                                        params: {postdata: Ext.encode(selected)}
+                                    });
+                                    storeGridLokasi_ModulOrg.remove(sm.getSelection());
+                                    sm.select(0);
+                                }
+                            }
+                        });
+                    },
+//                    disabled: true
+                }, '->',
+                'Pencarian: ', ' ',
+                {
+                    xtype: 'searchGridLokasi_ModulOrg',
+                    text: 'Left Button'
+                }
+
+            ]
+        }, {
+            xtype: 'pagingtoolbar',
+            store: storeGridLokasi_ModulOrg, // same store GridPanel is using
+            dock: 'bottom',
+            displayInfo: true
+                    // pageSize:20
+        }
+    ], listeners: {
+        render: {
+            scope: this,
+            fn: function(grid) {
+                storeGridLokasi_ModulOrg.load();
+            }
+        },
+        itemdblclick: function(dv, record, item, index, e) {
+
+            // var formAgama = Ext.create('formAgama');
+            var formLokasi_ModulOrg = Ext.getCmp('formLokasi_ModulOrg');
+            wLokasi_ModulOrg.show();
+            formLokasi_ModulOrg.getForm().load({
+                url: SITE_URL + 'backend/loadFormData/Lokasi/1/natadaya',
+                params: {
+                    extraparams: 'a.idLokasi:' + record.data.idLokasi
+                },
+                success: function(form, action) {
+                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                },
+                failure: function(form, action) {
+                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+                }
+            })
+
+            Ext.getCmp('statusformLokasi_ModulOrg').setValue('edit');
+        }
+    }
+});
