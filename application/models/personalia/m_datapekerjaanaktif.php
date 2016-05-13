@@ -11,7 +11,7 @@ class m_datapekerjaanaktif extends CI_Model {
     }
 
     function searchField() {
-        $field = "namalengkap";
+        $field = "a.namalengkap";
         return explode(",", $field);
     }
 

@@ -946,7 +946,7 @@ class kompensasi extends MY_Controller {
 
                     //UPLOAD
                     $qutt_upload = $this->db->query("select masukpajak,nominal,fungsipajak,jenisupah
-                            from v_upahtt a  WHERE TRUE AND ('$startdate' <= startdate and enddate >= '$enddate') 
+                            from v_upahtt a  WHERE TRUE AND ('$startdate' >= startdate and enddate <= '$enddate') 
                             and idpelamar =".$rpeg->idpelamar."");
 
                     if($rpeg->idpelamar==205)
@@ -1008,14 +1008,13 @@ class kompensasi extends MY_Controller {
                 // echo 'upload '.$rpeg->idpelamar.' ';
                  //UPLOAD
                 $qutt_upload = $this->db->query("select masukpajak,nominal,fungsipajak,jenisupah
-                            from v_upahtt a  WHERE TRUE AND ('$startdate' <= startdate and enddate >= '$enddate') and idpelamar =".$rpeg->idpelamar."");
+                            from v_upahtt a  WHERE TRUE AND ('$startdate' >= startdate and enddate <= '$enddate') and idpelamar =".$rpeg->idpelamar."");
                 if($qutt_upload->num_rows()>0)
                 {
                     foreach ($qutt_upload->result() as $rUTT_upload) {
                             $nilaiV = $rUTT_upload->nominal;
 
                             $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
-                            // echo $nilaiV;
 
                             // $data[$i]['upahtidaktetap']['item'][] = array(
                             //                                     // 'namakomponen'=>$rUTT->namakomponen,
@@ -1045,7 +1044,7 @@ class kompensasi extends MY_Controller {
 
                             $totalUTT+=$nilai;
 
-
+// echo $nilai.' ';
                             // if($commit=='true')
                             // {
                             //     $dupahhistory = array(
@@ -1061,7 +1060,6 @@ class kompensasi extends MY_Controller {
                 } else {
                      $totalUTT = 0;
                 }
-               
             }
             // echo $totalUTT;
             $data[$i]['totalUTT'] = $totalUTT;
@@ -4943,17 +4941,17 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
                     if($d['0']!='')
                     {
                          // $qnik = $this->db->get_where('calonpelamar',array('nik'=>$d[1]))->row();
-                         $sd = explode('.', $d[2]);
-                         $nd = explode('.', $d[3]);
+                         $sd = explode('.', $d[4]);
+                         $nd = explode('.', $d[5]);
 
                          $data = array(
                                 "idpelamar" => $idpelamar,
                                 "startdate" => $sd[2].'-'.$sd[1].'-'.$sd[0],
                                 "enddate" => $nd[2].'-'.$nd[1].'-'.$nd[0],
                                 // "jenisupah" => $d[2],
-                                "masukpajak" => $d[4],
-                                "fungsipajak" => $d[5],
-                                "nominal" => str_replace('.', '', $d[6]),
+                                "masukpajak" => $d[6],
+                                "fungsipajak" => $d[7],
+                                "nominal" => str_replace('.', '', $d[8]),
                                 "datein" => $this->tanggalWaktu(),
                                 "userin" => $this->session->userdata('username')
                             );
@@ -5031,27 +5029,34 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
 
          ///////////////////////////////////////
-        // if($d['2']=='')
+        if($d['2']=='')
+        {
+            $status = false;
+            $message = 'Error data NO ' . $d['0'] . ': Kode Komponen Upah tidak boleh kosong';
+        }
+
+         ///////////////////////////////////////
+        // if($d['3']=='')
         // {
         //     $status = false;
-        //     $message = 'Error data NO ' . $d['0'] . ': Kode Jenis Upah tidak boleh kosong';
+        //     $message = 'Error data NO ' . $d['0'] . ': Kode Jenis Upah tidak boleh kosong <br><br>Petunjuk: 1. Tahunan 2. Bulanan';
         // } 
         // else {
-        //     $c = intval($d['2']);
+        //     $c = intval($d['3']);
         //    if($c!=1 && $c!=2)
         //    {
         //         $status = false;
-        //         $message = 'Error data NO ' . $d['0'] . ': Kode Jenis Upah salah '.$c;
+        //         $message = 'Error data NO ' . $d['0'] . ': Kode Jenis Upah salah ';
         //    }
         // }
 
         /////////////////////////////////////////
-        if($d['2']=='')
+        if($d['4']=='')
         {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Tanggal Mulai tidak boleh kosong';
         } else {
-            $valid = validasitgl($d['0'],'Tanggal Mulai',$d['2']);
+            $valid = validasitgl($d['0'],'Tanggal Mulai',$d['4']);
             if (!$valid['status']) {
                 $status = false;
                 $message = $valid['message'];
@@ -5059,25 +5064,25 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
 
         /////////////////////////////////////////
-        if($d['3']=='')
+        if($d['5']=='')
         {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Tanggal Akhir tidak boleh kosong';
         } else {
-            $valid = validasitgl($d['0'],'Tanggal Mulai',$d['3']);
+            $valid = validasitgl($d['0'],'Tanggal Mulai',$d['5']);
             if (!$valid['status']) {
                 $status = false;
-                $message = $valid['message']." ".$d['3'];
+                $message = $valid['message']." ".$d['5'];
             }
         }
 
         /////////////////////////////////////////
-        if($d['4']=='')
+        if($d['6']=='')
         {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Kolom Masuk Pajak tidak boleh kosong';
         } else {
-            $v = strtoupper($d['4']);
+            $v = strtoupper($d['6']);
             if($v!='YA' && $v!='TIDAK')
             {
                 $status = false;
@@ -5087,21 +5092,21 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
 
         /////////////////////////////////////////
-        if($d['5']=='')
+        if($d['7']=='')
         {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Kode Fungsi Pajak tidak boleh kosong';
         } else {
-            $v = intval($d['5']);
+            $v = intval($d['7']);
             if($v!=1 && $v!=2 && $v!=3)
             {
                 $status = false;
-                $message = 'Error data NO ' . $d['0'] . ': Kode Fungsi Pajak Salah';
+                $message = 'Error data NO ' . $d['0'] . ': Kode Fungsi Pajak Salah<br><br>Petunjuk:<br>1.Penambah<br>2.Pengurang<br>3.Netral';
             }
         }
 
         /////////////////////////////////////////
-        if($d['6']=='')
+        if($d['8']=='')
         {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Nominal tidak boleh kosong';
@@ -5112,7 +5117,12 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
 
    function hapus_upload_upahtt()
    {
-    echo $this->input->post('postdata');
+        $records = json_decode($this->input->post('postdata'));
+        foreach ($records as $id) {
+            $this->db->where('upload_upahtt_id',$id);
+            $this->db->delete('upload_upahtt');
+        }
+    // echo $this->input->post('postdata');
    }
 
 
