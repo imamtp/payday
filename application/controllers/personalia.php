@@ -249,10 +249,15 @@ class personalia extends MY_Controller {
                           // 1. Perpanjang Kontrak, atau 
                           // 2. Perubahan Status (ke tetap), atau 
                           // 3. Terminasi 
-                          if($idpergerakan!=129 || $idpergerakan!=58 || $idpergerakan!=128 || $idpergerakan!=125)
+                          // 4. Demosi -> 15-5-2016
+                          $idpergerakan = intval($idpergerakan);
+                          if($idpergerakan!==129 && $idpergerakan!==58)
                           {
-                             echo json_encode(array('success' => false, 'message' => 'Pergerakan personil '.$this->input->post('namalengkap').' hanya bisa PERPANJANGAN KONTRAK, PERUBAHAN STATUS dan TERMINASI'));
-                             exit;
+                             if($idpergerakan!==128 && $idpergerakan!==125)
+                            {
+                               echo json_encode(array('success' => false, 'message' => $idpergerakan.' Pergerakan personil '.$this->input->post('namalengkap').' hanya bisa PERPANJANGAN KONTRAK, PERUBAHAN STATUS dan TERMINASI'));
+                               exit;
+                            }
                           }
                         }
 
