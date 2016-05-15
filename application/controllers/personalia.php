@@ -462,6 +462,12 @@ class personalia extends MY_Controller {
                     //       }
                     //   }
                 } //END   if($idpergerakan!=131)
+                  else if($idpergerakan==131)
+                  {
+                    //penempatan baru
+                    $this->db->where('idpelamar',$idpelamar);
+                    $this->db->update('calonpelamar',array('statuscalon'=>$statuspergerakan));
+                  }
         }
 
         $dt = new DateTime();
@@ -616,7 +622,15 @@ class personalia extends MY_Controller {
             } else {
                 $dpenyesuaian['tipe'] = 'pergerakan';
             }
-            $this->db->insert('penyesuaian',$dpenyesuaian);
+
+            $qcek = $this->db->get_where('penyesuaian',array(
+              "idpelamar" => $idpelamar,
+              "idpergerakanpersonil" => $idpergerakanpersonil,
+              "idpekerjaan" => $idpekerjaanPenyesuaian));
+            if($qcek->num_rows()<=0)
+            {
+              $this->db->insert('penyesuaian',$dpenyesuaian);
+            }
         }
 
         // echo 'asdsad';
@@ -661,6 +675,14 @@ class personalia extends MY_Controller {
         $this->db->trans_start();
 
         $statusformDataKaryawan = $this->input->post('statusformDataKaryawan');
+
+        if($statusformDataKaryawan=='')
+        {
+          if($this->input->post('idpelamar')=='')
+          {
+            $statusformDataKaryawan == 'input';
+          }
+        }
 
         if($statusformDataKaryawan=='input')
         {
@@ -765,6 +787,7 @@ class personalia extends MY_Controller {
             $this->db->insert('pelamar',$dpelamar);
 
             $this->db->insert('calonpelamar',$dcalon);
+            // echo $this->db->last_query();
         } else {
             $dpelamar['usermod'] = $this->session->userdata('username');
             $dpelamar['datemod'] = date('Y-m-d H:m:s');

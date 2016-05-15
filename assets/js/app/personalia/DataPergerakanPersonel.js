@@ -335,6 +335,8 @@ Ext.define('GridDataPergerakanPersonel', {
                                     {
                                         Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                                     } else {
+                                        Ext.getCmp('tglakhirkekaryaan_fPergerakanBaru').setValue(null);
+                                        
                                         //Ext.getCmp('kodejenjangmaster').setReadOnly(false);
                                         var formPergerakanPersonel = Ext.getCmp('formPergerakanPersonel');
                                         formPergerakanPersonel.getForm().load({

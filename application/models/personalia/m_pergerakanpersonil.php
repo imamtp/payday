@@ -42,8 +42,7 @@ rr.idpelamaratasan as idpelamaratasan_from,ww.namalengkap as namaatasan_from,rr.
                     join company c ON b.idcompany = c.idcompany
                     LEFT join pergerakan m ON a.idpergerakan = m.idpergerakan
                      LEFT join (select nik,idpelamar 
-									from calonpelamar
-										where statuscalon='Disetujui') n ON a.idpelamar = n.idpelamar
+									from calonpelamar) n ON a.idpelamar = n.idpelamar
                     LEFT join pekerjaan r ON a.idpergerakanpersonil = r.idpergerakanpersonil
                     LEFT join strukturjabatan o ON r.idstrukturjabatan = o.idstrukturjabatan
                     LEFT join jabatan p ON o.idjabatan = p.idjabatan
