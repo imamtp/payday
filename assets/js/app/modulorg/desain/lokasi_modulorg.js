@@ -108,7 +108,7 @@ var wLokasi_ModulOrg = Ext.create('widget.window', {
 
 Ext.define('GridLokasi_ModulOrgModel', {
     extend: 'Ext.data.Model',
-    fields: ['idlokasiorg','kodebudgelokasi','namalokasi','idcompany','idtingkatlokasi','startdate','enddate','description','status','userin','datein','tingkatlokasi','companyname'],
+    fields: ['idlokasiorg','kodebudgelokasi','companycode','namalokasi','idcompany','idtingkatlokasi','startdate','enddate','description','status','userin','datein','tingkatlokasi','companyname'],
     idProperty: 'id'
 });
 
@@ -169,6 +169,7 @@ Ext.define('GridLokasi_ModulOrg', {
     columns: [
         {header: 'idlokasiorg', dataIndex: 'idlokasiorg', hidden: true},
         {header: 'Perusahaan', dataIndex: 'companyname', minWidth: 150},
+        {header: 'Kode Perusahaan', dataIndex: 'companycode', minWidth: 150},
         {header: 'Kode budget lokasi', dataIndex: 'kodebudgelokasi', minWidth: 150},
         {header: 'Nama Lokasi', dataIndex: 'namalokasi', minWidth: 200,flex:1},
         {header: 'Tingkat lokasi', dataIndex: 'tingkatlokasi', minWidth: 150},

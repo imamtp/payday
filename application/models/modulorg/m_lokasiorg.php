@@ -16,7 +16,7 @@ class m_lokasiorg extends CI_Model {
     }
 
     function selectField() {
-        return "idlokasiorg,kodebudgelokasi,namalokasi,a.idtingkatlokasi,a.idcompany,a.startdate,a.enddate,a.description,a.status,a.userin,a.datein,tingkatlokasi,c.companyname";
+        return "idlokasiorg,kodebudgelokasi,namalokasi,a.idtingkatlokasi,a.idcompany,companycode,a.startdate,a.enddate,a.description,a.status,a.userin,a.datein,tingkatlokasi,c.companyname";
     }
     
     function fieldCek()
