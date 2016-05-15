@@ -361,6 +361,8 @@ class ptk extends MY_Controller {
                     $d = $val[$start];
                     if($d['0']!='')
                     {
+                        // $qcmp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
+                        $this->db->select('idcompany,parent');
                         $qcmp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
 
                         // $qjab = $this->db->get_where('jabatan', array('kodejabatan' => $d['4'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')))->row();
@@ -368,7 +370,7 @@ class ptk extends MY_Controller {
                         $qjab = $this->db->query("select a.idjabatan,a.idorganisasi,a.idjabatanatasan
                                                     from strukturjabatan a
                                                     join jabatan b ON a.idjabatan = b.idjabatan
-                                                    where b.kodejabatan='".$d['4']."' and b.idcompany = ".$this->session->userdata('idcompany')." and b.display is null")->row();
+                                                    where b.kodejabatan='".$d['4']."' and (b.idcompany = ".$qcmp->idcompany." OR b.idcompany = ".$qcmp->parent.") and b.display is null")->row();
 
                         $qlok = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')))->row();
 
@@ -430,19 +432,7 @@ class ptk extends MY_Controller {
       
         $message = 'valid';
 
-        if($d['1']=='')
-        {
-            $status = false;
-            $message = 'Error data NO ' . $d['0'] . ': Kode Perusahaan tidak boleh kosong';
-        }  else {
-            $code = $d['1'];
-            $qemp = $this->db->get_where('company', array('companycode' => "".$code."",'display'=>null));
-            if($qemp->num_rows()<=0)
-            {
-                $status = false;
-                $message = 'Error data NO ' . $d['0'] . ': Kode Perusahaan tidak ada di dalam database ';
-            } 
-        }
+
         ///////////////////////////////////////
         if($d['2']=='')
         {
@@ -471,7 +461,10 @@ class ptk extends MY_Controller {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Kode Jabatan tidak boleh kosong';
         } else {
-             $q = $this->db->get_where('jabatan', array('kodejabatan' => $d['4'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')));
+            $this->db->select('idcompany');
+            $qemp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
+
+             $q = $this->db->get_where('jabatan', array('kodejabatan' => $d['4'],'display'=>null,'idcompany'=>$qemp->idcompany));
             if ($q->num_rows() > 0) {
             } else {
                 $status = false;
@@ -485,7 +478,11 @@ class ptk extends MY_Controller {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Kode Lokasi tidak boleh kosong';
         } else {
-             $q = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')));
+            $this->db->select('idcompany,parent');
+            $qemp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
+
+             // $q = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$qemp->idcompany));
+            $q = $this->db->query("SELECT kodebudgelokasi FROM lokasi_org WHERE kodebudgelokasi = '".$d['5']."' AND display IS NULL AND (idcompany = $qemp->idcompany OR idcompany = $qemp->parent)");
             if ($q->num_rows() > 0) {
             } else {
                 $status = false;
@@ -506,6 +503,24 @@ class ptk extends MY_Controller {
                $status = false;
                 $message = 'Error data NO ' . $d['0'] . ': Jumlah kebutuhan tenaga kerja tidak boleh ada tanda comma(,)';
             }
+        }
+
+        ///////////
+
+         if($d['1']=='')
+        {
+            $status = false;
+            $message = 'Error data NO ' . $d['0'] . ': Kode Perusahaan tidak boleh kosong';
+        }  else {
+            $code = $d['1'];
+            $qemp = $this->db->get_where('company', array('companycode' => "".$code."",'display'=>null));
+            if($qemp->num_rows()<=0)
+            {
+                $remp = $qemp->row();
+                $idcompany = $remp->idcompany;
+                $status = false;
+                $message = 'Error data NO ' . $d['0'] . ': Kode Perusahaan tidak ada di dalam database ';
+            } 
         }
        
         return array('status' => $status, 'message' => $message);
