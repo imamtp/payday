@@ -11,7 +11,7 @@ var storeGridNamaAtasanPergerakanPersonilList = Ext.create('Ext.data.Store', {
     // autoload:true,
     proxy: {
         type: 'ajax',
-        url: SITE_URL + 'backend/ext_get_all/personil/personalia',
+        url: SITE_URL + 'backend/ext_get_all/VDataKaryawangrid/personalia',
         actionMethods: 'POST',
         reader: {
             root: 'rows',
@@ -24,6 +24,8 @@ var storeGridNamaAtasanPergerakanPersonilList = Ext.create('Ext.data.Store', {
             direction: 'DESC'
         }]
 });
+
+
 
 // storeGridNamaAtasanPergerakanPersonilList.on('beforeload',function(store, operation,eOpts){
 //         operation.params={

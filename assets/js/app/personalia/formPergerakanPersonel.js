@@ -666,6 +666,7 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                         wGridNamaAtasanPergerakanPersonilListPopup.show();
                         storeGridNamaAtasanPergerakanPersonilList.on('beforeload',function(store, operation,eOpts){
                             operation.params={
+                                         'aktif': 'true',
                                         // 'extraparams': 'k.statuscalon:Disetujui',
                                         'notidpelamar': Ext.getCmp('idpelamar_fPergerakanP_from').getValue(),
                                       };

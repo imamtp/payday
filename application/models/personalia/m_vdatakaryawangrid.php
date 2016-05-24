@@ -64,6 +64,14 @@ class m_vdatakaryawangrid extends CI_Model {
         $aktif = $this->input->post('aktif');
         $wer = $this->m_data->whereCompany('a',false);
 
+         if($this->input->post('notidpelamar')!='')
+         {
+            //cari atasan
+            $wer .= " AND a.idpelamar!=".$this->input->post('notidpelamar');
+         } else {
+            // $wer = null;
+         }
+
         if($this->input->post('tglmasuk1')!=null && $this->input->post('tglmasuk2')!=null)
         {
             $tglmasuk1 = backdate2_reverse($this->input->post('tglmasuk1'));

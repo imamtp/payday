@@ -344,6 +344,7 @@ class m_formulalembur extends CI_Model {
       $harikerja=0;
       $harilibur=0;
       $hariraya=0;
+      $upahlembur=0;
       foreach ($q->result() as $r) {
         $idwaktulembur = $r->idwaktulembur;
 
@@ -711,8 +712,8 @@ class m_formulalembur extends CI_Model {
           'harikerja'=>$harikerja,
           'harilibur'=>$harilibur,
           'hariraya'=>$hariraya,
-          'kenapajak'=>$formula->kenapajak,
-          'fungsipajak'=>$formula->fungsipajak
+          'kenapajak'=>isset($formula->kenapajak) ? $formula->kenapajak : null,
+          'fungsipajak'=>isset($formula->fungsipajak) ? $formula->fungsipajak : null
         );
     }
 
