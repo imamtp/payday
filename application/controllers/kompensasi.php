@@ -1014,7 +1014,8 @@ class kompensasi extends MY_Controller {
                     foreach ($qutt_upload->result() as $rUTT_upload) {
                             $nilaiV = $rUTT_upload->nominal;
 
-                            $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
+                            // $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
+                            $nilai = $nilaiV;
 
                             // $data[$i]['upahtidaktetap']['item'][] = array(
                             //                                     // 'namakomponen'=>$rUTT->namakomponen,
