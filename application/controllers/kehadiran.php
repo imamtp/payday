@@ -290,10 +290,15 @@ class kehadiran extends MY_Controller {
 		{
 			// echo 'param idcompany:'.$idcompany.' idjabatan:'.$idjabatan.' idorganisasi:'.$idorganisasi.' startdate:'.$startdate.' enddate:'.$enddate.' eksport:'.$eksport.' stream:'.$stream.' idpelamar:'.$idpelamar;
 			
-			if($stream==true)
+			if($stream==true && $stream!='false')
 			{
 				$idjabatan=null;
 				$idorganisasi=null;
+			}
+
+			if($idpelamar=='null')
+			{
+				$idpelamar = null;
 			}
 			
 			 if($eksport==null && $stream==null)
@@ -336,7 +341,6 @@ class kehadiran extends MY_Controller {
 			// 	from v_detailkaryawan where display is null 
 			// 	and idcompany=".$this->session->userdata('idcompany')."");
 	        $queryKaryawan = $this->db->query($query);
-// echo $this->db->last_query();
 			$arr = array();
         	foreach ($queryKaryawan->result() as $obj) {
         		$idpelamar = $obj->idpelamar;
@@ -463,20 +467,23 @@ class kehadiran extends MY_Controller {
 
         		$arr[] = $obj;
         	}
+        	// echo $stream;
 
-			if($stream==true)
+			if($stream==true && $stream!='null')
 			{
 				return $arr;
 				//print_r($arr);
-				exit;
+				// exit;
 			}
-			
-        	if($eksport==null)
+
+			if($eksport==null)
         	{
         		$results = $queryKaryawan->num_rows();
 	        	echo '{success:true,numrow:' . $queryKaryawan->num_rows() . ',results:' . $results .',rows:' . json_encode($arr) . '}';
 	        } else {
 	        	  //cetak ke excel
+	        	// print_r($arr);
+	        	// $this->load->view('tplcetak/tpl_rekapkehadiran', array('data'=>$arr,'fontsize'=>9,'option'=>'false'));
 	            $html = $this->load->view('tplcetak/tpl_rekapkehadiran', array('data'=>$arr,'fontsize'=>9),true);
 	            $filename = "data_rekap_kehadiran.xls";
 	            header("Content-Type:   application/vnd.ms-excel; charset=utf-8");

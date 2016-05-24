@@ -458,7 +458,7 @@ Ext.define('GridRekapKehadiran', {
                         click: function(component) {
                             window.location = SITE_URL+"kehadiran/rekap/" + Ext.getCmp('companyname_filterRekapKehadiran').getValue()+'/'+
                                        Ext.getCmp('namajabatan_filterRekapKehadiran').getValue()+'/'+Ext.getCmp('namaorg_filterRekapKehadiran').getValue() + '/'+ 
-                                       Ext.getCmp('startdate_rekapkehadiran').getSubmitValue() + '/' + Ext.getCmp('enddate_rekapkehadiran').getSubmitValue();
+                                       Ext.getCmp('startdate_rekapkehadiran').getSubmitValue() + '/' + Ext.getCmp('enddate_rekapkehadiran').getSubmitValue()+'/true/null/null';
                         }
                     }
                 },{
