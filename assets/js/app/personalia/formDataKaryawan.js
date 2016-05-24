@@ -84,7 +84,11 @@ Ext.define('formDataKaryawan', {
                         },
                         success: function(form, action) {
                             Ext.Msg.alert('Success', action.result.message);
-                            funcTabDataKaryawan(false);
+                            
+                            var WindowKaryawan = Ext.getCmp('WindowKaryawan');
+                            // Ext.getCmp('formDataKaryawan').getForm().reset();
+                            WindowKaryawan.hide();
+                            // funcTabDataKaryawan(false);
                             // Ext.getCmp('formDataKaryawan').getForm().reset();
                             // Ext.getCmp('windowPopupDataKaryawan').hide();
                             // storeGridDataKaryawan.load();

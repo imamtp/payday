@@ -312,7 +312,7 @@ Ext.define('GridRekapKehadiran', {
                         labelWidth: 70,
                         listeners: {
                         select: function() {
-                                storeGridRekapKehadiran.load();
+                                // storeGridRekapKehadiran.load();
                                 // console.log(this.value)
                             }
                         }
@@ -417,7 +417,7 @@ Ext.define('GridRekapKehadiran', {
                         'change': function(field, newValue, oldValue) {
                             if (Ext.getCmp('startdate_rekapkehadiran').getValue() != null && Ext.getCmp('enddate_rekapkehadiran').getValue() != null)
                             {
-                               storeGridRekapKehadiran.load()
+                               // storeGridRekapKehadiran.load()
                             }
                         }
                     }
@@ -434,7 +434,7 @@ Ext.define('GridRekapKehadiran', {
                         'change': function(field, newValue, oldValue) {
                             if (Ext.getCmp('startdate_rekapkehadiran').getValue() != null && Ext.getCmp('enddate_rekapkehadiran').getValue() != null)
                             {
-                               storeGridRekapKehadiran.load()
+                               // storeGridRekapKehadiran.load()
                             }
                         }
                     }
