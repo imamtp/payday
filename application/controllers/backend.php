@@ -727,6 +727,8 @@ class Backend extends MY_Controller {
         $this->db->limit($start, $limit);
         $query_page = $this->db->query($sql);
         // echo $sql;
+        // exit;
+
         $arr = array();
         $no = 1;
         foreach ($query_page->result() as $obj) {
@@ -880,7 +882,6 @@ class Backend extends MY_Controller {
             // {
             //     $obj->enddate = backdate2($obj->enddate);
             // }
-
             $arr[] = $obj;
         }
 

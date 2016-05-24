@@ -225,7 +225,7 @@ class m_pekerjaan extends CI_Model {
                 $data['kodeorgatasan']=$d['kodeorg'];
                 $data['namaorgatasan']=$d['namaorg'];
                 $data['kekaryaannameatasan']=$d['kekaryaanname'];
-                $data['namaatasan']=$d['namaatasan'];
+                // $data['namaatasan']=$d['namaatasan'];
                 $data['levelnameindividuatasan']=$d['levelnameindividu'];
                 $data['levelnamejabatanatasan']=$d['levelnamejabatan'];
             }
@@ -247,8 +247,6 @@ class m_pekerjaan extends CI_Model {
                 'levelnamejabatan'=>null
             );
         }
-
-
         return $data;
     }
 
