@@ -139,7 +139,7 @@ Ext.define('GridAgama_Natadaya', {
     // renderTo:'mytabpanel',
 //    multiSelect: true,
 //    selModel: smGridAgama_Natadaya,
-    title: 'Data Agama',
+    title: 'Data Agamax',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
     itemId: 'GridAgama_NatadayaID',
     id: 'GridAgama_NatadayaID',
