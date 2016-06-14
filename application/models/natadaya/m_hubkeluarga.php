@@ -16,7 +16,7 @@ class m_hubkeluarga extends CI_Model {
     }
 
     function selectField() {
-        return "idhubkeluarga,namahubkeluarga,status,a.idcompany,kodehubkeluarga,a.userin,a.datein,c.companyname";
+        return "idhubkeluarga,namahubkeluarga,a.status,a.idcompany,kodehubkeluarga,a.userin,a.datein,c.companyname";
     }
     
     function fieldCek()

@@ -1155,18 +1155,18 @@ class kompensasi extends MY_Controller {
             if($d['num']!=0)
             {
                 // print_r($d);
-                $data[$i]['lembur']['jumlahjam'] = isset($d['data']['jumlahjam']) ? $d['data']['jumlahjam'] : 0;
-                $data[$i]['lembur']['jumlahhari'] = isset($d['data']['jumlahhari']) ? $d['data']['jumlahhari'] : 0;          
-                $data[$i]['lembur']['upahlemburPajak'] = isset($d['data']['upahlemburPajak']) ? $d['data']['upahlemburPajak'] : 0;
-                $data[$i]['lembur']['upahlemburNoPajak'] = isset($d['data']['upahlemburNoPajak']) ? $d['data']['upahlemburNoPajak'] : 0;
-                $data[$i]['lembur']['harikerja'] = isset($d['data']['harikerja']) ? $d['data']['harikerja'] : 0;
-                $data[$i]['lembur']['harilibur'] = isset($d['data']['harilibur']) ? $d['data']['harilibur'] : 0;
-                $data[$i]['lembur']['hariraya'] = isset($d['data']['hariraya']) ? $d['data']['hariraya'] : 0;
+                $data[$i]['lembur']['jumlahjam'] = isset($d['data'][0]['jumlahjam']) ? $d['data'][0]['jumlahjam'] : 0;
+                $data[$i]['lembur']['jumlahhari'] = isset($d['data'][0]['jumlahhari']) ? $d['data'][0]['jumlahhari'] : 0;          
+                $data[$i]['lembur']['upahlemburPajak'] = isset($d['data'][0]['upahlemburPajak']) ? $d['data'][0]['upahlemburPajak'] : 0;
+                $data[$i]['lembur']['upahlemburNoPajak'] = isset($d['data'][0]['upahlemburNoPajak']) ? $d['data'][0]['upahlemburNoPajak'] : 0;
+                $data[$i]['lembur']['harikerja'] = isset($d['data'][0]['harikerja']) ? $d['data'][0]['harikerja'] : 0;
+                $data[$i]['lembur']['harilibur'] = isset($d['data'][0]['harilibur']) ? $d['data'][0]['harilibur'] : 0;
+                $data[$i]['lembur']['hariraya'] = isset($d['data'][0]['hariraya']) ? $d['data'][0]['hariraya'] : 0;
 
-                $data[$i]['upahlemburPajak'] = isset($d['data']['upahlemburPajak']) ? $d['data']['upahlemburPajak'] : 0;
-                $data[$i]['upahlemburNoPajak'] = isset($d['data']['upahlemburNoPajak']) ? $d['data']['upahlemburNoPajak'] : 0;
-                $data[$i]['upahlemburTambahPajak'] = isset($d['data']['upahlemburTambahPajak']) ? $d['data']['upahlemburTambahPajak'] : 0;
-                $data[$i]['upahlemburKurangPajak'] = isset($d['data']['upahlemburKurangPajak']) ? $d['data']['upahlemburKurangPajak'] : 0;
+                $data[$i]['upahlemburPajak'] = isset($d['data'][0]['upahlemburPajak']) ? $d['data'][0]['upahlemburPajak'] : 0;
+                $data[$i]['upahlemburNoPajak'] = isset($d['data'][0]['upahlemburNoPajak']) ? $d['data'][0]['upahlemburNoPajak'] : 0;
+                $data[$i]['upahlemburTambahPajak'] = isset($d['data'][0]['upahlemburTambahPajak']) ? $d['data'][0]['upahlemburTambahPajak'] : 0;
+                $data[$i]['upahlemburKurangPajak'] = isset($d['data'][0]['upahlemburKurangPajak']) ? $d['data'][0]['upahlemburKurangPajak'] : 0;
                 // echo $penghasilanbruto.' += '.$data[$i]['lembur']['upahlemburPajak'].'<br>';
                 $penghasilanbruto+= $data[$i]['upahlemburTambahPajak'];
                 // $penghasilannet+= $data[$i]['lembur']['upahlemburNoPajak'];
@@ -1177,7 +1177,9 @@ class kompensasi extends MY_Controller {
                 $data[$i]['upahlemburTambahPajak'] = 0;
                 $data[$i]['upahlemburKurangPajak'] = 0;
             }
-          
+
+
+
             $obj->upahlemburPajak = $data[$i]['upahlemburPajak'];
             $obj->upahlemburNoPajak = $data[$i]['upahlemburNoPajak'];
             $obj->totallembur =  $obj->upahlemburPajak+$obj->upahlemburNoPajak;
@@ -1185,6 +1187,7 @@ class kompensasi extends MY_Controller {
             $penghasilanTT+=$obj->totallembur;
             
 
+                   
             // $penerimaan = $totalUT+$totalUTT+$upahLembur;
 
 

@@ -1,7 +1,7 @@
 
 Ext.define('GridProsesGajiModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpelamar','startdate','enddate','masapajaksetahun','namalengkap','kehadiran','punyanpwp','durasi','hitungpajak','tglgajipertama','masakerja','tglmasuk','nilaiptkp','kodeptkp','totalUT','totalUTT','upahlemburPajak','upahlemburNoPajak','benefitCmpBruto','benefitCmpNet','benefitEmpBruto','benefitEmpNet','numdayswork','totalpendapatan','penerimaanbruto','tunjanganpajak','biayajabatan','penerimaannet','netosetahun','pkpsetahun','pph5tahun','pph15tahun','pph25tahun','pph35tahun','pphsettahun','pphsebulan','takehomepay','nilaiPotongan','totallembur','nilaiPotongan','benefitCmp','benefitEmp','tglakhirjabatan','pphterminasi','pajakjantonov','pajakterminasi','pajakterbayar','pajakterutangdes','pajaktotalbayarsetahun','nik','companycode','kodeorg','namajabatan','nilaiptkp','penerimaannetTT','pkpsetahunteratur','selisihpph'],
+    fields: ['idpelamar','startdate','enddate','masapajaksetahun','namalengkap','kehadiran','punyanpwp','durasi','hitungpajak','tglgajipertama','masakerja','tglmasuk','nilaiptkp','kodeptkp','totalUT','totalUTT','upahlemburPajak','upahlemburNoPajak','totallembur','benefitCmpBruto','benefitCmpNet','benefitEmpBruto','benefitEmpNet','numdayswork','totalpendapatan','penerimaanbruto','tunjanganpajak','biayajabatan','penerimaannet','netosetahun','pkpsetahun','pph5tahun','pph15tahun','pph25tahun','pph35tahun','pphsettahun','pphsebulan','takehomepay','nilaiPotongan','totallembur','nilaiPotongan','benefitCmp','benefitEmp','tglakhirjabatan','pphterminasi','pajakjantonov','pajakterminasi','pajakterbayar','pajakterutangdes','pajaktotalbayarsetahun','nik','companycode','kodeorg','namajabatan','nilaiptkp','penerimaannetTT','pkpsetahunteratur','selisihpph'],
     idProperty: 'id'
 });
 
@@ -91,7 +91,7 @@ Ext.define('GridProsesGaji', {
         // {header: 'Tgl Masuk', dataIndex: 'tglmasuk', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Total Upah Tetap', dataIndex: 'totalUT', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Total Upah Tdk Tetap', dataIndex: 'totalUTT', minWidth: 150, xtype:'numbercolumn',align:'right'},
-        {header: 'Total Lembur', dataIndex: 'upahlemburPajak', minWidth: 150, xtype:'numbercolumn',align:'right'},
+        {header: 'Total Lembur', dataIndex: 'totallembur', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Benefit (perusahaan)', dataIndex: 'benefitCmp', minWidth: 170, xtype:'numbercolumn',align:'right'},
         {header: 'Benefit (karyawan)', dataIndex: 'benefitEmp', minWidth: 170, xtype:'numbercolumn',align:'right'},
         {header: 'Total Potongan Lainnya', dataIndex: 'nilaiPotongan', minWidth: 170, xtype:'numbercolumn',align:'right'},

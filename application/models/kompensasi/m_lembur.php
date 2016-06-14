@@ -171,7 +171,6 @@ class m_lembur extends CI_Model {
             // echo $this->db->last_query();
           // print_r($data);
         }   
-
         return array('num'=>$num,'data'=>$dataLembur);
 	}
 }

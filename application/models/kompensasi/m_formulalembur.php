@@ -706,7 +706,7 @@ class m_formulalembur extends CI_Model {
 
           
       }
-     
+      
        return array(
           'upahlembur'=>round($upahlembur),
           'harikerja'=>$harikerja,
