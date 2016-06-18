@@ -103,9 +103,7 @@ class Backend extends MY_Controller {
 //            var_dump($r);
             $field = $this->datamodel->selectField();
             $field = explode(",", $field);
-            $json = "{
-                                success: true,
-                                data: {";
+            $json = "{success: true,data: {";
             foreach ($field as $value) {
                 $v = explode(".", $value);
                 if (count($v) > 1) {
@@ -1570,6 +1568,10 @@ class Backend extends MY_Controller {
             $display = true;
             $datamaster = true;
             $field = array('idjadwalkerja', 'namajadwalkerja');
+        } else if ($data == 'jamkerjaharian') {
+            $display = true;
+            $datamaster = true;
+            $field = array('idjamkerjaharian', 'namajamkerja');
         }
 
         // echo $data." && ".$this->session->userdata('group_id');

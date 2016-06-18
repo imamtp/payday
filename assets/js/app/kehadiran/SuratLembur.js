@@ -1,8 +1,33 @@
 Ext.define('GridSuratLemburModel', {
     extend: 'Ext.data.Model',
-    fields: ['idlembur','idpelamar','idwaktulembur','tgllembur','namarumuslembur','formulalembur','idformulalembur','waktulembur','datein','userin','mulailembur_jam','mulailembur_menit','akhirlembur_jam','akhirlembur_menit','jammulailembur','jamakhirlembur','durasi','namalengkap','namajabatan','namaorg','namaatasan','namajabatanatasan','namaorgatasan','nik','display','idcompany','companyname'],
+    fields: ['idlembur','idpelamar','idwaktulembur','tgllembur','namarumuslembur','formulalembur','idformulalembur','waktulembur','datein','userin','mulailembur_jam','mulailembur_menit','akhirlembur_jam','akhirlembur_menit','jammulailembur','jamakhirlembur','durasi','namalengkap','namajabatan','namaorg','namaatasan','namajabatanatasan','namaorgatasan','nik','display','idcompany','companyname','namajamkerja'],
     idProperty: 'id'
 });
+
+var storeJamKerja = Ext.create('Ext.data.Store', {
+        fields: ['idjamkerjaharian', 'namajamkerja'],
+        proxy: {
+            type: 'ajax',
+            url: SITE_URL + 'backend/combox/jamkerjaharian',
+            reader: {
+                type: 'json',
+                root: 'dat'
+            }
+        },
+        autoLoad: false
+    });
+
+Ext.define('comboJamKerja', {
+    extend: 'Ext.form.ComboBox',
+    alias: 'widget.comboJamKerja',
+    fieldLabel: 'Jam Kerja',
+    editable: false,
+    triggerAction: 'all',
+    displayField: 'namajamkerja',
+    valueField: 'idjamkerjaharian',
+    name: 'namajamkerja',
+    store: storeJamKerja
+})
 
 var storeGridSuratLembur = Ext.create('Ext.data.Store', {
     pageSize: 100,
@@ -94,7 +119,12 @@ var formSuratLembur = Ext.create('Ext.form.Panel', {
         },
         {
             xtype:'comboxWaktuLembur'
-        },{
+        },
+        {
+            xtype:'comboJamKerja',
+            id:'comboJamKerja'
+        }
+        ,{
             xtype: 'datefield',
             format: 'd-m-Y',
             name:'tgllembur',
@@ -288,6 +318,7 @@ Ext.define('GridSuratLembur', {
         {header: 'Org atasan', dataIndex: 'namaorgatasan', minWidth: 150},
         {header: 'Waktu Lembur', dataIndex: 'waktulembur', minWidth: 150},
         {header: 'Tgl Lembur', dataIndex: 'tgllembur', minWidth: 150},
+        {header: 'Jam Kerja', dataIndex: 'namajamkerja', minWidth: 150},
         {header: 'Jam Mulai', dataIndex: 'jammulailembur', minWidth: 150},
         {header: 'Jam Selesai', dataIndex: 'jamakhirlembur', minWidth: 150},
         {header: 'Durasi', dataIndex: 'durasi', minWidth: 150},
@@ -342,6 +373,8 @@ Ext.define('GridSuratLembur', {
                                 var d = Ext.decode(form.responseText);
                                 if(d.success)
                                 {
+                                    storeJamKerja.load();
+
                                     var grid = Ext.ComponentQuery.query('GridSuratLembur')[0];
                                     var selectedRecord = grid.getSelectionModel().getSelection()[0];
                                     var data = grid.getSelectionModel().getSelection();
@@ -357,7 +390,9 @@ Ext.define('GridSuratLembur', {
                                                 extraparams: 'a.idlembur:' + selectedRecord.data.idlembur
                                             },
                                             success: function(form, action) {
+                                                var d = Ext.decode(action.response.responseText);
                                                 // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                                                Ext.getCmp('comboJamKerja').setValue(d.data.idjamkerjaharian);
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert("Load failed", action.result.errorMessage);

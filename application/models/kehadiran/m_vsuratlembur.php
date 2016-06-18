@@ -16,7 +16,7 @@ class m_vsuratlembur extends CI_Model {
     }
 
     function selectField() {
-        return "idlembur,a.idpelamar,idwaktulembur,tgllembur,formulalembur,waktulembur,a.datein,a.userin,mulailembur_jam,mulailembur_menit,akhirlembur_jam,akhirlembur_menit,jammulailembur,jamakhirlembur,durasi,a.namalengkap,a.display,a.idcompany,nik,c.idformulalembur,c.namarumuslembur,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,ff.companyname,gg.namalengkap as namaatasan";
+        return "idlembur,a.idpelamar,idwaktulembur,tgllembur,formulalembur,waktulembur,a.datein,a.userin,mulailembur_jam,mulailembur_menit,akhirlembur_jam,akhirlembur_menit,jammulailembur,jamakhirlembur,durasi,a.namalengkap,a.display,a.idcompany,nik,c.idformulalembur,c.namarumuslembur,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,ff.companyname,gg.namalengkap as namaatasan,hh.idjamkerjaharian,hh.namajamkerja";
     }
     
     function fieldCek()
@@ -53,7 +53,8 @@ class m_vsuratlembur extends CI_Model {
                     LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
                     LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi
                     join company ff ON d.idcompany = ff.idcompany
-                    left join pelamar gg ON aa.idpelamaratasan = gg.idpelamar";
+                    left join pelamar gg ON aa.idpelamaratasan = gg.idpelamar
+                    join jamkerjaharian hh ON a.idjamkerjaharian = hh.idjamkerjaharian";
 
         return $query;
     }
