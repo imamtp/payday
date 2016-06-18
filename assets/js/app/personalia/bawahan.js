@@ -232,6 +232,7 @@ Ext.define('GridBawahan', {
                 // },
                 {
                     text: 'Ubah Atasan',
+                    hidden:true,
                     id:'btnDetailBawahanPergerakan',
                     iconCls: 'edit-icon',
                     handler: function() {

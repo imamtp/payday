@@ -61,31 +61,38 @@ Ext.define('TabItemPergerakanPersonil', {
                 i.tab.on('click', function(){
                     if(i.title=='Daftar Bawahan')
                     {
-                        var idpergerakanpersonil = Ext.getCmp('idpergerakanpersonil_fPergerakanP').getValue();
-                        if(idpergerakanpersonil=='')
-                        {
-                            Ext.Msg.alert("Info", "Data Pergerakan Personil Belum Diinput");
-                            // Ext.getCmp('tambahBawahanBtn').setDisabled(true);
-                            // var tabs = btn.up('tabpanel');
-                            Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
-                            Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(true);
-                        }  else {
-                            // Ext.getCmp('tambahBawahanBtn').setDisabled(false);
-                            storeGridBawahan.on('beforeload',function(store, operation,eOpts){
+                        storeGridBawahan.on('beforeload',function(store, operation,eOpts){
                             operation.params={
                                         'extraparams': 'aa.idpelamaratasan:'+Ext.getCmp('idpelamar_fPergerakanP_from').getValue()
                                       };
                                   });
-                            storeGridBawahan.load();
-                            // Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);
+                        storeGridBawahan.load();
 
-                            if(Ext.getCmp('statuspergerakan_fPergerakanP').getValue()=='Disetujui')
-                            {
-                                Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(true);
-                            } else {
-                                Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);
-                            }
-                        }
+                        // var idpergerakanpersonil = Ext.getCmp('idpergerakanpersonil_fPergerakanP').getValue();
+                        // if(idpergerakanpersonil=='')
+                        // {
+                        //     Ext.Msg.alert("Info", "Data Pergerakan Personil Belum Diinput");
+                        //     // Ext.getCmp('tambahBawahanBtn').setDisabled(true);
+                        //     // var tabs = btn.up('tabpanel');
+                        //     Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
+                        //     Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(true);
+                        // }  else {
+                        //     // Ext.getCmp('tambahBawahanBtn').setDisabled(false);
+                        //     storeGridBawahan.on('beforeload',function(store, operation,eOpts){
+                        //     operation.params={
+                        //                 'extraparams': 'aa.idpelamaratasan:'+Ext.getCmp('idpelamar_fPergerakanP_from').getValue()
+                        //               };
+                        //           });
+                        //     storeGridBawahan.load();
+                        //     // Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);
+
+                        //     if(Ext.getCmp('statuspergerakan_fPergerakanP').getValue()=='Disetujui')
+                        //     {
+                        //         Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(true);
+                        //     } else {
+                        //         Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);
+                        //     }
+                        // }
                     }
                 });
             });

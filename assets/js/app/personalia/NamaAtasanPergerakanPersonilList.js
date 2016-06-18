@@ -1,6 +1,6 @@
 Ext.define('GridNamaAtasanPergerakanPersonilListModel', {
     extend: 'Ext.data.Model',
-   fields: ['idpelamar','ni','nik','namalengkap','tgllahir','idjabatan','kodejabatan','namajabatan','namalokasi','idorganisasi','kodeorg','namaorg','namalokasi','tglmasuk','tglberakhir','kekaryaanname'],
+   fields: ['idpelamar','ni','nik','namalengkap','tgllahir','idjabatan','kodejabatan','namajabatan','namalokasi','idorganisasi','kodeorg','namaorg','namalokasi','tglmasuk','tglberakhir','kekaryaanname','companyname'],
     idProperty: 'id'
 });
 
@@ -87,6 +87,7 @@ Ext.define('GridNamaAtasanPergerakanPersonilList', {
             }
         },
         {header: 'idpelamar', dataIndex: 'idpelamar', hidden: true},
+        {header: 'Nama Perusahaan', dataIndex: 'companyname', minWidth: 150},
         {header: 'NIK', dataIndex: 'nik', minWidth: 150},
         {header: 'Nama lengkap', dataIndex: 'namalengkap', minWidth: 150},
         {header: 'Nama jabatan', dataIndex: 'namajabatan', minWidth: 150},
