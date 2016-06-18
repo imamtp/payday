@@ -343,6 +343,8 @@ Ext.define('GridJamKerjaHarian', {
                     text: 'Hapus',
                     iconCls: 'delete-icon',
                     handler: function() {
+
+
                         Ext.Msg.show({
                             title: 'Confirm',
                             msg: 'Delete Selected ?',
@@ -351,17 +353,39 @@ Ext.define('GridJamKerjaHarian', {
                                 if (btn == 'yes') {
                                     var grid = Ext.ComponentQuery.query('GridJamKerjaHarian')[0];
                                     var sm = grid.getSelectionModel();
-                                    selected = [];
-                                    Ext.each(sm.getSelection(), function(item) {
-                                        selected.push(item.data[Object.keys(item.data)[0]]);
-                                    });
+                                    console.log(sm.getSelection()[0].data.idjamkerjaharian)
+
                                     Ext.Ajax.request({
-                                        url: SITE_URL + 'backend/ext_delete/JamKerjaHarian/kehadiran/hidden',
-                                        method: 'POST',
-                                        params: {postdata: Ext.encode(selected)}
-                                    });
-                                    storeGridJamKerjaHarian.remove(sm.getSelection());
-                                    sm.select(0);
+                                      url: SITE_URL + 'kehadiran/cekjamkerja',
+                                      method: 'GET',
+                                      params: {
+                                          idjamkerjaharian: sm.getSelection()[0].data.idjamkerjaharian
+                                      },
+                                      success: function(form, action) {
+                                          var d = Ext.decode(form.responseText);
+                                          if(d.status)
+                                          {
+                                             selected = [];
+                                             Ext.each(sm.getSelection(), function(item) {
+                                                selected.push(item.data[Object.keys(item.data)[0]]);
+                                            });
+                                            Ext.Ajax.request({
+                                                url: SITE_URL + 'backend/ext_delete/JamKerjaHarian/kehadiran/hidden',
+                                                method: 'POST',
+                                                params: {postdata: Ext.encode(selected)}
+                                            });
+                                            storeGridJamKerjaHarian.remove(sm.getSelection());
+                                            sm.select(0);
+                                          } else {
+                                            Ext.Msg.alert('Failed','Tidak bisa menghapus jam kerja, karena sedang digunakan di Jadwal Kerja');
+                                          }
+                                      },
+                                      failure: function(form, action) {
+                                          Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                      }
+                                  });
+
+                                   
                                 }
                             }
                         });

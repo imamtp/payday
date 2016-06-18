@@ -1080,5 +1080,61 @@ class kehadiran extends MY_Controller {
 		$diff = (($year2 - $year1) * 12) + ($month2 - $month1);
 		return $diff;
 	}
+
+	function cekjamkerja()
+	{
+		$id = $this->input->get('idjamkerjaharian');
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_1'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_2'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_3'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_4'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_5'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_6'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+
+		$q = $this->db->get_where('jadwalkerja',array('idjamkerjaharian_7'=>$id));
+		if($q->num_rows()>0)
+		{
+			echo json_encode(array('status'=>false));
+			exit;
+		}
+
+		echo json_encode(array('status'=>true));
+		exit;
+		// return true;
+	}
 }
  ?>
