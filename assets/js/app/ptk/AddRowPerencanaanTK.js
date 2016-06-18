@@ -94,7 +94,11 @@ var formAddRowPerencanaanTK = Ext.create('Ext.form.Panel', {
                         //                         'idaccounttype': '12,16,11'
                         //             };
                         //         });
-                                storeGridStrukturJabatanList.load();
+                        storeGridStrukturJabatanList.load({
+                            params:{
+                                tahun:Ext.getCmp('tahun_ptk').getValue()
+                            }
+                        });
                     });
                 }
             }

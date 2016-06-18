@@ -11,7 +11,7 @@ class m_datarawptk extends CI_Model {
     }
 
     function searchField() {
-        $field = "namabulan,kodeorg,namaorg,namalokasi,namajabatan.namajabatanatasan";
+        $field = "namabulan,kodeorg,namaorg,namalokasi,e.namajabatan";
         return explode(",", $field);
     }
 

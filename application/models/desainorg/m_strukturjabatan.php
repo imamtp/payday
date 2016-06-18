@@ -41,8 +41,10 @@ class m_strukturjabatan extends CI_Model {
     }
 
     function whereQuery() {
-      $startdate = $this->input->post('startdate')=='' ? '' : backdate2_reverse($this->input->post('startdate'));
+        $startdate = $this->input->post('startdate')=='' ? '' : backdate2_reverse($this->input->post('startdate'));
         $enddate = $this->input->post('enddate')=='' ? '' : backdate2_reverse($this->input->post('enddate'));
+        
+        $werdate = '';
 
         if($startdate!='' && $enddate!='')
         {
@@ -54,9 +56,13 @@ class m_strukturjabatan extends CI_Model {
                 {
                     $werdate = " AND a.enddate='$enddate' ";
                 } else {
-                        $werdate = null;
+                        
                     }
-
+        $y = $this->input->post('tahun');
+        if($y!='')
+        {
+            $werdate .= " AND ('".$y."-".date('m')."-".date('d')."' between a.startdate and a.enddate)";
+        }
         // return "a.display is null and now() between a.startdate and a.enddate ". $this->m_data->whereCompany()."";
         return "a.display is null $werdate ". $this->m_data->whereCompany()."";
     }
