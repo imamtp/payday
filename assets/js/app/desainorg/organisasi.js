@@ -240,10 +240,10 @@ Ext.define('GridOrganisasi', {
                                     {
                                         Ext.getCmp('companyname_filterOrganisasi').setValue(null);
                                         Ext.getCmp('companyname_filterOrganisasi').setDisabled(true);
-                                        storeGridOrganisasi.load();
+                                        // storeGridOrganisasi.load();
                                     } else {
                                         Ext.getCmp('companyname_filterOrganisasi').setDisabled(false);
-                                        storeGridOrganisasi.load();
+                                        // storeGridOrganisasi.load();
                                     }
                                 }
                             }
@@ -257,7 +257,7 @@ Ext.define('GridOrganisasi', {
                         labelWidth: 70,
                         listeners: {
                         select: function() { 
-                                storeGridOrganisasi.load();
+                                // storeGridOrganisasi.load();
                                 // console.log(this.value)
                             }
                         }
@@ -281,10 +281,10 @@ Ext.define('GridOrganisasi', {
                                     {
                                         Ext.getCmp('namaorg_filterOrganisasi').setValue(null);
                                         Ext.getCmp('namaorg_filterOrganisasi').setDisabled(true);
-                                        storeGridOrganisasi.load();
+                                        // storeGridOrganisasi.load();
                                     } else {
                                         Ext.getCmp('namaorg_filterOrganisasi').setDisabled(false);
-                                        storeGridOrganisasi.load();
+                                        // storeGridOrganisasi.load();
                                     }
                                 }
                             }
@@ -298,7 +298,7 @@ Ext.define('GridOrganisasi', {
                         labelWidth: 70,
                         listeners: {
                         select: function() { 
-                                storeGridOrganisasi.load();
+                                // storeGridOrganisasi.load();
                                 // console.log(this.value)
                             }
                         }
@@ -321,7 +321,7 @@ Ext.define('GridOrganisasi', {
                                     'change': function(field, newValue, oldValue) {
                                         if (Ext.getCmp('startdate_Organisasi').getSubmitValue() != null && Ext.getCmp('enddate_Organisasi').getSubmitValue() != null)
                                         {
-                                           storeGridOrganisasi.load()
+                                           // storeGridOrganisasi.load()
                                         }
                                     }
                                 }
@@ -338,8 +338,34 @@ Ext.define('GridOrganisasi', {
                                     'change': function(field, newValue, oldValue) {
                                         if (Ext.getCmp('startdate_Organisasi').getSubmitValue() != null && Ext.getCmp('enddate_Organisasi').getSubmitValue() != null)
                                         {
-                                           storeGridOrganisasi.load()
+                                           // storeGridOrganisasi.load()
                                         }
+                                    }
+                                }
+                            },                            
+                            {
+                                text: 'Proses',
+                                iconCls: 'cog-icon',
+                                handler: function () {
+                                    if (Ext.getCmp('startdate_Organisasi').getSubmitValue() !== '' && Ext.getCmp('enddate_Organisasi').getSubmitValue() === '')
+                                    {
+                                       // storeGridOrganisasi.load()
+                                       Ext.Msg.alert("Info",'Harap Masukkan Tanggal Akhir');
+                                    } else {
+                                        storeGridOrganisasi.load();
+                                    }
+
+                                    if (Ext.getCmp('enddate_Organisasi').getSubmitValue() !== '' && Ext.getCmp('startdate_Organisasi').getSubmitValue() === '')
+                                    {
+                                       // storeGridOrganisasi.load()
+                                       Ext.Msg.alert("Info",'Harap Masukkan Tanggal Mulai');
+                                    } else {
+                                        storeGridOrganisasi.load();
+                                    }
+                                    
+                                    if (Ext.getCmp('startdate_Organisasi').getSubmitValue() == '' && Ext.getCmp('enddate_Organisasi').getSubmitValue() == '')
+                                    {
+                                        storeGridOrganisasi.load();
                                     }
                                 }
                             },
