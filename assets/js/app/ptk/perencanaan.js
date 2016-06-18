@@ -859,6 +859,7 @@ Ext.define('GridPerencanaan', {
                 'Pencarian: ', ' ',
                 {
                     xtype: 'searchGridPerencanaan',
+                    hidden:true,
                     text: 'Left Button'
                 }
 
