@@ -2,7 +2,7 @@
 
 class m_vdatakaryawangrid extends CI_Model {
 
-        function tableName() {
+    function tableName() {
         return 'pelamar';
     }
 
@@ -50,7 +50,7 @@ class m_vdatakaryawangrid extends CI_Model {
                     left join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan                    
 					LEFT join (select nik,idpelamar,statuscalon 
 									from calonpelamar
-									where statuscalon='Disetujui') k ON a.idpelamar = k.idpelamar
+									where statuscalon='Disetujui' OR statuscalon is null) k ON a.idpelamar = k.idpelamar
                     LEFT join sextype c ON a.idsex = c.idsex
                     left join kekaryaan d ON aa.idkekaryaan = d.idkekaryaan
                     left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
