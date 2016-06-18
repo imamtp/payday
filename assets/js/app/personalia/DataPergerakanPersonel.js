@@ -420,6 +420,7 @@ Ext.define('GridDataPergerakanPersonel', {
                 }, {
                     id: 'btnDeleteDataPergerakanPersonel',
                     text: 'Hapus',
+                    hidden:true,
                     iconCls: 'delete-icon',
                     handler: function() {
 
