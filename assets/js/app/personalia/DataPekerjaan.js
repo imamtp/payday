@@ -836,7 +836,7 @@ Ext.define('GridDataPekerjaan', {
                                        window.location = SITE_URL+"laporan/datapekerjaan/" + Ext.getCmp('companyname_filterDataPekerjaan').getValue()+'/'+
                                        Ext.getCmp('namajabatan_filterDataPekerjaan').getValue()+'/'+Ext.getCmp('namaorg_filterDataPekerjaan').getValue() + '/'+ 
                                        Ext.getCmp('startdate_DataPekerjaan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataPekerjaan').getSubmitValue() + '/'+ 
-                                       Ext.getCmp('startTerminatedate_DataPekerjaan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataPekerjaan').getSubmitValue();
+                                       Ext.getCmp('startTerminatedate_DataPekerjaan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataPekerjaan').getSubmitValue()+'/'+Ext.getCmp('keaktifanDataPekerjaan').getValue();
                                     } else {
                                          Ext.Msg.alert("Info", d.message);
                                     }

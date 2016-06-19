@@ -32,7 +32,7 @@ class laporan extends MY_Controller {
         return $data;
     }
 
-    function datapekerjaan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$option='excel')
+    function datapekerjaan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$keaktifan=null,$option='excel')
     {
         $this->load->model('personalia/m_datapekerjaan','model');
 
@@ -78,6 +78,15 @@ class laporan extends MY_Controller {
             $startterminatedate = backdate2_reverse($startterminatedate);
             $endterminatedate = backdate2_reverse($endterminatedate);
             $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
+        }
+
+         $datenow = gmdate('Y-m-d');
+         
+         if($keaktifan=='true')
+         {
+             $query .= " AND a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) ";
+         } else {
+             $query .= " AND a.display is null";
         }
 
         $query .= " ".$orderby;
