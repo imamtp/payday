@@ -168,7 +168,7 @@ Ext.define('comboxstatusAkun', {
     store: storeStatusAkun
 });
 
-var statusPelamararr = [['Diajukan'],['Disetujui']];
+var statusPelamararr = [['Diajukan'],['Disetujui'],['Ditolak']];
 var storeStatusPelamar = new Ext.data.ArrayStore({
     fields: ['status'],
     data: statusPelamararr
