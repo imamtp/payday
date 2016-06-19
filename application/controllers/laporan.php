@@ -47,7 +47,7 @@ class laporan extends MY_Controller {
       
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
-        $query = $this->model->query() ." ". $orderby;
+        $query = $this->model->query();
 
         if($idcompany!='null')
         {
