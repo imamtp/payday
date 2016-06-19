@@ -404,10 +404,12 @@ Ext.define('GridDataPekerjaan', {
                     {
                         xtype:'displayfield',
                         labelWidth:72,
+                        hidden:true,
                         fieldLabel:'Organisasi'
                     },
                     {
                         xtype: 'checkboxfield',
+                        hidden:true,
                         name: 'checkbox1',
                         id:'filtercb_orgDataPekerjaan',
                         // fieldLabel: 'Semua',
@@ -430,6 +432,7 @@ Ext.define('GridDataPekerjaan', {
                         }
                     },{
                         xtype: 'comboxOrg',
+                        hidden:true,
                         valueField:'idorganisasi',
                         fieldLabel:'',
                         id: 'namaorg_filterDataPekerjaan',
@@ -445,11 +448,13 @@ Ext.define('GridDataPekerjaan', {
                     {
                         xtype:'displayfield',
                         labelWidth:72,
+                        hidden:true,
                         fieldLabel:'Jabatan'
                     },
                     {
                         xtype: 'checkboxfield',
                         name: 'checkbox1',
+                        hidden:true,
                         id:'filtercb_jabatanDataPekerjaan',
                         // fieldLabel: 'Semua',
                         boxLabel: 'Semua',
@@ -473,6 +478,7 @@ Ext.define('GridDataPekerjaan', {
                     {
                         xtype: 'comboxJabatan',
                         valueField:'idjabatan',
+                        hidden:true,
                         fieldLabel:'',
                         id: 'namajabatan_filterDataPekerjaan',
                         name: 'namajabatan',

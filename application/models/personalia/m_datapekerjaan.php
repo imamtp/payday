@@ -11,7 +11,7 @@ class m_datapekerjaan extends CI_Model {
     }
 
     function searchField() {
-        $field = "a.namalengkap,nik";
+        $field = "a.namalengkap,nik,namajabatan,namaorg,kekaryaanname";
         return explode(",", $field);
     }
 
@@ -75,7 +75,7 @@ class m_datapekerjaan extends CI_Model {
         {
             $tglmasuk1 = backdate2_reverse($this->input->post('tglmasuk1'));
             // $tglmasuk2 = backdate2_reverse($this->input->post('tglmasuk2'));
-            $wer.=" AND aaa.tatglmasuk ='$tglmasuk1'";
+            $wer.=" AND aaa.tglmasuk ='$tglmasuk1'";
         }
         
         //terminasi
@@ -100,7 +100,7 @@ class m_datapekerjaan extends CI_Model {
 		 
          if($aktif=='true')
          {
-			 return "a.display is null and (aa.tglmasuk<='$datenow') $wer";
+			 return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) $wer";
             // return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir OR '$datenow' between aaa.tglmasuk and aaa.tglberakhir) $wer";
          } else {
             // $wer = str_replace("WHERE TRUE AND", "WHERE TRUE", $wer);
