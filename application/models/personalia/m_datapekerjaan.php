@@ -16,7 +16,7 @@ class m_datapekerjaan extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.idcompany,e.idorganisasi,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,ni,nik,tgllahir,sexname,noktp,notelp,nohandphone,statuscalon,a.status,kekaryaanname,a.display,f.companyname,bb.idpergerakan";
+        return "a.idpelamar,a.idcompany,e.idorganisasi,g.kodeorg,kodejabatan,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,ni,nik,tgllahir,sexname,noktp,notelp,nohandphone,statuscalon,a.status,kekaryaanname,a.display,f.companyname,bb.idpergerakan";
     }
 
     function fieldCek()
@@ -54,7 +54,9 @@ class m_datapekerjaan extends CI_Model {
                     LEFT join sextype c ON a.idsex = c.idsex
                     left join kekaryaan d ON aa.idkekaryaan = d.idkekaryaan
                     left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
-                    left join company f ON a.idcompany = f.idcompany";
+                    left join company f ON a.idcompany = f.idcompany
+                    left join organisasi g ON e.idorganisasi = g.idorganisasi 
+                    left join jabatan h ON e.idjabatan = e.idjabatan";
 
         return $query;
     }

@@ -24,10 +24,12 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>Nama Lengkap</td>
          <td><b>Tanggal Lahir</td>
          <td><b>NIK</td>
+         <td><b>Kode Jabatan</td>
          <td><b>Jabatan</td>
          <td><b>Level Jabatan</td>
          <td><b>Level Individu</td>
          <td><b>Lokasi</td>
+         <td><b>Kode Organisasi</td>
          <td><b>Organisasi</td>
          <td><b>Kekaryawanan</td>
          <td><b>Perusahaan</td>
@@ -48,11 +50,13 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
                  <td><?=$r->nik?></td>
                  <td><?=$r->namalengkap?></td>
                  <td><?=$r->tgllahir?></td>
-                 <td><?=$r->nik?></td>
+                 <td><?=$r->nik?></td>                 
+                 <td><?=$d['kodejabatan']?></td>
                  <td><?=$d['levelnamejabatan']?></td>
                  <td><?=$d['levelnameindividu']?></td>
                  <td><?=$d['namajabatan']?></td>
                  <td><?=$d['namalokasi']?></td>
+                 <td><?=$d['kodeorg']?></td>
                  <td><?=$d['namaorg']?></td>
                  <td><?=$d['kekaryaanname']?></td>
                  <td><?=$r->companyname?></td>
