@@ -235,6 +235,7 @@ Ext.define('GridDataKaryawan', {
         {
             xtype: 'toolbar',
             dock: 'top',
+            hidden:true,
             items: [
                 {
                     xtype: 'checkbox',
@@ -268,6 +269,7 @@ Ext.define('GridDataKaryawan', {
                 {
                     xtype: 'datefield',
                     disabled: true,
+                    hidden:true,
                     format: 'd-m-Y',
                     id: 'startdate_DataKaryawan',
                     labelWidth: 170,
@@ -287,6 +289,7 @@ Ext.define('GridDataKaryawan', {
                     xtype: 'datefield',
                     disabled: true,
                     format: 'd-m-Y',
+                    hidden:true,
                     id: 'enddate_DataKaryawan',
                     name: 'enddate',
                     labelWidth: 30,

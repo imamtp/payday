@@ -496,6 +496,7 @@ Ext.define('GridDataPekerjaan', {
         {
             xtype: 'toolbar',
             dock: 'top',
+            hidden:true,
             items: [
                         {
                                 xtype:'checkbox',
