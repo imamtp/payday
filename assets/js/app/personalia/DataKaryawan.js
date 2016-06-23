@@ -125,10 +125,12 @@ Ext.define('GridDataKaryawan', {
                                 {
                                     Ext.getCmp('companyname_filterDataKaryawan').setValue(null);
                                     Ext.getCmp('companyname_filterDataKaryawan').setDisabled(true);
-                                    storeGridDataKaryawan.load();
+                                    // storeGridDataKaryawan.load();
+                                    disableCbFilter(true);
                                 } else {
                                     Ext.getCmp('companyname_filterDataKaryawan').setDisabled(false);
-                                    storeGridDataKaryawan.load();
+                                    // storeGridDataKaryawan.load();
+                                    disableCbFilter(true);
                                 }
                             }
                         }
@@ -141,14 +143,30 @@ Ext.define('GridDataKaryawan', {
                     valueField: 'idcompany',
                     labelWidth: 70,
                     listeners: {
-                        select: function () {
-                            storeGridDataKaryawan.load();
+                        select: function (n,v) {
+                            Ext.getCmp('filtercb_orgDataKaryawan').setDisabled(false);
+                            Ext.getCmp('namaorg_filterDataKaryawan').setDisabled(false);
+                            Ext.getCmp('filtercb_jabatanDataKaryawan').setDisabled(false);
+                            Ext.getCmp('namajabatan_filterDataKaryawan').setDisabled(false);
+
+                            // storeGridDataKaryawan.load();
+                            orgStore.load({
+                                params:{
+                                    idcompany:v[0].data.idcompany
+                                }
+                            });
+                            jabatanStore.load({
+                                params:{
+                                    idcompany:v[0].data.idcompany
+                                }
+                            });
                             // console.log(this.value)
                         }
                     }
                 },
                 {
                     xtype: 'displayfield',
+                    id:'dfOrg',
                     labelWidth: 72,
                     fieldLabel: 'Organisasi'
                 },
@@ -166,10 +184,10 @@ Ext.define('GridDataKaryawan', {
                                 {
                                     Ext.getCmp('namaorg_filterDataKaryawan').setValue(null);
                                     Ext.getCmp('namaorg_filterDataKaryawan').setDisabled(true);
-                                    storeGridDataKaryawan.load();
+                                    // storeGridDataKaryawan.load();
                                 } else {
                                     Ext.getCmp('namaorg_filterDataKaryawan').setDisabled(false);
-                                    storeGridDataKaryawan.load();
+                                    // storeGridDataKaryawan.load();
                                 }
                             }
                         }
@@ -183,13 +201,14 @@ Ext.define('GridDataKaryawan', {
                     labelWidth: 70,
                     listeners: {
                         select: function () {
-                            storeGridDataKaryawan.load();
+                            // storeGridDataKaryawan.load();
                             // console.log(this.value)
                         }
                     }
                 },
                 {
                     xtype: 'displayfield',
+                    id:'dfJabatan',
                     labelWidth: 72,
                     fieldLabel: 'Jabatan'
                 },
@@ -207,10 +226,10 @@ Ext.define('GridDataKaryawan', {
                                 {
                                     Ext.getCmp('namajabatan_filterDataKaryawan').setValue(null);
                                     Ext.getCmp('namajabatan_filterDataKaryawan').setDisabled(true);
-                                    storeGridDataKaryawan.load();
+                                    // storeGridDataKaryawan.load();
                                 } else {
                                     Ext.getCmp('namajabatan_filterDataKaryawan').setDisabled(false);
-                                    storeGridDataKaryawan.load();
+                                    // storeGridDataKaryawan.load();
                                 }
                             }
                         }
@@ -225,7 +244,7 @@ Ext.define('GridDataKaryawan', {
                     labelWidth: 70,
                     listeners: {
                         select: function () {
-                            storeGridDataKaryawan.load();
+                            // storeGridDataKaryawan.load();
                             // console.log(this.value)
                         }
                     }
@@ -280,7 +299,7 @@ Ext.define('GridDataKaryawan', {
                         'change': function (field, newValue, oldValue) {
                             // if (Ext.getCmp('startdate_DataKaryawan').getValue() != null && Ext.getCmp('enddate_DataKaryawan').getValue() != null)
                             // {
-                            storeGridDataKaryawan.load()
+                            // storeGridDataKaryawan.load()
                             // }
                         }
                     }
@@ -299,7 +318,7 @@ Ext.define('GridDataKaryawan', {
                         'change': function (field, newValue, oldValue) {
                             // if (Ext.getCmp('startdate_DataKaryawan').getValue() != null && Ext.getCmp('enddate_DataKaryawan').getValue() != null)
                             // {
-                            storeGridDataKaryawan.load()
+                            // storeGridDataKaryawan.load()
                             // }
                         }
                     }
@@ -425,6 +444,12 @@ Ext.define('GridDataKaryawan', {
                         Ext.getCmp('startTerminatedate_DataKaryawan').setValue(null);
                         Ext.getCmp('endTerminatedate_DataKaryawan').setValue(null);
                         Ext.getCmp('keaktifanDataKaryawan').setValue(false);
+
+                        Ext.getCmp('filtercb_orgDataKaryawan').setDisabled(true);
+                        Ext.getCmp('namaorg_filterDataKaryawan').setDisabled(true);
+                        Ext.getCmp('filtercb_jabatanDataKaryawan').setDisabled(true);
+                        Ext.getCmp('namajabatan_filterDataKaryawan').setDisabled(true);
+
                         storeGridDataKaryawan.reload();
                     }
                 }
@@ -728,8 +753,31 @@ Ext.define('GridDataKaryawan', {
                 jenisptkpStore.load();
                 kewarganegaraanStore.load();
                 companyStore.load();
-                jabatanStore.load();
-                orgStore.load();
+                // jabatanStore.load();
+                // orgStore.load();
+
+                Ext.getCmp('filtercb_orgDataKaryawan').setDisabled(true);
+                Ext.getCmp('namaorg_filterDataKaryawan').setDisabled(true);
+                Ext.getCmp('filtercb_jabatanDataKaryawan').setDisabled(true);
+                Ext.getCmp('namajabatan_filterDataKaryawan').setDisabled(true);
+
+                if(group_id*1==2)
+                {
+                    //super admin
+                    Ext.getCmp('filtercb_orgDataKaryawan').hide();
+                    Ext.getCmp('namaorg_filterDataKaryawan').hide();
+                    Ext.getCmp('filtercb_jabatanDataKaryawan').hide();
+                    Ext.getCmp('namajabatan_filterDataKaryawan').hide();
+                    Ext.getCmp('dfOrg').hide();
+                    Ext.getCmp('dfJabatan').hide();
+                } else {
+                    Ext.getCmp('filtercb_orgDataKaryawan').show();
+                    Ext.getCmp('namaorg_filterDataKaryawan').show();
+                    Ext.getCmp('filtercb_jabatanDataKaryawan').show();
+                    Ext.getCmp('namajabatan_filterDataKaryawan').show();
+                    Ext.getCmp('dfOrg').show();
+                    Ext.getCmp('dfJabatan').show();
+                }
             }
         },
         itemdblclick: function (dv, record, item, index, e) {
@@ -847,4 +895,12 @@ function TabKaryawanRights()
             //Ext.Msg.alert("Load failed",Ext.decode(action.responseText));
         }
     });
+}
+
+function disableCbFilter(opt)
+{
+    Ext.getCmp('filtercb_orgDataKaryawan').setDisabled(opt);
+    Ext.getCmp('namaorg_filterDataKaryawan').setDisabled(opt);
+    Ext.getCmp('filtercb_jabatanDataKaryawan').setDisabled(opt);
+    Ext.getCmp('namajabatan_filterDataKaryawan').setDisabled(opt);
 }

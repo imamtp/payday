@@ -1410,8 +1410,18 @@ class Backend extends MY_Controller {
 
     function comboxJabatan() {
         $field = array('idjabatan', 'namajabatan');
+         $idcompany = $this->input->get('idcompany');
         // $qj = $this->db->get_where('keljab', array('ketkeljab' => $_GET['ketkeljab']))->row();
-        $sql = "select idjabatan,namajabatan from jabatan a where display is null  " . $this->m_data->whereCompany() . " and now() between startdate and enddate";
+
+        if($idcompany!='')
+        { 
+            $wer = " and idcompany = $idcompany";
+        } else {
+            $wer = $this->m_data->whereCompany();
+        }
+
+        // $qj = $this->db->get_where('keljab', array('ketkeljab' => $_GET['ketkeljab']))->row();
+        $sql = "select idjabatan,namajabatan from jabatan a where display is null  " .$wer . " and now() between startdate and enddate";
         // echo $sql;
         $q = $this->db->query($sql);
         $this->fetchJson($q, $field);
@@ -1419,8 +1429,17 @@ class Backend extends MY_Controller {
 
     function comboxOrg() {
         $field = array('idorganisasi', 'namaorg');
+        $idcompany = $this->input->get('idcompany');
         // $qj = $this->db->get_where('keljab', array('ketkeljab' => $_GET['ketkeljab']))->row();
-        $sql = "select idorganisasi,namaorg from organisasi a where display is null  " . $this->m_data->whereCompany() . " and now() between startdate and enddate";
+
+        if($idcompany!='')
+        { 
+            $wer = " and idcompany = $idcompany";
+        } else {
+            $wer = $this->m_data->whereCompany();
+        }
+        $sql = "select idorganisasi,namaorg from organisasi a 
+        where display is null  " .$wer. " and now() between startdate and enddate";
         // echo $sql;
         $q = $this->db->query($sql);
         $this->fetchJson($q, $field);
