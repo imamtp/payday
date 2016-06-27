@@ -54,7 +54,7 @@ class m_vsuratlembur extends CI_Model {
                     LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi
                     join company ff ON d.idcompany = ff.idcompany
                     left join pelamar gg ON aa.idpelamaratasan = gg.idpelamar
-                    join jamkerjaharian hh ON a.idjamkerjaharian = hh.idjamkerjaharian";
+                    left join jamkerjaharian hh ON a.idjamkerjaharian = hh.idjamkerjaharian";
 
         return $query;
     }
