@@ -1568,12 +1568,9 @@ class Backend extends MY_Controller {
             $display = true;
             $datamaster = true;
             $field = array('idjadwalkerja', 'namajadwalkerja');
-        } else if ($data == 'jamkerjaharian') {
-            $display = true;
-            $datamaster = true;
-            $field = array('idjamkerjaharian', 'namajamkerja');
         }
 
+        
         // echo $data." && ".$this->session->userdata('group_id');
 
         if ($orderby) {

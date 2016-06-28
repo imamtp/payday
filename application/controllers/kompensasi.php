@@ -946,21 +946,14 @@ class kompensasi extends MY_Controller {
 
                     //UPLOAD
                     $qutt_upload = $this->db->query("select masukpajak,nominal,fungsipajak,jenisupah
-                            from v_upahtt a  WHERE TRUE AND ('$startdate' >= startdate and enddate <= '$enddate') 
+                            from v_upahtt a  WHERE TRUE AND (startdate >= '$startdate' and enddate <= '$enddate') 
                             and idpelamar =".$rpeg->idpelamar."");
-
-                    if($rpeg->idpelamar==205)
-                    {
-                        // echo $this->db->last_query();
-                    }
 
                     if($qutt_upload->num_rows()>0)
                     {
                         foreach ($qutt_upload->result() as $rUTT_upload) {
                                 $nilaiV = $rUTT_upload->nominal;
-
                                 $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
-                                // echo $nilaiV;
 
                                 // $data[$i]['upahtidaktetap']['item'][] = array(
                                 //                                     // 'namakomponen'=>$rUTT->namakomponen,
