@@ -101,6 +101,8 @@ class kehadiran extends MY_Controller {
     		$this->load->model('personalia/m_personildetail','m_personil');
     		$search = $this->input->post('query');
 
+    		$wer = " AND (b.idcompany=".$this->session->userdata('idcompany')." OR b.idcompany=".$this->session->userdata('idcompanyparent').")";
+
     		if($this->input->post('startdate')!='' && $this->input->post('enddate')!='')
     		{
     			$startdate = str_replace('T00:00:00', '', $this->input->post('startdate'));
@@ -122,7 +124,7 @@ class kehadiran extends MY_Controller {
 									FROM kehadiran a
 									join pelamar b ON a.idpelamar = b.idpelamar
 									join calonpelamar c ON b.idpelamar = c.idpelamar
-									WHERE a.display IS NULL and a.tglhadir between '$startdate' and '$enddate' ";
+									WHERE a.display IS NULL and a.tglhadir between '$startdate' and '$enddate' $wer";
 	           	if($search!=null)
 				{
 					$qhadir.=" and (c.nik like '%".strtoupper($search)."%' OR b.namalengkap like '%".strtoupper($search)."%')";
@@ -135,7 +137,7 @@ class kehadiran extends MY_Controller {
 									FROM kehadiran a
 									join pelamar b ON a.idpelamar = b.idpelamar
 									join calonpelamar c ON b.idpelamar = c.idpelamar
-									WHERE a.display IS NULL ";
+									WHERE a.display IS NULL $wer";
 				if($search!=null)
 				{
 					$qhadir.=" and (c.nik like '%".strtoupper($search)."%' OR b.namalengkap like '%".strtoupper($search)."%')";
