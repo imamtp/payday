@@ -616,12 +616,14 @@ Ext.define('GridPerencanaan', {
                                     var d = Ext.decode(form.responseText);
                                     if(d.success)
                                     {
-                                       window.location = SITE_URL+"laporan/perencanaantk/" + 
-                                       Ext.getCmp('tahun_filterptk').getValue()+'/'+
-                                       Ext.getCmp('companyname_filterptk').getValue()+'/'+ 
-                                       Ext.getCmp('namabulan_filterptk').getSubmitValue() + '/' + 
-                                       Ext.getCmp('namajabatan_filterptk').getSubmitValue() + '/' + 
-                                       Ext.getCmp('namaorg_filterptk').getSubmitValue();
+                                        window.location = SITE_URL+"laporan/perencanaantk/" + 
+                                       filter_clear(Ext.getCmp('tahun_filterptk').getValue())+'/'+
+                                       filter_clear(Ext.getCmp('companyname_filterptk').getValue())+'/'+ 
+                                       filter_clear(Ext.getCmp('namabulan_filterptk').getSubmitValue()) + '/' + 
+                                       filter_clear(Ext.getCmp('namajabatan_filterptk').getSubmitValue()) + '/' + 
+                                       filter_clear(Ext.getCmp('namaorg_filterptk').getSubmitValue());
+
+                                       // console.log(l);
                                     } else {
                                          Ext.Msg.alert("Info", d.message);
                                     }
@@ -904,6 +906,17 @@ Ext.define('GridPerencanaan', {
         }
     }
 });
+
+function filter_clear(v)
+{
+    console.log(v);
+    if(v=='')
+    {
+        return 'null';
+    } else {
+        return v;
+    }
+}
 
 function clearFormKTK()
 {

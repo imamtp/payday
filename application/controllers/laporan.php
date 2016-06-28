@@ -133,26 +133,24 @@ class laporan extends MY_Controller {
             $query.=" AND a.tahun=$tahun";
         }
 
-        if($namabulan!='null' && $namabulan!='')
+        if($namabulan!='null')
         {
             $query.=" AND a.namabulan='$namabulan'";
         }
 
-        if($idorganisasi!='null' && $idorganisasi!='')
+        if($idorganisasi!='null')
         {
             $query.=" AND a.idorganisasi=$idorganisasi";
         }
 
-        if($idjabatan!='null' && $idjabatan!='')
+        if($idjabatan!='null')
         {
             $query.=" AND a.idjabatan=$idjabatan";
         }
 
 
         $query .= " ".$orderby;
-// echo $query;
-// exit;
-
+        
         $data = array(
             'data'=>$this->db->query($query),
             'option'=>$option
