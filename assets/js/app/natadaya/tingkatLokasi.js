@@ -38,7 +38,8 @@ var formTingkatLokasi = Ext.create('Ext.form.Panel', {
             // allowBlank: false,
             name: 'deskripsi'
         },{
-            xtype:'comboxstatus'
+            xtype:'comboxstatus',
+            hidden:true
         }],
     buttons: [{
             text: 'Batal',
@@ -153,9 +154,9 @@ Ext.define('GridTingkatLokasi', {
         {header: 'Kode Tingkat Lokasi', dataIndex: 'kodetingkatlokasi', minWidth: 150},
         {header: 'Nama Tingkat Lokasi', dataIndex: 'tingkatlokasi', minWidth: 150},
         {header: 'Deskripsi', dataIndex: 'deskripsi', minWidth: 150},
-        {header: 'Status', dataIndex: 'status', minWidth: 150},
-        {header: 'user in', dataIndex: 'userin', minWidth: 150},
-        {header: 'date in', dataIndex: 'datein', minWidth: 150}
+        {header: 'Status', dataIndex: 'status', minWidth: 150,hidden:true},
+        {header: 'user in', dataIndex: 'userin', minWidth: 150,hidden:true},
+        {header: 'date in', dataIndex: 'datein', minWidth: 150,hidden:true}
     ]
     , dockedItems: [
         {

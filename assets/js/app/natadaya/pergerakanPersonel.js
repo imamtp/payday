@@ -38,7 +38,7 @@ var formJenisPergerakanPersonel = Ext.create('Ext.form.Panel', {
             // allowBlank: false,
             name: 'deskripsi'
         },{
-            xtype:'comboxstatus'
+            xtype:'comboxstatus',hidden:true
         }],
     buttons: [{
             text: 'Batal',
@@ -153,9 +153,9 @@ Ext.define('GridJenisPergerakanPersonel', {
         {header: 'Kode Pergerakan', dataIndex: 'kodepergerakan', minWidth: 150},
         {header: 'Nama Pergerakan', dataIndex: 'namapergerakan', minWidth: 150,flex:1},
         {header: 'Deskripsi', dataIndex: 'deskripsi', minWidth: 150},
-        {header: 'Status', dataIndex: 'status', minWidth: 150},
-        {header: 'user in', dataIndex: 'userin', minWidth: 150},
-        {header: 'date in', dataIndex: 'datein', minWidth: 150}
+        {header: 'Status', dataIndex: 'status', minWidth: 150,hidden:true},
+        {header: 'user in', dataIndex: 'userin', minWidth: 150,hidden:true},
+        {header: 'date in', dataIndex: 'datein', minWidth: 150,hidden:true}
     ]
     , dockedItems: [
         {

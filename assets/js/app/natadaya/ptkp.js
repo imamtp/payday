@@ -42,7 +42,7 @@ var formPtkp_Natadaya = Ext.create('Ext.form.Panel', {
             allowBlank: false,
             name: 'nilaiptkp'
         },{
-            xtype:'comboxstatus'
+            xtype:'comboxstatus',hidden:true
         }],
     buttons: [{
             text: 'Batal',
@@ -158,9 +158,9 @@ Ext.define('GridPtkp_Natadaya', {
         {header: 'Nama PTKP', dataIndex: 'namaptkp', minWidth: 200,flex:1},
         // {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
         {header: 'Nilai PTKP', dataIndex: 'nilaiptkp', minWidth: 150, xtype:'numbercolumn'},
-        {header: 'Status', dataIndex: 'status', minWidth: 150},
-        {header: 'user in', dataIndex: 'userin', minWidth: 150},
-        {header: 'date in', dataIndex: 'datein', minWidth: 150}
+        {header: 'Status', dataIndex: 'status', minWidth: 150,hidden:true},
+        {header: 'user in', dataIndex: 'userin', minWidth: 150,hidden:true},
+        {header: 'date in', dataIndex: 'datein', minWidth: 150,hidden:true}
     ]
     , dockedItems: [
         {
