@@ -101,7 +101,7 @@ Ext.define('GridJamKerja7List', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridJamKerja7List, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

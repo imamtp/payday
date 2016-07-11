@@ -116,7 +116,7 @@ Ext.define('GridStrukturJabatanList_formPerencanaan', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridStrukturJabatanList_formPerencanaan, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

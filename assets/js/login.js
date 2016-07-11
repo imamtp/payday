@@ -14,7 +14,7 @@ function timeLogin(){
              */
             var loadingtxt = "Loading...";
            var loginform = Ext.create('Ext.form.Panel', {
-                    title: 'Natadaya HRIS Login',
+                    title: 'Akses Natadaya',
                     bodyPadding: 5,
                     width: 350,
                     id:'loginid',
@@ -24,7 +24,7 @@ function timeLogin(){
                     },
                     defaultType: 'textfield',
                     items: [{
-                        fieldLabel: 'ID',
+                        fieldLabel: 'Pengguna',
                         name: 'userid',
                         allowBlank: false
                         ,listeners: {
@@ -35,7 +35,7 @@ function timeLogin(){
                             }
                         }
                     },{
-                        fieldLabel: 'Password',
+                        fieldLabel: 'Kata Sandi',
                         name: 'password',
                         allowBlank: false,
                         inputType: 'password'

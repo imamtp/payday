@@ -96,6 +96,11 @@
                 }
             });
 
+            Ext.define('Override.toolbar.Paging', {
+                override : 'Ext.toolbar.Paging',
+                emptyMsg: 'Belum ada data'
+            });
+
             var windowH = Ext.getBody().getViewSize().height;
             if (windowH <= 682)
             {
@@ -201,7 +206,7 @@
                             region: 'west',
                             stateId: 'navigation-panel',
                             id: 'west-panel', // see Ext.getCmp() below
-                            title: 'Navigation',
+                            title: 'Navigasi',
                             split: true,
                             width: 270,
                             minWidth: 172,
@@ -227,26 +232,26 @@
                                                 expandnav();
                                             },
                                             flex: 1,
-                                            text: 'Expand'
+                                            text: 'Buka'
                                         }, {
                                             xtype: 'button',
                                             handler: function(button, event) {
                                                 collapsenav();
                                             },
                                             flex: 1,
-                                            text: 'Collapse'
+                                            text: 'Tutup'
                                         }, {
                                             xtype: 'button',
                                             handler: function(button, event) {
                                                 closeAllTab();
                                             },
                                             flex: 1,
-                                            text: 'Close Tab'
+                                            text: 'Tutup Hal'
                                         }]
                                 }],
                             items: [
                                 {
-                                    title: 'Welcome {$username}',
+                                    title: 'Selamat Datang {$username}',
                                     items: [treeNavigation]
                                 }]
                         },
@@ -278,7 +283,7 @@
                 // }
 
                 Ext.create('Ext.Button', {
-                    text: 'Logged as {$username}',
+                    text: 'Anda sebagai {$username}',
                     renderTo: 'bloggout'
                 });
 
@@ -301,7 +306,7 @@
 
                 Ext.create('Ext.Button', {
                     id:'LogoutBtn',
-                    text: 'Logout',
+                    text: 'Keluar',
                     renderTo: 'bloggout',
                     handler: function() {
                         window.location.href = 'dashboard/logout';

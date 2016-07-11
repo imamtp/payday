@@ -99,7 +99,7 @@ Ext.define('GridPersonilNewJobList', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridPersonilNewJobList, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

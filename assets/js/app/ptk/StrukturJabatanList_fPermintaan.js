@@ -116,7 +116,7 @@ Ext.define('GridStrukturJabatanList_fPermintaan', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridStrukturJabatanList_fPermintaan, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

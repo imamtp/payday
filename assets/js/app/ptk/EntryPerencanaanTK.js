@@ -242,7 +242,7 @@ Ext.define('KitchenSink.view.grid.EntryPerencanaanTK', {
                                     handler: Ext.bind(this.recordData, this, 'noprint', true)
                                 }]
                             }, {
-                                xtype: 'pagingtoolbar',
+                                xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
                                 store: PerencanaanTKGridStore, // same store GridPanel is using
                                 dock: 'bottom',
                                 displayInfo: true

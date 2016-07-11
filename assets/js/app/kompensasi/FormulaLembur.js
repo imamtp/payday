@@ -649,8 +649,8 @@ Ext.define('Gridformulalembur', {
                                 if(d.success)
                                 {
                                    Ext.Msg.show({
-                                        title: 'Confirm',
-                                        msg: 'Delete Selected ?',
+                                        title: 'Konfirmasi',
+                                        msg: 'Hapus data terpilih ?',
                                         buttons: Ext.Msg.YESNO,
                                         fn: function(btn) {
                                             if (btn == 'yes') {
@@ -690,7 +690,7 @@ Ext.define('Gridformulalembur', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridformulalembur, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

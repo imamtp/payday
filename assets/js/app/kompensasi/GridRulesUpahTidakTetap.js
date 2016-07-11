@@ -210,8 +210,8 @@ Ext.define('GridRulesUpahTidakTetap', {
                     iconCls: 'delete-icon',
                     handler: function() {
                         Ext.Msg.show({
-                            title: 'Confirm',
-                            msg: 'Delete Selected ?',
+                            title: 'Konfirmasi',
+                            msg: 'Hapus data terpilih ?',
                             buttons: Ext.Msg.YESNO,
                             fn: function(btn) {
                                 if (btn == 'yes') {
@@ -236,7 +236,7 @@ Ext.define('GridRulesUpahTidakTetap', {
                 }
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridRulesUpahTidakTetap, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

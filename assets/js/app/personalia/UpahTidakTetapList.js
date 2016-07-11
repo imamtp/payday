@@ -118,7 +118,7 @@ Ext.define('GridUpahTidakTetapList', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridUpahTidakTetapList, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

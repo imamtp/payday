@@ -910,9 +910,10 @@ Ext.define('GridDataPekerjaan', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridDataPekerjaan, // same store GridPanel is using
-            dock: 'bottom',
+            dock: 'bottom',            
+            displayMsg:'Menampilkan {0} - {1} dari {2}',
             displayInfo: true
                     // pageSize:20
         }

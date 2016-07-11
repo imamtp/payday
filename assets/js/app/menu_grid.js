@@ -184,8 +184,8 @@
             iconCls: 'delete-icon',
             handler: function() {
                 Ext.Msg.show({
-                    title: 'Confirm',
-                    msg: 'Delete Selected ?',
+                    title: 'Konfirmasi',
+                    msg: 'Hapus data terpilih ?',
                     buttons: Ext.Msg.YESNO,
                     fn: function(btn) {
                         if (btn == 'yes') {

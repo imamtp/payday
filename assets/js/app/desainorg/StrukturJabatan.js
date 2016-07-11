@@ -582,7 +582,7 @@ Ext.define('GridStrukturJabatan', {
                     }
                 },
                 {
-                    text: 'Detail',
+                    text: 'Ubah',
                     iconCls: 'edit-icon',
                     handler: function() {
                         Ext.Ajax.request({
@@ -735,7 +735,7 @@ Ext.define('GridStrukturJabatan', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridStrukturJabatan, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

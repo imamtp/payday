@@ -96,7 +96,7 @@ Ext.define('GridCompanyConfigDasarUTTList', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridCompanyConfigDasarUTTList, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

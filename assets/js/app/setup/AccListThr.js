@@ -215,7 +215,7 @@ Ext.define('AccListThr', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridAccount, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true
@@ -463,7 +463,7 @@ Ext.define('AccListBebanThr', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridAccount, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

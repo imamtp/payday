@@ -355,7 +355,7 @@ Ext.define('GridSetupUnit', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridSetupUnit, // same store GridPanel is using
             dock: 'bottom',
             displayInfo: true

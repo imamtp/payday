@@ -739,10 +739,12 @@ Ext.define('GridDataKaryawan', {
 
             ]
         }, {
-            xtype: 'pagingtoolbar',
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridDataKaryawan, // same store GridPanel is using
             dock: 'bottom',
-            displayInfo: true
+            displayInfo: true,
+            displayMsg:'Menampilkan {0} - {1} dari {2}',
+            emptyMsg: 'Belum ada data'
                     // pageSize:20
         }
     ], listeners: {
