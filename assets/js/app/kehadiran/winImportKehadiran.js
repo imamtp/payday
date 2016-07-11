@@ -80,6 +80,7 @@ var winImportKehadiran = Ext.create('widget.window', {
     closable: true,
     closeAction: 'hide',
     autoWidth: true,
+    modal:true,
     autoHeight: true,
     layout: 'fit',
     border: false,

@@ -16,7 +16,7 @@ class m_vdatakaryawangrid extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.idcompany,e.idorganisasi,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,ni,nik,tgllahir,sexname,noktp,notelp,nohandphone,statuscalon,a.status,kekaryaanname,a.display,f.companyname,bb.idpergerakan,aaa.tglmasuk as tglmasukpeg,a.idjadwalkerja";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,a.tgllahir,n.sexname,a.noktp,a.notelp,a.nohandphone,aa.tglmasuk as tglmasukpeg";
     }
 
     function fieldCek()
@@ -31,30 +31,39 @@ class m_vdatakaryawangrid extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
-                    LEFT JOIN
+                   LEFT  JOIN
                     (
                         SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
                         WHERE statuspergerakan='Disetujui'
                         GROUP BY idpelamar
                     ) as x ON a.idpelamar = x.idpelamar
-                    left join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
-					join pergerakanpersonil bb ON aa.idpergerakanpersonil = bb.idpergerakanpersonil
-                    LEFT JOIN
+                    LEFT join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
+                    join pergerakanpersonil bbb ON aa.idpergerakanpersonil = bbb.idpergerakanpersonil
+                    LEFT JOIN strukturjabatan b ON aa.idstrukturjabatan = b.idstrukturjabatan
+                    LEFT JOIN jabatan c ON b.idjabatan = c.idjabatan
+                    LEFT JOIN lokasi_org d ON aa.idlokasiorg = d.idlokasiorg
+                    LEFT JOIN organisasi e ON b.idorganisasi = e.idorganisasi
+                    LEFT JOIN kekaryaan f ON aa.idkekaryaan = f.idkekaryaan
+                    LEFT JOIN pelamar g ON aa.idpelamaratasan = g.idpelamar
+                    LEFT JOIN level j ON aa.idlevelindividu = j.idlevel
+                    LEFT JOIN level i ON c.idlevel = i.idlevel
+                    LEFT join kekaryaan v ON aa.idkekaryaan = v.idkekaryaan
+                    JOIN calonpelamar k ON a.idpelamar = k.idpelamar
+                    left join pelamar l ON aa.idpelamaratasan = l.idpelamar
+                    join company m ON a.idcompany = m.idcompany
+                    LEFT  JOIN
                     (
-                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
+                        SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
                         WHERE statuspergerakan='Disetujui'
                         GROUP BY idpelamar
-                    ) as xx ON a.idpelamar = xx.idpelamar
-                    left join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan                    
-					LEFT join (select nik,idpelamar,statuscalon 
-									from calonpelamar
-									where statuscalon='Disetujui' OR statuscalon is null) k ON a.idpelamar = k.idpelamar
-                    LEFT join sextype c ON a.idsex = c.idsex
-                    left join kekaryaan d ON aa.idkekaryaan = d.idkekaryaan
-                    left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
-                    left join company f ON a.idcompany = f.idcompany";
+                    ) as xx ON xx.idpelamar = aa.idpelamaratasan
+                    LEFT JOIN pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
+                    LEFT JOIN strukturjabatan bb ON aaa.idstrukturjabatan = bb.idstrukturjabatan
+                    LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
+                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi
+                    left join sextype n ON a.idsex = n.idsex";
 
         return $query;
     }
@@ -90,12 +99,12 @@ class m_vdatakaryawangrid extends CI_Model {
             $tglkeluar1 = backdate2_reverse($this->input->post('tglkeluar1'));
             $tglkeluar2 = backdate2_reverse($this->input->post('tglkeluar2'));
             // $wer.=" AND (aa.tglberakhir BETWEEN '$tglkeluar1' AND '$tglkeluar2') and bb.idpergerakan=128";
-            $wer.=" AND (aa.tglmasuk BETWEEN '$tglkeluar1' AND '$tglkeluar2') and bb.idpergerakan=128";
+            $wer.=" AND (aa.tglmasuk BETWEEN '$tglkeluar1' AND '$tglkeluar2') and bbb.idpergerakan=128";
         } else if($this->input->post('tglkeluar1')!=null && $this->input->post('tglkeluar2')==null)
         {
             $tglkeluar1 = backdate2_reverse($this->input->post('tglkeluar1'));
             // $tglmasuk2 = backdate2_reverse($this->input->post('tglmasuk2'));
-            $wer.=" AND aa.tglmasuk ='$tglkeluar1'  and bb.idpergerakan=128";
+            $wer.=" AND aa.tglmasuk ='$tglkeluar1'  and bbb.idpergerakan=128";
         }
 
          // return "a.display is null $wer";
@@ -106,7 +115,7 @@ class m_vdatakaryawangrid extends CI_Model {
 		 
          if($aktif=='true')
          {
-            return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir OR '$datenow' between aaa.tglmasuk and aaa.tglberakhir) $wer AND bb.idpergerakan!=128";
+            return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir OR '$datenow' between aaa.tglmasuk and aaa.tglberakhir) $wer AND bbb.idpergerakan!=128";
          } else {
             // $wer = str_replace("WHERE TRUE AND", "WHERE TRUE", $wer);
             // return "$wer";

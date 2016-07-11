@@ -1,3 +1,31 @@
+var orgPekerjaanStore = Ext.create('Ext.data.Store', {
+        fields: ['idorganisasi','namaorg'],
+        proxy: {
+            type: 'ajax',
+            url: SITE_URL + 'backend/comboxOrg',
+            reader: {
+                type: 'json',
+                root: 'dat'
+            }
+        },
+        autoLoad: false
+    });
+
+Ext.define('comboxOrgPekerjaan', {
+    extend: 'Ext.form.field.ComboBox',
+    alias: 'widget.comboxOrgPekerjaan',
+    displayField: 'namaorg',
+    fieldLabel: 'Organisasi',
+    queryMode: 'local',
+    labelWidth:150,
+    name: 'namaorg',
+    editable: false,
+    triggerAction: 'all',
+    valueField: 'namaorg',
+    store: orgPekerjaanStore
+});
+
+
 var formPekerjaan2 = Ext.create('Ext.form.Panel', {
     id: 'formPekerjaan2',
     width: 450,
@@ -395,21 +423,32 @@ Ext.define('GridDataPekerjaan', {
                         valueField:'idcompany',
                         labelWidth: 70,
                         listeners: {
-                        select: function() {
+                        select: function(e,v) {
+                            Ext.getCmp('df_org_pekerjaan').setDisabled(false);
+                            Ext.getCmp('filtercb_orgDataPekerjaan').setDisabled(false);
+                            // console.log(v);
                                 storeGridDataPekerjaan.load();
                                 // console.log(this.value)
+                                orgPekerjaanStore.load({
+                                    params:{
+                                        idcompany:v[0].data.idcompany
+                                    }
+                                });
                             }
                         }
                     },
                     {
                         xtype:'displayfield',
+                        id:'df_org_pekerjaan',
+                        disabled:true,
                         labelWidth:72,
-                        hidden:true,
+                        // hidden:true,
                         fieldLabel:'Organisasi'
                     },
                     {
                         xtype: 'checkboxfield',
-                        hidden:true,
+                        disabled:true,
+                        // hidden:true,
                         name: 'checkbox1',
                         id:'filtercb_orgDataPekerjaan',
                         // fieldLabel: 'Semua',
@@ -431,8 +470,8 @@ Ext.define('GridDataPekerjaan', {
                             }
                         }
                     },{
-                        xtype: 'comboxOrg',
-                        hidden:true,
+                        xtype: 'comboxOrgPekerjaan',
+                        // hidden:true,
                         valueField:'idorganisasi',
                         fieldLabel:'',
                         id: 'namaorg_filterDataPekerjaan',
@@ -496,7 +535,7 @@ Ext.define('GridDataPekerjaan', {
         {
             xtype: 'toolbar',
             dock: 'top',
-            hidden:true,
+            // hidden:true,
             items: [
                         {
                                 xtype:'checkbox',
@@ -510,19 +549,24 @@ Ext.define('GridDataPekerjaan', {
                                                 Ext.getCmp('startdate_DataPekerjaan').setDisabled(false);
                                                 Ext.getCmp('enddate_DataPekerjaan').setDisabled(false);  
 
-                                                Ext.getCmp('startTerminatedate_DataPekerjaan').setValue(null);
-                                                Ext.getCmp('endTerminatedate_DataPekerjaan').setValue(null); 
+                                                // Ext.getCmp('startTerminatedate_DataPekerjaan').setValue(null);
+                                                // Ext.getCmp('endTerminatedate_DataPekerjaan').setValue(null); 
 
-                                                Ext.getCmp('startTerminatedate_DataPekerjaan').setDisabled(true);
-                                                Ext.getCmp('endTerminatedate_DataPekerjaan').setDisabled(true);
-                                                Ext.getCmp('cbPeriodeTerminatePekerjaan').setValue(false);                                       
-                                                
+                                                // Ext.getCmp('startTerminatedate_DataPekerjaan').setDisabled(true);
+                                                // Ext.getCmp('endTerminatedate_DataPekerjaan').setDisabled(true);
+                                                // Ext.getCmp('cbPeriodeTerminatePekerjaan').setValue(false); 
+
                                                 Ext.getCmp('keaktifanDataPekerjaan').setValue(false);
-                                                Ext.getCmp('keaktifanDataPekerjaan').setDisabled(true);                                          
+                                                Ext.getCmp('keaktifanDataPekerjaan').setDisabled(true);      
+
                                            } else {
-                                               Ext.getCmp('startdate_DataPekerjaan').setDisabled(true);
+                                                Ext.getCmp('cbPeriodeTerminatePekerjaan').setValue(true);
+
+                                                Ext.getCmp('startdate_DataPekerjaan').setDisabled(true);
                                                 Ext.getCmp('enddate_DataPekerjaan').setDisabled(true);
+                                                
                                                 Ext.getCmp('keaktifanDataPekerjaan').setDisabled(false); 
+                                                Ext.getCmp('keaktifanDataPekerjaan').setValue(1);
                                            }
                                     }
                                 }
@@ -562,11 +606,63 @@ Ext.define('GridDataPekerjaan', {
                                         // }
                                     }
                                 }
+                            },
+                            {
+                                xtype:'checkbox',
+                                // hidden:true,
+                                labelWidth:110,
+                                checked:true,
+                                fieldLabel: 'Status Keaktifan',
+                                boxLabel: 'Aktif',
+                                name: 'keaktifanDataPekerjaan',
+                                id:'keaktifanDataPekerjaan',
+                                inputValue: '1',
+                                listeners: {
+                                    'change': function(field, newValue, oldValue) {
+                                            console.log(newValue)
+                                           storeGridDataPekerjaan.load()
+                                           // if(newValue)
+                                           // {
+                                                // Ext.getCmp('startdate_DataPekerjaan').setDisabled(true);
+                                                // Ext.getCmp('enddate_DataPekerjaan').setDisabled(true);                                            
+                                           // } else {
+                                               // Ext.getCmp('startdate_DataPekerjaan').setDisabled(false);
+                                                // Ext.getCmp('enddate_DataPekerjaan').setDisabled(false);
+                                           // }
+                                    }
+                                }
+                            },
+                            {
+                                text: 'Proses',
+                                iconCls: 'cog-icon',
+                                handler: function() {
+                                    storeGridDataPekerjaan.load();
+                                }
+                            },
+                            {
+                                    text: 'Hapus Filter',
+                                    iconCls: 'refresh',
+                                    handler: function() {
+                                        Ext.getCmp('keaktifanDataPekerjaan').setValue(1);
+                                        Ext.getCmp('filtercb_companyDataPekerjaan').setValue(null);
+                                        Ext.getCmp('companyname_filterDataPekerjaan').setValue(null);
+                                        Ext.getCmp('filtercb_orgDataPekerjaan').setValue(null);
+                                        Ext.getCmp('namaorg_filterDataPekerjaan').setValue(null);
+                                        Ext.getCmp('filtercb_jabatanDataPekerjaan').setValue(null);
+                                        Ext.getCmp('namajabatan_filterDataPekerjaan').setValue(null);
+                                        Ext.getCmp('startdate_DataPekerjaan').setValue(null);
+                                        Ext.getCmp('enddate_DataPekerjaan').setValue(null);
+                                        Ext.getCmp('startTerminatedate_DataPekerjaan').setValue(null);
+                                        Ext.getCmp('endTerminatedate_DataPekerjaan').setValue(null);
+                                        Ext.getCmp('keaktifanDataPekerjaan').setValue(false);
+                                        storeGridDataPekerjaan.reload();
+                                    }
                             }
                 ]
         },
         {
             xtype: 'toolbar',
+            hidden:true,
             dock: 'top',
             items: [
                         {
@@ -636,56 +732,6 @@ Ext.define('GridDataPekerjaan', {
                                         // }
                                     }
                                 }
-                            },
-                            {
-                                xtype:'checkbox',
-                                // hidden:true,
-                                labelWidth:110,
-                                checked:true,
-                                fieldLabel: 'Status Keaktifan',
-                                boxLabel: 'Aktif',
-                                name: 'keaktifanDataPekerjaan',
-                                id:'keaktifanDataPekerjaan',
-                                inputValue: '1',
-                                listeners: {
-                                    'change': function(field, newValue, oldValue) {
-                                            console.log(newValue)
-                                           storeGridDataPekerjaan.load()
-                                           // if(newValue)
-                                           // {
-                                                // Ext.getCmp('startdate_DataPekerjaan').setDisabled(true);
-                                                // Ext.getCmp('enddate_DataPekerjaan').setDisabled(true);                                            
-                                           // } else {
-                                               // Ext.getCmp('startdate_DataPekerjaan').setDisabled(false);
-                                                // Ext.getCmp('enddate_DataPekerjaan').setDisabled(false);
-                                           // }
-                                    }
-                                }
-                            },
-                            {
-                                text: 'Proses',
-                                iconCls: 'cog-icon',
-                                handler: function() {
-                                    storeGridDataPekerjaan.load();
-                                }
-                            },
-                            {
-                                    text: 'Hapus Filter',
-                                    iconCls: 'refresh',
-                                    handler: function() {
-                                        Ext.getCmp('filtercb_companyDataPekerjaan').setValue(null);
-                                        Ext.getCmp('companyname_filterDataPekerjaan').setValue(null);
-                                        Ext.getCmp('filtercb_orgDataPekerjaan').setValue(null);
-                                        Ext.getCmp('namaorg_filterDataPekerjaan').setValue(null);
-                                        Ext.getCmp('filtercb_jabatanDataPekerjaan').setValue(null);
-                                        Ext.getCmp('namajabatan_filterDataPekerjaan').setValue(null);
-                                        Ext.getCmp('startdate_DataPekerjaan').setValue(null);
-                                        Ext.getCmp('enddate_DataPekerjaan').setValue(null);
-                                        Ext.getCmp('startTerminatedate_DataPekerjaan').setValue(null);
-                                        Ext.getCmp('endTerminatedate_DataPekerjaan').setValue(null);
-                                        Ext.getCmp('keaktifanDataPekerjaan').setValue(false);
-                                        storeGridDataPekerjaan.reload();
-                                    }
                             }
                 ]
         },
@@ -834,10 +880,15 @@ Ext.define('GridDataPekerjaan', {
                                     var d = Ext.decode(form.responseText);
                                     if(d.success)
                                     {
-                                       window.location = SITE_URL+"laporan/datapekerjaan/" + Ext.getCmp('companyname_filterDataPekerjaan').getValue()+'/'+
-                                       Ext.getCmp('namajabatan_filterDataPekerjaan').getValue()+'/'+Ext.getCmp('namaorg_filterDataPekerjaan').getValue() + '/'+ 
-                                       Ext.getCmp('startdate_DataPekerjaan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataPekerjaan').getSubmitValue() + '/'+ 
-                                       Ext.getCmp('startTerminatedate_DataPekerjaan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataPekerjaan').getSubmitValue()+'/'+Ext.getCmp('keaktifanDataPekerjaan').getValue();
+                                       //   var location = SITE_URL+"laporan/datapekerjaan/" + nullvalue(Ext.getCmp('companyname_filterDataPekerjaan').getValue())+'/'+
+                                       // nullvalue(Ext.getCmp('namajabatan_filterDataPekerjaan').getValue())+'/'+nullvalue(Ext.getCmp('namaorg_filterDataPekerjaan').getValue()) + '/'+ 
+                                       // nullvalue(Ext.getCmp('startdate_DataPekerjaan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataPekerjaan').getSubmitValue()) + '/'+ 
+                                       // nullvalue(Ext.getCmp('startTerminatedate_DataPekerjaan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('endTerminatedate_DataPekerjaan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataPekerjaan').getValue());
+
+                                        // window.location
+                                       window.location = SITE_URL+"laporan/datapekerjaan/" + nullvalue(Ext.getCmp('companyname_filterDataPekerjaan').getValue())+'/'+
+                                       nullvalue(Ext.getCmp('startdate_DataPekerjaan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataPekerjaan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataPekerjaan').getValue());
+                                       // alert(location)
                                     } else {
                                          Ext.Msg.alert("Info", d.message);
                                     }
@@ -903,3 +954,5 @@ Ext.define('GridDataPekerjaan', {
         }
     }
 });
+
+

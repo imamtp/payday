@@ -255,7 +255,7 @@ class personalia extends MY_Controller {
                           {
                              if($idpergerakan!==128 && $idpergerakan!==125)
                             {
-                               echo json_encode(array('success' => false, 'message' => $idpergerakan.' Pergerakan personil '.$this->input->post('namalengkap').' hanya bisa PERPANJANGAN KONTRAK, PERUBAHAN STATUS dan TERMINASI'));
+                               echo json_encode(array('success' => false, 'message' => 'Pergerakan personil '.$this->input->post('namalengkap').' hanya bisa PERPANJANGAN KONTRAK, PERUBAHAN STATUS dan TERMINASI'));
                                exit;
                             }
                           }

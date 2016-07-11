@@ -372,7 +372,15 @@ class ptk extends MY_Controller {
                                                     join jabatan b ON a.idjabatan = b.idjabatan
                                                     where b.kodejabatan='".$d['4']."' and (b.idcompany = ".$qcmp->idcompany." OR b.idcompany = ".$qcmp->parent.") and b.display is null")->row();
 
-                        $qlok = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')))->row();
+                        //lokasi
+                        $this->db->select('idcompany,parent');
+                        $qemp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
+
+                         // $q = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$qemp->idcompany));
+                        $qlok = $this->db->query("SELECT kodebudgelokasi,idlokasiorg FROM lokasi_org WHERE kodebudgelokasi = '".$d['5']."' AND display IS NULL AND (idcompany = $qemp->idcompany OR idcompany = $qemp->parent)")->row();
+
+                        // $qlok = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')))->row();
+                        //end lokasi
 
                         if(intval($d['3'])<10)
                          {

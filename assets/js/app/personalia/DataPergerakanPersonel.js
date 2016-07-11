@@ -2,7 +2,7 @@
 
 Ext.define('GridDataPergerakanPersonelModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpergerakanpersonil','nopergerakan','idpelamar','idcompany','idjabatan','idlevelindividu','idorganisasi','idjabatanatasan','idorganisasiatasan','namaatasan','tglmasuk','tglberakhir','statuspergerakan','userin','datein','namalengkap','companyname','namajabatan','kodejabatan','levelnameJabatan','levelnameindividu','kodeorg','namaorg','kekaryaanname','namalokasi','namajabatanatasan','namaorgatasan','kodeorgatasan','lokasiatasan','namapergerakan','ni','nik','catatanpenyesuaian'],
+    fields: ['idpergerakanpersonil','nopergerakan','idpelamar','idcompany','idjabatan','idlevelindividu','idorganisasi','idjabatanatasan','idorganisasiatasan','namaatasan','tglmasuk','tglberakhir','statuspergerakan','userin','datein','namalengkap','companyname','namajabatan','kodejabatan','levelnameJabatan','levelnameindividu','kodeorg','namaorg','kekaryaanname','namalokasi','namajabatanatasan','namaorgatasan','kodeorgatasan','lokasiatasan','namapergerakan','ni','nik','catatanpenyesuaian','namajabatan_from','namalokasi_from','namaorg_from'],
     idProperty: 'id'
 });
 
@@ -178,9 +178,12 @@ Ext.define('GridDataPergerakanPersonel', {
         // {header: 'NI', dataIndex: 'ni', minWidth: 150},
         {header: 'NIK', dataIndex: 'nik', minWidth: 150},
         {header: 'Nama Lengkap', dataIndex: 'namalengkap', minWidth: 150},
-        {header: 'Nama Jabatan', dataIndex: 'namajabatan', minWidth: 150},
-        {header: 'Lokasi', dataIndex: 'namalokasi', minWidth: 150},
-        {header: 'Organisasi', dataIndex: 'namaorg', minWidth: 150},
+        {header: 'Jabatan Sebelumnya', dataIndex: 'namajabatan_from', minWidth: 150},
+        {header: 'Jabatan Baru', dataIndex: 'namajabatan', minWidth: 150},
+        {header: 'Lokasi Sebelumnya', dataIndex: 'namalokasi_from', minWidth: 150},
+        {header: 'Lokasi Baru', dataIndex: 'namalokasi', minWidth: 150},
+        {header: 'Organisasi Sebelumnya', dataIndex: 'namaorg_from', minWidth: 150},
+        {header: 'Organisasi Baru', dataIndex: 'namaorg', minWidth: 150},
         {header: 'Tgl Mulai Jabatan', dataIndex: 'tglmasuk', minWidth: 130},
         {header: 'Tgl Akhir Jabatan', dataIndex: 'tglberakhir', minWidth: 130},
         {header: 'Catatan', dataIndex: 'catatanpenyesuaian', minWidth: 350},

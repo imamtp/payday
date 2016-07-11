@@ -904,6 +904,7 @@ class kompensasi extends MY_Controller {
             $utTPenambahPajak=0;
             $utTPengurangPajak=0;
             $totalUTT=0;
+
             $nilai=0;
             if($qUTT->num_rows()>0)
             {
@@ -943,18 +944,17 @@ class kompensasi extends MY_Controller {
 
                     $totalUTT+=$nilai;
 
-
                     //UPLOAD
                     $qutt_upload = $this->db->query("select masukpajak,nominal,fungsipajak,jenisupah
                             from v_upahtt a  WHERE TRUE AND (startdate >= '$startdate' and enddate <= '$enddate') 
                             and idpelamar =".$rpeg->idpelamar."");
-
+                    // echo $this->db->last_query().'    ';
                     if($qutt_upload->num_rows()>0)
                     {
                         foreach ($qutt_upload->result() as $rUTT_upload) {
                                 $nilaiV = $rUTT_upload->nominal;
-                                $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
-
+                                // $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
+                                $nilai = $nilaiV;
                                 // $data[$i]['upahtidaktetap']['item'][] = array(
                                 //                                     // 'namakomponen'=>$rUTT->namakomponen,
                                 //                                     'nilai'=>$nilai,
@@ -983,6 +983,8 @@ class kompensasi extends MY_Controller {
 
                                 $totalUTT+=$nilai;
                             }
+
+
                     }
 
                     if($commit=='true')
@@ -1009,7 +1011,7 @@ class kompensasi extends MY_Controller {
 
                             // $nilai += ($nilaiV/$numdayswork)* $obj->kehadiran;
                             $nilai = $nilaiV;
-
+// echo $nilai;
                             // $data[$i]['upahtidaktetap']['item'][] = array(
                             //                                     // 'namakomponen'=>$rUTT->namakomponen,
                             //                                     'nilai'=>$nilai,

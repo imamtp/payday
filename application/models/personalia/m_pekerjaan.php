@@ -201,6 +201,7 @@ class m_pekerjaan extends CI_Model {
             $data = array(
                 'idpekerjaan'=>$r->idpekerjaan,
                 'idstrukturjabatan'=>$r->idstrukturjabatan,
+                'kodejabatan'=>$r->kodejabatan,
                 'tglmasuk'=>$r->tglmasuk,
                 'tglberakhir'=>$r->tglberakhir,
                 'namajabatan'=>$r->namajabatan,
@@ -219,6 +220,7 @@ class m_pekerjaan extends CI_Model {
                 $data['idpekerjaanatasan']=$d['idpekerjaan'];
                 $data['idstrukturjabatanatasan']=$d['idstrukturjabatan'];
                 $data['tglmasukatasan']=$d['tglmasuk'];
+                // $data['kodejabatan']=$d['kodejabatan'];
                 $data['tglberakhiratasan']=$d['tglberakhir'];
                 $data['namajabatanatasan']=$d['namajabatan'];
                 $data['namalokasiatasan']=$d['namalokasi'];
@@ -236,6 +238,7 @@ class m_pekerjaan extends CI_Model {
                 'idpekerjaan'=>null,
                 'idstrukturjabatan'=>null,
                 'tglmasuk'=>null,
+                'kodejabatan'=>null,
                 'tglberakhir'=>null,
                 'namajabatan'=>null,
                 'namalokasi'=>null,

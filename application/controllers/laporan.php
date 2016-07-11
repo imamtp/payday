@@ -32,7 +32,7 @@ class laporan extends MY_Controller {
         return $data;
     }
 
-    function datapekerjaan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$keaktifan=null,$option='excel')
+    function datapekerjaan($idcompany,$startdate=null,$enddate=null,$keaktifan=null,$option='excel')
     {
         $this->load->model('personalia/m_datapekerjaan','model');
 
@@ -47,7 +47,7 @@ class laporan extends MY_Controller {
       
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
-        $query = $this->model->query();
+        $query = $this->model->query().' WHERE TRUE AND '.$this->model->whereQuery();
 
         if($idcompany!='null')
         {
@@ -56,29 +56,29 @@ class laporan extends MY_Controller {
              $query.=$this->m_data->whereReportCompany();
         }
 
-        if($idjabatan!='null')
-        {
-            $query.=" AND b.idjabatan=$idjabatan";
-        }
+        // if($idjabatan!='null')
+        // {
+        //     $query.=" AND b.idjabatan=$idjabatan";
+        // }
 
-         if($idorganisasi!='null')
-        {
-            $query.=" AND b.idorganisasi=$idorganisasi";
-        }
+        //  if($idorganisasi!='null')
+        // {
+        //     $query.=" AND b.idorganisasi=$idorganisasi";
+        // }
 
-        if($enddate!=null && $startdate!=null)
+        if($enddate!='null' && $startdate!='null')
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
             $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
-        if($startterminatedate!=null && $endterminatedate!=null)
-        {
-            $startterminatedate = backdate2_reverse($startterminatedate);
-            $endterminatedate = backdate2_reverse($endterminatedate);
-            $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
-        }
+        // if($startterminatedate!=null && $endterminatedate!=null)
+        // {
+        //     $startterminatedate = backdate2_reverse($startterminatedate);
+        //     $endterminatedate = backdate2_reverse($endterminatedate);
+        //     $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
+        // }
 
          $datenow = gmdate('Y-m-d');
          
@@ -292,7 +292,7 @@ class laporan extends MY_Controller {
         echo $html;
     }
 
-    function datakaryawan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$option='excel')
+    function datakaryawan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$status=null,$option='excel')
     {
         $this->load->model('personalia/m_VDataKaryawangrid','model');
 
@@ -304,10 +304,21 @@ class laporan extends MY_Controller {
 
         // $query.= ' WHERE a.display is null ';
 
-      
+         $wer =" AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null)";
+
+         $datenow = gmdate('Y-m-d');
+         
+         if($status=='true')
+         {
+            $wer .= " AND a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir OR '$datenow' between aaa.tglmasuk and aaa.tglberakhir) $wer AND bbb.idpergerakan!=128";
+         } else {
+            // $wer = str_replace("WHERE TRUE AND", "WHERE TRUE", $wer);
+            // return "$wer";
+            $wer .= " AND a.display is null $wer";
+        }
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
-        $query = $this->model->query()." where true ";
+        $query = $this->model->query()." where true ".$wer;
 
         if($idcompany!='null')
         {
@@ -326,14 +337,14 @@ class laporan extends MY_Controller {
             $query.=" AND e.idorganisasi=$idorganisasi";
         }
 
-        if($enddate!=null && $startdate!=null)
+        if($enddate!='null' && $startdate!='null')
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
             $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
-        if($startterminatedate!=null && $endterminatedate!=null)
+        if($startterminatedate!='null' && $endterminatedate!='null')
         {
             $startterminatedate = backdate2_reverse($startterminatedate);
             $endterminatedate = backdate2_reverse($endterminatedate);
@@ -341,8 +352,7 @@ class laporan extends MY_Controller {
         }
 
         $query .= " ".$orderby;
-// echo $query;
-// exit;
+        
         $data = array(
             'data'=>$this->db->query($query),
             'option'=>$option
@@ -366,10 +376,20 @@ class laporan extends MY_Controller {
         echo $html;
     }
 
-    function dataidentitas($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$option='excel')
+    function dataidentitas($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$status=null,$option='excel')
     {
         $this->load->model('personalia/m_VDataKaryawangrid','model');
       
+        $wer =" AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null)";
+
+        $datenow = gmdate('Y-m-d');
+         
+        if($status=='true')
+        {
+            $wer .= " AND a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) $wer AND bb.idpergerakan!=128";
+        } else {
+            $wer .= " AND a.display is null $wer";
+        }
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
         $query = "select a.idpelamar,a.idcompany,e.idorganisasi,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,ni,nik,tgllahir,sexname,noktp,notelp,nohandphone,statuscalon,a.status,kekaryaanname,a.display,f.companyname,
@@ -392,7 +412,7 @@ class laporan extends MY_Controller {
                     left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
                     left join company f ON a.idcompany = f.idcompany";
         $query .= " left join identitas g ON a.idpelamar = g.idpelamar";
-        $query .=" where true ";
+        $query .=" where true ".$wer;
 
         if($idcompany!='null')
         {
@@ -411,18 +431,18 @@ class laporan extends MY_Controller {
             $query.=" AND e.idorganisasi=$idorganisasi";
         }
 
-        if($enddate!=null && $startdate!=null)
+        if($enddate!='null' && $startdate!='null')
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
-            $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
+            $query.=" AND aa.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
-        if($startterminatedate!=null && $endterminatedate!=null)
+        if($startterminatedate!='null' && $endterminatedate!='null')
         {
             $startterminatedate = backdate2_reverse($startterminatedate);
             $endterminatedate = backdate2_reverse($endterminatedate);
-            $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
+            $query.=" AND aa.tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
         }
 
         $query .= " ".$orderby;
@@ -451,10 +471,20 @@ class laporan extends MY_Controller {
         echo $html;
     }
 
-    function datakeluarga($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$option='excel')
+    function datakeluarga($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$status=null,$option='excel')
     {
         $this->load->model('personalia/m_VDataKaryawangrid','model');
       
+        $wer =" AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null)";
+
+        $datenow = gmdate('Y-m-d');
+         
+        if($status=='true')
+        {
+            $wer .= " AND a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) $wer AND bb.idpergerakan!=128";
+        } else {
+            $wer .= " AND a.display is null $wer";
+        }
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
         $query = "select a.idpelamar,a.idcompany,e.idorganisasi,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,statuscalon,a.status,kekaryaanname,a.display,f.companyname,
@@ -482,7 +512,7 @@ class laporan extends MY_Controller {
                     LEFT join jenjangpendidikan j ON g.idjenjangpendidikan = j.idjenjangpendidikan
                     LEFT join hubkeluarga l ON g.idhubkeluarga = l.idhubkeluarga
                     ";
-        $query .=" where true ";
+        $query .=" where true ".$wer;
 
         if($idcompany!='null')
         {
@@ -501,18 +531,18 @@ class laporan extends MY_Controller {
             $query.=" AND e.idorganisasi=$idorganisasi";
         }
 
-        if($enddate!=null && $startdate!=null)
+        if($enddate!='null' && $startdate!='null')
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
-            $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
+            $query.=" AND aa.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
-        if($startterminatedate!=null && $endterminatedate!=null)
+        if($startterminatedate!='null' && $endterminatedate!='null')
         {
             $startterminatedate = backdate2_reverse($startterminatedate);
             $endterminatedate = backdate2_reverse($endterminatedate);
-            $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
+            $query.=" AND aa.tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
         }
 
         $query .= " ".$orderby;
@@ -540,10 +570,20 @@ class laporan extends MY_Controller {
         echo $html;
     }
 
-    function datapendidikan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$option='excel')
+    function datapendidikan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$status=null,$option='excel')
     {
         $this->load->model('personalia/m_VDataKaryawangrid','model');
       
+         $wer =" AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null)";
+
+        $datenow = gmdate('Y-m-d');
+         
+        if($status=='true')
+        {
+            $wer .= " AND a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) $wer AND bb.idpergerakan!=128";
+        } else {
+            $wer .= " AND a.display is null $wer";
+        }
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
         $query = "select a.idpelamar,a.idcompany,e.idorganisasi,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,statuscalon,a.status,kekaryaanname,a.display,f.companyname,
@@ -567,7 +607,7 @@ class laporan extends MY_Controller {
                     left join company f ON a.idcompany = f.idcompany";
         $query .= " left join pendidikan g ON a.idpelamar = g.idpelamar
                     left join jenjangpendidikan h ON g.idjenjangpendidikan = h.idjenjangpendidikan";
-        $query .=" where true ";
+        $query .=" where true ".$wer;
 
         if($idcompany!='null')
         {
@@ -586,18 +626,18 @@ class laporan extends MY_Controller {
             $query.=" AND e.idorganisasi=$idorganisasi";
         }
 
-        if($enddate!=null && $startdate!=null)
+        if($enddate!='null' && $startdate!='null')
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
-            $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
+            $query.=" AND aa.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
-        if($startterminatedate!=null && $endterminatedate!=null)
+        if($startterminatedate!='null' && $endterminatedate!='null')
         {
             $startterminatedate = backdate2_reverse($startterminatedate);
             $endterminatedate = backdate2_reverse($endterminatedate);
-            $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
+            $query.=" AND aa.tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
         }
 
         $query .= " ".$orderby;
@@ -625,10 +665,20 @@ class laporan extends MY_Controller {
         echo $html;
     }
 
-    function datapelatihan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$option='excel')
+    function datapelatihan($idcompany,$idjabatan,$idorganisasi,$startdate=null,$enddate=null,$startterminatedate=null,$endterminatedate=null,$status=null,$option='excel')
     {
         $this->load->model('personalia/m_VDataKaryawangrid','model');
       
+        $wer =" AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null)";
+
+        $datenow = gmdate('Y-m-d');
+         
+        if($status=='true')
+        {
+            $wer .= " AND a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) $wer AND bb.idpergerakan!=128";
+        } else {
+            $wer .= " AND a.display is null $wer";
+        }
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
         $query = "select a.idpelamar,a.idcompany,e.idorganisasi,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,statuscalon,a.status,kekaryaanname,a.display,f.companyname,
@@ -651,7 +701,7 @@ class laporan extends MY_Controller {
                     left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
                     left join company f ON a.idcompany = f.idcompany";
         $query .= " left join pelatihan g ON a.idpelamar = g.idpelamar";
-        $query .=" where true ";
+        $query .=" where true ".$wer;
 
         if($idcompany!='null')
         {
@@ -670,18 +720,18 @@ class laporan extends MY_Controller {
             $query.=" AND e.idorganisasi=$idorganisasi";
         }
 
-        if($enddate!=null && $startdate!=null)
+        if($enddate!='null' && $startdate!='null')
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
-            $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
+            $query.=" AND aa.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
-        if($startterminatedate!=null && $endterminatedate!=null)
+        if($startterminatedate!='null' && $endterminatedate!='null')
         {
             $startterminatedate = backdate2_reverse($startterminatedate);
             $endterminatedate = backdate2_reverse($endterminatedate);
-            $query.=" AND tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
+            $query.=" AND aa.tglberakhir BETWEEN '$startterminatedate' AND '$endterminatedate'";
         }
 
         $query .= " ".$orderby;
@@ -713,9 +763,10 @@ class laporan extends MY_Controller {
     {
         $this->load->model('personalia/m_pergerakanpersonil','model');
       
+        $wer = $this->m_data->whereCompany('b',false);
 
         $orderby = $this->model->orderBy() != "" ? "ORDER BY " . $this->model->orderBy() : null;
-        $query = $this->model->query()." where true ";
+        $query = $this->model->query()." where true $wer";
 
         // if($idcompany!='null')
         // {
@@ -733,17 +784,18 @@ class laporan extends MY_Controller {
         // {
         //     $query.=" AND e.idorganisasi=$idorganisasi";
         // }
+        
 
         if($enddate!=null && $startdate!=null)
         {
             $tglmasuk1 = backdate2_reverse($startdate);
             $tglmasuk2 = backdate2_reverse($enddate);
-            $query.=" AND tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
+            $query.=" AND r.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         }
 
         if($status!=null && $status!='null')
         {
-            $query .=" AND a.statuspergerakan='$status'";
+            $query .=" AND a.statuspergerakan='$status' $wer";
         }
 
         $query .= " ".$orderby;

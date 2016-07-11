@@ -1427,6 +1427,25 @@ class Backend extends MY_Controller {
         $this->fetchJson($q, $field);
     }
 
+    function comboxOrgPekerjaan()
+    {
+        $field = array('idorganisasi', 'namaorg');
+        $idcompany = $this->input->get('idcompany');
+        // $qj = $this->db->get_where('keljab', array('ketkeljab' => $_GET['ketkeljab']))->row();
+
+        if($idcompany!='')
+        { 
+            $wer = " and idcompany = $idcompany";
+        } else {
+            $wer = $this->m_data->whereCompany();
+        }
+        $sql = "select idorganisasi,namaorg from organisasi a 
+        where display is null  " .$wer. " and now() between startdate and enddate";
+        // echo $sql;
+        $q = $this->db->query($sql);
+        $this->fetchJson($q, $field);
+    }
+
     function comboxOrg() {
         $field = array('idorganisasi', 'namaorg');
         $idcompany = $this->input->get('idcompany');

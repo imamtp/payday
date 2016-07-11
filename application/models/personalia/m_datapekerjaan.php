@@ -16,7 +16,7 @@ class m_datapekerjaan extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.idcompany,e.idorganisasi,g.kodeorg,kodejabatan,e.idjabatan,a.namalengkap,aa.idpekerjaan,k.statuscalon,a.display,a.idcompany,aa.tglmasuk,aa.tglberakhir,ni,nik,tgllahir,sexname,noktp,notelp,nohandphone,statuscalon,a.status,kekaryaanname,a.display,f.companyname,bb.idpergerakan";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan";
     }
 
     function fieldCek()
@@ -31,32 +31,37 @@ class m_datapekerjaan extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
-                    LEFT JOIN
+                    LEFT  JOIN
                     (
                         SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
                         WHERE statuspergerakan='Disetujui'
                         GROUP BY idpelamar
                     ) as x ON a.idpelamar = x.idpelamar
-                    left join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
-					left join pergerakanpersonil bb ON aa.idpergerakanpersonil = bb.idpergerakanpersonil
-                    LEFT JOIN
+                    LEFT join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
+                    LEFT JOIN strukturjabatan b ON aa.idstrukturjabatan = b.idstrukturjabatan
+                    LEFT JOIN jabatan c ON b.idjabatan = c.idjabatan
+                    LEFT JOIN lokasi_org d ON aa.idlokasiorg = d.idlokasiorg
+                    LEFT JOIN organisasi e ON b.idorganisasi = e.idorganisasi
+                    LEFT JOIN kekaryaan f ON aa.idkekaryaan = f.idkekaryaan
+                    LEFT JOIN pelamar g ON aa.idpelamaratasan = g.idpelamar
+                    LEFT JOIN level j ON aa.idlevelindividu = j.idlevel
+                    LEFT JOIN level i ON c.idlevel = i.idlevel
+                    LEFT join kekaryaan v ON aa.idkekaryaan = v.idkekaryaan
+                    JOIN calonpelamar k ON a.idpelamar = k.idpelamar
+                    left join pelamar l ON aa.idpelamaratasan = l.idpelamar
+                    join company m ON a.idcompany = m.idcompany
+                    LEFT  JOIN
                     (
-                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
+                        SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
                         WHERE statuspergerakan='Disetujui'
                         GROUP BY idpelamar
-                    ) as xx ON a.idpelamar = xx.idpelamar
-                    left join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
-                    LEFT join (select nik,idpelamar,statuscalon 
-                                    from calonpelamar
-                                        where statuscalon='Disetujui') k ON a.idpelamar = k.idpelamar
-                    LEFT join sextype c ON a.idsex = c.idsex
-                    left join kekaryaan d ON aa.idkekaryaan = d.idkekaryaan
-                    left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
-                    left join company f ON a.idcompany = f.idcompany
-                    left join organisasi g ON e.idorganisasi = g.idorganisasi 
-                    left join jabatan h ON e.idjabatan = e.idjabatan";
+                    ) as xx ON xx.idpelamar = aa.idpelamaratasan
+                    LEFT JOIN pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
+                    LEFT JOIN strukturjabatan bb ON aaa.idstrukturjabatan = bb.idstrukturjabatan
+                    LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
+                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi";
 
         return $query;
     }

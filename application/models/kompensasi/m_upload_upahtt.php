@@ -44,17 +44,17 @@ class m_upload_upahtt extends CI_Model {
 
         if($startdate!=null && $enddate!=null)
         {
-            $wer.=" ( '".$startdate[2].'-'.$startdate[1].'-'.$startdate[0]."' <= startdate and enddate >= '".$enddate[2].'-'.$enddate[1].'-'.$enddate[0]."')";
+            $wer.=" ( startdate >= '".$startdate[2].'-'.$startdate[1].'-'.$startdate[0]."' and enddate <= '".$enddate[2].'-'.$enddate[1].'-'.$enddate[0]."')";
         }
 // echo $startdate.'==null && '.$enddate.'==null && '.$jenisupah;
         if($startdate==null && $enddate==null && $jenisupah!=null)
         {
-            $wer.=" jenisupah='$jenisupah'";
+            // $wer.=" jenisupah='$jenisupah'";
         } else if( $jenisupah!=null) {
-            $wer.=" and jenisupah='$jenisupah'";
+            // $wer.=" and jenisupah='$jenisupah'";
         }
 
-         return $wer.substr($this->m_data->whereCompany(), 4);
+         return $wer.' and '.substr($this->m_data->whereCompany(), 4);
     }
 
     function orderBy() {

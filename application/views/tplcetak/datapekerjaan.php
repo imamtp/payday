@@ -25,7 +25,7 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>Tanggal Lahir</td>
          <td><b>NIK</td>
          <td><b>Kode Jabatan</td>
-         <td><b>Jabatan</td>
+         <td><b>Nama Jabatan</td>
          <td><b>Level Jabatan</td>
          <td><b>Level Individu</td>
          <td><b>Lokasi</td>
@@ -33,7 +33,7 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>Organisasi</td>
          <td><b>Kekaryawanan</td>
          <td><b>Perusahaan</td>
-         <td><b>Tgl Masuk</td>
+         <td><b>Tgl Efektif</td>
          <td><b>Tgl Berakhir</td>
          <!-- <td><b>Nama Atasan</td>
          <td><b>Jabatan Atasan</td>

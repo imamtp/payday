@@ -84,7 +84,7 @@ rr.idpelamaratasan as idpelamaratasan_from,ww.namalengkap as namaatasan_from,rr.
                     LEFT JOIN pekerjaan aa ON xx.idpekerjaan = aa.idpekerjaan
                     LEFT JOIN strukturjabatan bb ON aa.idstrukturjabatan = bb.idstrukturjabatan
                     LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
-                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi    ";
+                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi ";
 
         return $query;
     }

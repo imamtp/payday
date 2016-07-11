@@ -624,10 +624,10 @@ Ext.define('GridDataKaryawan', {
                             text: 'Data Karyawan',
                             listeners: {
                                 click: function (component) {
-                                    window.location = SITE_URL + "laporan/datakaryawan/" + Ext.getCmp('companyname_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('namajabatan_filterDataKaryawan').getValue() + '/' + Ext.getCmp('namaorg_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('startdate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataKaryawan').getSubmitValue() + '/' +
-                                            Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue();
+                                    window.location = SITE_URL + "laporan/datakaryawan/" + nullvalue(Ext.getCmp('companyname_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('namajabatan_filterDataKaryawan').getValue()) + '/' + nullvalue(Ext.getCmp('namaorg_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startdate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataKaryawan').getSubmitValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataKaryawan').getValue());
                                 }
                             }
                         },
@@ -635,10 +635,10 @@ Ext.define('GridDataKaryawan', {
                             text: 'Data Identitas',
                             listeners: {
                                 click: function (component) {
-                                    window.location = SITE_URL + "laporan/dataidentitas/" + Ext.getCmp('companyname_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('namajabatan_filterDataKaryawan').getValue() + '/' + Ext.getCmp('namaorg_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('startdate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataKaryawan').getSubmitValue() + '/' +
-                                            Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue();
+                                    window.location = SITE_URL + "laporan/dataidentitas/" + nullvalue(Ext.getCmp('companyname_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('namajabatan_filterDataKaryawan').getValue()) + '/' + nullvalue(Ext.getCmp('namaorg_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startdate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataKaryawan').getSubmitValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataKaryawan').getValue());
                                 }
                             }
                         },
@@ -646,10 +646,10 @@ Ext.define('GridDataKaryawan', {
                             text: 'Data Keluarga',
                             listeners: {
                                 click: function (component) {
-                                    window.location = SITE_URL + "laporan/datakeluarga/" + Ext.getCmp('companyname_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('namajabatan_filterDataKaryawan').getValue() + '/' + Ext.getCmp('namaorg_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('startdate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataKaryawan').getSubmitValue() + '/' +
-                                            Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue();
+                                    window.location = SITE_URL + "laporan/datakeluarga/" + nullvalue(Ext.getCmp('companyname_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('namajabatan_filterDataKaryawan').getValue()) + '/' + nullvalue(Ext.getCmp('namaorg_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startdate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataKaryawan').getSubmitValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataKaryawan').getValue());
                                 }
                             }
                         },
@@ -657,10 +657,10 @@ Ext.define('GridDataKaryawan', {
                             text: 'Data Pendidikan',
                             listeners: {
                                 click: function (component) {
-                                    window.location = SITE_URL + "laporan/datapendidikan/" + Ext.getCmp('companyname_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('namajabatan_filterDataKaryawan').getValue() + '/' + Ext.getCmp('namaorg_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('startdate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataKaryawan').getSubmitValue() + '/' +
-                                            Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue();
+                                    window.location = SITE_URL + "laporan/datapendidikan/" + nullvalue(Ext.getCmp('companyname_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('namajabatan_filterDataKaryawan').getValue()) + '/' + nullvalue(Ext.getCmp('namaorg_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startdate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataKaryawan').getSubmitValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataKaryawan').getValue());
                                 }
                             }
                         },
@@ -668,10 +668,10 @@ Ext.define('GridDataKaryawan', {
                             text: 'Data Pelatihan',
                             listeners: {
                                 click: function (component) {
-                                    window.location = SITE_URL + "laporan/datapelatihan/" + Ext.getCmp('companyname_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('namajabatan_filterDataKaryawan').getValue() + '/' + Ext.getCmp('namaorg_filterDataKaryawan').getValue() + '/' +
-                                            Ext.getCmp('startdate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('enddate_DataKaryawan').getSubmitValue() + '/' +
-                                            Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue() + '/' + Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue();
+                                    window.location = SITE_URL + "laporan/datapelatihan/" + nullvalue(Ext.getCmp('companyname_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('namajabatan_filterDataKaryawan').getValue()) + '/' + nullvalue(Ext.getCmp('namaorg_filterDataKaryawan').getValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startdate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('enddate_DataKaryawan').getSubmitValue()) + '/' +
+                                            nullvalue(Ext.getCmp('startTerminatedate_DataKaryawan').getSubmitValue()) + '/' + nullvalue(Ext.getCmp('endTerminatedate_DataKaryawan').getSubmitValue())+'/'+nullvalue(Ext.getCmp('keaktifanDataKaryawan').getValue());
                                 }
                             }
                         }

@@ -130,7 +130,7 @@ class kehadiran extends MY_Controller {
 					$qhadir.=" and (c.nik like '%".strtoupper($search)."%' OR b.namalengkap like '%".strtoupper($search)."%')";
 				}
 
-				$qhadir.="ORDER BY idkehadiran";
+				$qhadir.="ORDER BY idkehadiran desc";
 
 	        } else {
 	        	$qhadir = "SELECT a.*,b.namalengkap,c.nik
@@ -142,7 +142,7 @@ class kehadiran extends MY_Controller {
 				{
 					$qhadir.=" and (c.nik like '%".strtoupper($search)."%' OR b.namalengkap like '%".strtoupper($search)."%')";
 				}
-				$qhadir.="ORDER BY idkehadiran";
+				$qhadir.="ORDER BY idkehadiran desc";
 	        }
 // echo $qhadir;
 // exit;

@@ -155,3 +155,13 @@ function kotakLoading()
 
      msgBox.getPositionEl().setTop(5);
 }
+
+function nullvalue(v)
+{
+    if(v==='')
+    {
+        return 'null';
+    } else {
+        return v;
+    }
+}
