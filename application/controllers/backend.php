@@ -272,10 +272,13 @@ class Backend extends MY_Controller {
                                 $qcek = $this->db->get_where($this->datamodel->tableName(), array($key => $value, 'display' => null));
                             }
 
-                            if ($qcek->num_rows() > 0) {
-                                $json = array('success' => false, 'message' => $valuefc . ' <b>' . $value . '</b> sudah ada di dalam database');
-                                echo json_encode($json);
-                                exit;
+                            if($this->datamodel->tableName()!='product')
+                            {
+                                if ($qcek->num_rows() > 0) {
+                                    $json = array('success' => false, 'message' => $valuefc . ' <b>' . $value . '</b> sudah ada di dalam database');
+                                    echo json_encode($json);
+                                    exit;
+                                }
                             }
                         }
                     }

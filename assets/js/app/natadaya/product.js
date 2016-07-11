@@ -51,6 +51,7 @@ var formProduct = Ext.create('Ext.form.Panel', {
         },
          {
             xtype: 'textfield',
+            id:'max_num_quota_product',
             fieldLabel: 'Jumlah Maksimal Pegawai',
             allowBlank: false,
             name: 'maxemployee'
@@ -226,6 +227,7 @@ Ext.define('GridProduct', {
                             }
                         });
                        
+                       Ext.getCmp('max_num_quota_product').setReadOnly(false);
                     }
                 },
                 {
@@ -279,7 +281,7 @@ Ext.define('GridProduct', {
                             }
                         });
 
-                        
+                        Ext.getCmp('max_num_quota_product').setReadOnly(true);
 
                     }
                 }, {
