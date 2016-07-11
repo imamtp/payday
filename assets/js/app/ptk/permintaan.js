@@ -625,6 +625,8 @@ Ext.define('GridPermintaan', {
                                 fn: function(){ 
                                     if(Ext.getCmp('filtercb_companyPermintaanTK').getValue())
                                     {
+                                        filter_prtk(true);
+
                                         Ext.getCmp('companyname_filterPermintaanTK').setValue(null);
                                         Ext.getCmp('companyname_filterPermintaanTK').setDisabled(true);
                                         storeGridPermintaan.load();
@@ -642,19 +644,35 @@ Ext.define('GridPermintaan', {
                         name: 'companyname',
                         labelWidth: 70,
                         listeners: {
-                        select: function() { 
+                        select: function(n,v) { 
+                                filter_prtk(false);
+
                                 storeGridPermintaan.load();
+
+                                 orgStore.load({
+                                    params:{
+                                         idcompany:v[0].data.idcompany
+                                    }
+                                });
+                                 jabatanStore.load({
+                                    params:{
+                                         idcompany:v[0].data.idcompany
+                                    }
+                                });
                                 // console.log(this.value)
                             }
                         }
                     },
                     {
                         xtype:'displayfield',
+                        disabled:true,
+                        id:'df_org_prtk',
                         labelWidth:72,
                         fieldLabel:'Organisasi'
                     },
                     {
                         xtype: 'checkboxfield',
+                        disabled:true,
                         name: 'checkbox1',
                         id:'filtercb_orgPermintaanTK',
                         // fieldLabel: 'Semua',
@@ -677,6 +695,7 @@ Ext.define('GridPermintaan', {
                         }
                     },{
                         xtype: 'comboxOrg',
+                        disabled:true,
                         fieldLabel:'',
                         id: 'namaorg_filterPermintaanTK',
                         name: 'namaorg',
@@ -738,11 +757,14 @@ Ext.define('GridPermintaan', {
 
                     {
                         xtype:'displayfield',
+                        id:'df_jabatan_prtk',
+                        disabled:true,
                         labelWidth:72,
                         fieldLabel:'Jabatan'
                     },
                     {
                         xtype: 'checkboxfield',
+                        disabled:true,
                         name: 'checkbox1',
                         id:'filtercb_jabatanPermintaanTK',
                         // fieldLabel: 'Semua',
@@ -766,6 +788,7 @@ Ext.define('GridPermintaan', {
                     },
                     {
                         xtype: 'comboxJabatan',
+                        disabled:true,
                         fieldLabel:'',
                         id: 'namajabatan_filterPermintaanTK',
                         name: 'namajabatan',
@@ -942,8 +965,8 @@ Ext.define('GridPermintaan', {
                 storeGridPermintaan.load();
                   tahunTKStore.load();
                 companyStore.load();
-                jabatanStore.load();
-                orgStore.load();
+                // jabatanStore.load();
+                // orgStore.load();
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
@@ -1045,4 +1068,22 @@ function getNumPerencanaan()
                         }
                     });
             }
+}
+
+function filter_prtk(opt)
+{
+    Ext.getCmp('df_org_prtk').setDisabled(opt);
+    Ext.getCmp('filtercb_orgPermintaanTK').setDisabled(opt);
+    Ext.getCmp('namaorg_filterPermintaanTK').setDisabled(opt);
+    Ext.getCmp('df_jabatan_prtk').setDisabled(opt);
+    Ext.getCmp('filtercb_jabatanPermintaanTK').setDisabled(opt);
+    Ext.getCmp('namajabatan_filterPermintaanTK').setDisabled(opt);
+
+    if(opt===true)
+    {
+        Ext.getCmp('filtercb_orgPermintaanTK').setValue(null);
+        Ext.getCmp('namaorg_filterPermintaanTK').setValue(null);
+        Ext.getCmp('filtercb_jabatanPermintaanTK').setValue(null);
+        Ext.getCmp('namajabatan_filterPermintaanTK').setValue(null);
+    }
 }

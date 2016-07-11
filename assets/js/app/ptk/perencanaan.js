@@ -381,6 +381,8 @@ Ext.define('GridPerencanaan', {
                                         Ext.getCmp('companyname_filterptk').setValue(null);
                                         Ext.getCmp('companyname_filterptk').setDisabled(true);
                                         storeGridPerencanaan.load();
+
+                                        filter_rtk(true);
                                     } else {
                                         Ext.getCmp('companyname_filterptk').setDisabled(false);
                                         storeGridPerencanaan.load();
@@ -396,19 +398,34 @@ Ext.define('GridPerencanaan', {
                         name: 'companyname',
                         labelWidth: 70,
                         listeners: {
-                        select: function() { 
+                        select: function(n,v) { 
+                                filter_rtk(false);
                                 storeGridPerencanaan.load();
+
+                                orgStore.load({
+                                    params:{
+                                         idcompany:v[0].data.idcompany
+                                    }
+                                });
+                                jabatanStore.load({
+                                    params:{
+                                         idcompany:v[0].data.idcompany
+                                    }
+                                });
                                 // console.log(this.value)
                             }
                         }
                     },
                     {
                         xtype:'displayfield',
+                        id:'df_org_ptk',
+                        disabled:true,
                         labelWidth:72,
                         fieldLabel:'Organisasi'
                     },
                     {
                         xtype: 'checkboxfield',
+                        disabled:true,
                         name: 'checkbox1',
                         id:'filtercb_orgPtk',
                         // fieldLabel: 'Semua',
@@ -431,6 +448,7 @@ Ext.define('GridPerencanaan', {
                         }
                     },{
                         xtype: 'comboxOrg',
+                        disabled:true,
                         fieldLabel:'',
                         id: 'namaorg_filterptk',
                         valueField:'idorganisasi',
@@ -493,11 +511,14 @@ Ext.define('GridPerencanaan', {
 
                     {
                         xtype:'displayfield',
+                        id:'df_jabatan_ptk',
+                        disabled:true,
                         labelWidth:72,
                         fieldLabel:'Jabatan'
                     },
                     {
                         xtype: 'checkboxfield',
+                        disabled:true,
                         name: 'checkbox1',
                         id:'filtercb_jabatanPtk',
                         // fieldLabel: 'Semua',
@@ -521,6 +542,7 @@ Ext.define('GridPerencanaan', {
                     },
                     {
                         xtype: 'comboxJabatan',
+                        disabled:true,
                         fieldLabel:'',
                         id: 'namajabatan_filterptk',
                         valueField:'idjabatan',
@@ -856,6 +878,8 @@ Ext.define('GridPerencanaan', {
                             Ext.getCmp('namajabatan_filterptk').setValue(null);
                             
                             storeGridPerencanaan.reload();
+
+                            filter_rtk(true);
                         }
                     },'->',
                 'Pencarian: ', ' ',
@@ -880,8 +904,8 @@ Ext.define('GridPerencanaan', {
                 storeGridPerencanaan.load();
                 tahunTKStore.load();
                 companyStore.load();
-                jabatanStore.load();
-                orgStore.load();
+                // jabatanStore.load();
+                // orgStore.load();
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
@@ -926,4 +950,22 @@ function clearFormKTK()
     });
     // PerencanaanTKGridStore.load();
     // PerencanaanTKGridStore.remove();
+}
+
+function filter_rtk(opt)
+{
+    Ext.getCmp('df_org_ptk').setDisabled(opt);
+    Ext.getCmp('filtercb_orgPtk').setDisabled(opt);
+    Ext.getCmp('namaorg_filterptk').setDisabled(opt);
+    Ext.getCmp('df_jabatan_ptk').setDisabled(opt);
+    Ext.getCmp('filtercb_jabatanPtk').setDisabled(opt);
+    Ext.getCmp('namajabatan_filterptk').setDisabled(opt);
+
+    if(opt===true)
+    {
+        Ext.getCmp('filtercb_orgPtk').setValue(null);
+        Ext.getCmp('namaorg_filterptk').setValue(null);
+        Ext.getCmp('filtercb_jabatanPtk').setValue(null);
+        Ext.getCmp('namajabatan_filterptk').setValue(null);
+    } 
 }
