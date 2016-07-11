@@ -206,6 +206,8 @@ Ext.define('GridProduct', {
                     id:'addBtnProduk',
                     iconCls: 'add-icon',
                     handler: function() {
+                        Ext.getCmp('formProduct').getForm().reset();
+
                         Ext.Ajax.request({
                             url: SITE_URL + 'sistem/cekakses',
                             method: 'POST',

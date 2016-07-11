@@ -809,6 +809,8 @@ Ext.define('GridPermintaan', {
                     text: 'Tambah',
                     iconCls: 'add-icon',
                     handler: function() {
+                        Ext.getCmp('formPermintaan').getForm().reset();
+
                         Ext.Ajax.request({
                             url: SITE_URL + 'sistem/cekakses',
                             method: 'POST',

@@ -329,6 +329,8 @@ Ext.define('GridUpahKaryBaru', {
                                     {
                                         Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
                                     } else {
+                                            Ext.getCmp('idpelamar_dkaryawan').setValue( selectedRecord.data.idpelamar);
+
                                             var formDataKaryawan = Ext.getCmp('formDataKaryawan');
                                             formDataKaryawan.getForm().load({
                                                 url: SITE_URL + 'backend/loadFormData/VDataKaryawan/1/personalia',
@@ -368,6 +370,8 @@ Ext.define('GridUpahKaryBaru', {
 
                                             Ext.getCmp('tipePenyesuaianUpah').setValue('baru');
                                             Ext.getCmp('idpekerjaanPenyesuaianUpah').setValue(selectedRecord.data.idpekerjaan);
+
+
 
                                     }
                                 } else {

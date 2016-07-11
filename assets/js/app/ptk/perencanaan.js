@@ -564,6 +564,8 @@ Ext.define('GridPerencanaan', {
                     text: 'Tambah Perencanaan',
                     iconCls: 'add-icon',
                     handler: function() {
+                        Ext.getCmp('formPerencanaan').getForm().reset();
+                        
                         Ext.Ajax.request({
                             url: SITE_URL + 'sistem/cekakses',
                             method: 'POST',
