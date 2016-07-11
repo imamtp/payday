@@ -465,53 +465,71 @@ Ext.define('GridDataKaryawan', {
                     handler: function () {
 
                         Ext.Ajax.request({
-                            url: SITE_URL + 'sistem/cekakses',
-                            method: 'POST',
-                            params: {
-                                roleid: 80
-                            },
-                            success: function (form, action) {
+                            url: SITE_URL + 'sistem/cek_kuota',
+                            method: 'GET',
+                            success: function(form, action) {
                                 var d = Ext.decode(form.responseText);
-                                if (d.success)
+                                if(d.success)
                                 {
-                                    jadwalKerjaStore.load();
+                                     Ext.Ajax.request({
+                                        url: SITE_URL + 'sistem/cekakses',
+                                        method: 'POST',
+                                        params: {
+                                            roleid: 80
+                                        },
+                                        success: function (form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            if (d.success)
+                                            {
+                                                jadwalKerjaStore.load();
 
-                                    WindowKaryawan.show();
+                                                WindowKaryawan.show();
 
-                                    Ext.getCmp('formDataKaryawan').getForm().reset();
-                                    Ext.getCmp('namalengkap_dkaryawan').setValue(null);
-                                    Ext.getCmp('companyname_dkaryawan').setValue(null);
-                                    Ext.getCmp('status_dkaryawan').setValue(null);
-                                    Ext.getCmp('ni_dkaryawan').setValue(null);
-                                    Ext.getCmp('nik_dkaryawan').setValue(null);
+                                                Ext.getCmp('formDataKaryawan').getForm().reset();
+                                                Ext.getCmp('namalengkap_dkaryawan').setValue(null);
+                                                Ext.getCmp('companyname_dkaryawan').setValue(null);
+                                                Ext.getCmp('status_dkaryawan').setValue(null);
+                                                Ext.getCmp('ni_dkaryawan').setValue(null);
+                                                Ext.getCmp('nik_dkaryawan').setValue(null);
 
-                                    agamaStore.load();
-                                    sextypeStore.load();
-                                    statuskawinStore.load();
+                                                agamaStore.load();
+                                                sextypeStore.load();
+                                                statuskawinStore.load();
 
-                                    funcTabDataKaryawan(true);
+                                                funcTabDataKaryawan(true);
 
-                                    Ext.getCmp('statusformDataKaryawan').setValue('input');
-                                    // Ext.getCmp('ni_dkaryawan').setReadOnly(false);
-                                    Ext.getCmp('nik_dkaryawan').setReadOnly(false);
-                                    Ext.getCmp('companyname_dkaryawan').setReadOnly(false);
+                                                Ext.getCmp('statusformDataKaryawan').setValue('input');
+                                                // Ext.getCmp('ni_dkaryawan').setReadOnly(false);
+                                                Ext.getCmp('nik_dkaryawan').setReadOnly(false);
+                                                Ext.getCmp('companyname_dkaryawan').setReadOnly(false);
 
-                                    Ext.getCmp("fotokaryawanthumb").el.dom.src = null;
+                                                Ext.getCmp("fotokaryawanthumb").el.dom.src = null;
 
-                                    Ext.getCmp('tipePenyesuaianUpah').setValue(null);
-                                    Ext.getCmp('idpekerjaanPenyesuaianUpah').setValue(null);
+                                                Ext.getCmp('tipePenyesuaianUpah').setValue(null);
+                                                Ext.getCmp('idpekerjaanPenyesuaianUpah').setValue(null);
 
-                                    Ext.getCmp('TabItemKaryawan').setActiveTab(0);
+                                                Ext.getCmp('TabItemKaryawan').setActiveTab(0);
 
 
+                                            } else {
+                                                Ext.Msg.alert("Info", d.message);
+                                            }
+                                        },
+                                        failure: function (form, action) {
+                                            Ext.Msg.alert("Load failed", Ext.decode(action.responseText));
+                                        }
+                                    });
                                 } else {
-                                    Ext.Msg.alert("Info", d.message);
+                                     //melebihi kuota
+                                     Ext.Msg.alert("Info", d.message);
                                 }
                             },
-                            failure: function (form, action) {
-                                Ext.Msg.alert("Load failed", Ext.decode(action.responseText));
+                            failure: function(form, action) {
+                                Ext.Msg.alert("Load failed",Ext.decode(action.responseText));
                             }
                         });
+
+                       
                     }
                 },
                 {

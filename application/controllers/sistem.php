@@ -427,6 +427,35 @@ class sistem extends MY_Controller {
         echo json_encode($json);
     }
 
+    function cek_kuota()
+    {
+        $sql = "select count(*) as total from pelamar a
+                where true ". $this->m_data->whereCompany('a',false);
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+
+            $idcompanyparent = $this->session->userdata('idcompanyparent');
+            $this->db->select('productid');
+            $qprod = $this->db->get_where('adminsuper',array('idcompany'=>$idcompanyparent,'display'=>null))->row();
+
+            $this->db->select('maxemployee');
+            $qquota = $this->db->get_where('product',array('productid'=>$qprod->productid,'display'=>null))->row();
+
+            if($r->total<=$qquota->maxemployee)
+            {
+                $json = array('success' => true, 'message' => 'oke');
+            } else if($r->total>$qquota->maxemployee){
+                $json = array('success' => false, 'message' => 'Tidak bisa menambah data karena sudah melebihi kuota maksimal sebesar '.$qquota->maxemployee.' data karyawan');
+            }
+        } else {
+            $json = array('success' => false, 'message' => 'Insufficient Rights!');
+        }
+        // echo $this->db->last_query();
+        echo json_encode($json);
+    }
+
     function saveRoleMenu()
     {
         $dataGrid = json_decode($this->input->post('dataGrid'));

@@ -482,28 +482,48 @@ Ext.define('GridPelamar', {
                     text: 'Tambah',
                     iconCls: 'add-icon',
                     handler: function() {
-                        Ext.getCmp('formPelamar').getForm().reset();
-                        
-                        storeStatusPelamar.load();
-                        
                         Ext.Ajax.request({
-                            url: SITE_URL + 'sistem/cekakses',
-                            method: 'POST',
-                            params: {
-                                roleid: 74
-                            },
+                            url: SITE_URL + 'sistem/cek_kuota',
+                            method: 'GET',
                             success: function(form, action) {
                                 var d = Ext.decode(form.responseText);
                                 if(d.success)
                                 {
-                                    wPelamar.show();
-                                    Ext.getCmp('statusformPelamar').setValue('input');
-                                    sextypeStore.load();
-                                    jenjangpendidikanStore.load();
-                                    statuskawinStore.load();
-                                    Ext.getCmp('BtnPelamarSimpan').setDisabled(false);
-                                    Ext.getCmp('fotopelamarthumb').el.dom.src = null ;
+                                    Ext.getCmp('formPelamar').getForm().reset();
+                        
+                                    storeStatusPelamar.load();
+                                    
+                                    Ext.Ajax.request({
+                                        url: SITE_URL + 'sistem/cekakses',
+                                        method: 'POST',
+                                        params: {
+                                            roleid: 74
+                                        },
+                                        success: function(form, action) {
+                                            var d = Ext.decode(form.responseText);
+                                            if(d.success)
+                                            {
+                                                wPelamar.show();
+                                                Ext.getCmp('statusformPelamar').setValue('input');
+                                                sextypeStore.load();
+                                                jenjangpendidikanStore.load();
+                                                statuskawinStore.load();
+                                                Ext.getCmp('BtnPelamarSimpan').setDisabled(false);
+                                                Ext.getCmp('fotopelamarthumb').el.dom.src = null ;
+                                            } else {
+                                                 Ext.Msg.alert("Info", d.message);
+                                            }
+                                        },
+                                        failure: function(form, action) {
+                                            Ext.Msg.alert("Load failed",Ext.decode(action.responseText));
+                                        }
+                                    });
+                                    var cbStatus = Ext.getCmp('comboxstatusPelamarPengajuan');
+                                    cbStatus.setValue('Diajukan');
+                                    cbStatus.setReadOnly(true);
+                                    Ext.getCmp('btnDownloadCV').hide();
                                 } else {
+                                     //melebihi kuota
                                      Ext.Msg.alert("Info", d.message);
                                 }
                             },
@@ -511,10 +531,8 @@ Ext.define('GridPelamar', {
                                 Ext.Msg.alert("Load failed",Ext.decode(action.responseText));
                             }
                         });
-                        var cbStatus = Ext.getCmp('comboxstatusPelamarPengajuan');
-                        cbStatus.setValue('Diajukan');
-                        cbStatus.setReadOnly(true);
-                        Ext.getCmp('btnDownloadCV').hide();
+
+                        
                         
                     }
                 },
