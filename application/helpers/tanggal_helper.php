@@ -104,6 +104,15 @@ function sumTimes($times) {
     return sprintf('%02d:%02d', $hours, $minutes);
 }
 
+function sumTimesArray($d)
+{
+    $tot = 0;
+    foreach ($d as $key => $value) {
+        $tot+=$value;
+    }
+    return $tot;
+}
+
 function jumlahjam($jam)
 {
         // $jam = '09:31:00';

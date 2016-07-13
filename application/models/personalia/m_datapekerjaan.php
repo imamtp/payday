@@ -11,12 +11,12 @@ class m_datapekerjaan extends CI_Model {
     }
 
     function searchField() {
-        $field = "a.namalengkap,nik,namajabatan,namaorg,kekaryaanname";
+        $field = "a.namalengkap,nik,c.namajabatan,e.namaorg,f.kekaryaanname";
         return explode(",", $field);
     }
 
     function selectField() {
-        return "a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,bbb.idpergerakan";
     }
 
     function fieldCek()
@@ -39,6 +39,7 @@ class m_datapekerjaan extends CI_Model {
                         GROUP BY idpelamar
                     ) as x ON a.idpelamar = x.idpelamar
                     LEFT join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
+                    join pergerakanpersonil bbb ON aa.idpergerakanpersonil = bbb.idpergerakanpersonil
                     LEFT JOIN strukturjabatan b ON aa.idstrukturjabatan = b.idstrukturjabatan
                     LEFT JOIN jabatan c ON b.idjabatan = c.idjabatan
                     LEFT JOIN lokasi_org d ON aa.idlokasiorg = d.idlokasiorg
@@ -75,12 +76,12 @@ class m_datapekerjaan extends CI_Model {
         {
             $tglmasuk1 = backdate2_reverse($this->input->post('tglmasuk1'));
             $tglmasuk2 = backdate2_reverse($this->input->post('tglmasuk2'));
-            $wer.=" AND aaa.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
+            $wer.=" AND aa.tglmasuk BETWEEN '$tglmasuk1' AND '$tglmasuk2'";
         } else if($this->input->post('tglmasuk1')!=null && $this->input->post('tglmasuk2')==null)
         {
             $tglmasuk1 = backdate2_reverse($this->input->post('tglmasuk1'));
             // $tglmasuk2 = backdate2_reverse($this->input->post('tglmasuk2'));
-            $wer.=" AND aaa.tglmasuk ='$tglmasuk1'";
+            $wer.=" AND aa.tglmasuk ='$tglmasuk1'";
         }
         
         //terminasi

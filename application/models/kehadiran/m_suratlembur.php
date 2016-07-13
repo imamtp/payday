@@ -16,7 +16,7 @@ class m_suratlembur extends CI_Model {
     }
 
     function selectField() {
-        return "idlembur,idpelamar,idwaktulembur,tgllembur,idjamkerjaharian,formulalembur,waktulembur,datein,userin,mulailembur_jam,mulailembur_menit,akhirlembur_jam,akhirlembur_menit,jammulailembur,jamakhirlembur,durasi,namalengkap,namajabatan,namaorg,namaatasan,namajabatanatasan,namaorgatasan,nik,display,idcompany";
+        return "idlembur,idpelamar,idwaktulembur,tgllembur,idjamkerjaharian,formulalembur,waktulembur,datein,userin,mulailembur_jam,mulailembur_menit,akhirlembur_jam,akhirlembur_menit,jammulailembur,jamakhirlembur,durasi,namalengkap,namajabatan,namaorg,namaatasan,namajabatanatasan,namaorgatasan,nik,display,idcompany,durasi_istirahat";
     }
     
     function fieldCek()
@@ -110,6 +110,7 @@ class m_suratlembur extends CI_Model {
             "idwaktulembur" => $this->m_data->getID('waktulembur', 'waktulembur', 'idwaktulembur', $this->input->post('waktulembur')),
             "tgllembur" => $tgllembur,
             "formulalembur" => $this->input->post('formulalembur'),
+            "durasi_istirahat" => $this->input->post('durasi_istirahat'),
             "mulailembur_jam" => $this->input->post('mulailembur_jam'),
             "mulailembur_menit" => $this->input->post('mulailembur_menit'),
             "akhirlembur_jam" => $this->input->post('akhirlembur_jam'),

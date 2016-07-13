@@ -608,6 +608,8 @@ class Backend extends MY_Controller {
     public function ext_get_all($table, $dir = null, $idunit = null) {
 
         $this->load->model('personalia/m_pekerjaan');
+        $this->load->model('kompensasi/m_formulalembur');
+
         if ($dir != null) {
             // echo $dir.'/m_'.$table;
             $this->load->model($dir . '/m_' . $table, 'datamodel');
@@ -772,6 +774,12 @@ class Backend extends MY_Controller {
                 $obj->levelnameindividu = $d['levelnameindividu'];
                 $obj->levelnamejabatan = $d['levelnamejabatan'];
                 $obj->idstrukturjabatan = $d['idstrukturjabatan'];
+            }
+
+            if($table == 'VSuratLembur')
+            {
+                //itung durasi total lembur dikurang jam istirahat
+                $obj->durasi_total = $this->m_formulalembur->jumlahjam($obj->mulailembur_jam.':'.$obj->mulailembur_menit.':00',$obj->akhirlembur_jam.':'.$obj->akhirlembur_menit.':00',$obj->durasi_istirahat);
             }
 
             if ($table == 'VDataKaryawangrid' || $table == 'datapekerjaan') {

@@ -89,12 +89,15 @@ class m_lembur extends CI_Model {
                     $idformulalembur = $rr->idformulalembur;
                     // echo $idformulalembur.' ';
                     // echo 'waktu:'.$rr->mulailembur_jam.':'.$rr->mulailembur_menit.':00'.','.$rr->akhirlembur_jam.':'.$rr->akhirlembur_menit.':00<br>';
-                    $sumthetime = getTimeDiff($rr->mulailembur_jam.':'.$rr->mulailembur_menit.':00',$rr->akhirlembur_jam.':'.$rr->akhirlembur_menit.':00');
-                    // echo 'sumthetime:'.$sumthetime.' ';
-                    $jumlahjam[] = $sumthetime;
+                    // $sumthetime = getTimeDiff($rr->mulailembur_jam.':'.$rr->mulailembur_menit.':00',$rr->akhirlembur_jam.':'.$rr->akhirlembur_menit.':00');
+                    // echo 'sumthetime:'.$sumthetime.' '.intval($rr->durasi_istirahat);                   
 
                     //hitung upah
                     $ul = $this->m_formulalembur->hitunglembur($r->idpelamar,$rr->tgllembur,$idformulalembur);
+
+                    // $jumlahjam[] = $rr->durasi_total;
+                    $jumlahjam[] = $ul['totaljam'];
+
                     if($ul['kenapajak']=='YA')
                     {
                         if($ul['fungsipajak']=='Penambah')
@@ -141,7 +144,8 @@ class m_lembur extends CI_Model {
                 }
                 
                 // print_r($jumlahjam);
-                $data['jumlahjam'] = jumlahjam(sumTimes($jumlahjam));
+                // $data['jumlahjam'] = jumlahjam(sumTimes($jumlahjam));
+                $data['jumlahjam'] = sumTimesArray($jumlahjam);
                 $data['jumlahhari'] = $hari;
                 $data['upahlemburPajak'] = $upahlemburPajak;
                 $data['upahlemburNoPajak'] = $upahlemburNoPajak;

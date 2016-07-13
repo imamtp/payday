@@ -1,6 +1,6 @@
 Ext.define('GridSuratLemburModel', {
     extend: 'Ext.data.Model',
-    fields: ['idlembur','idpelamar','idwaktulembur','tgllembur','namarumuslembur','formulalembur','idformulalembur','waktulembur','datein','userin','mulailembur_jam','mulailembur_menit','akhirlembur_jam','akhirlembur_menit','jammulailembur','jamakhirlembur','durasi','namalengkap','namajabatan','namaorg','namaatasan','namajabatanatasan','namaorgatasan','nik','display','idcompany','companyname','namajamkerja'],
+    fields: ['idlembur','idpelamar','idwaktulembur','tgllembur','namarumuslembur','formulalembur','idformulalembur','waktulembur','datein','userin','mulailembur_jam','mulailembur_menit','akhirlembur_jam','akhirlembur_menit','jammulailembur','jamakhirlembur','durasi','namalengkap','namajabatan','namaorg','namaatasan','namajabatanatasan','namaorgatasan','nik','display','idcompany','companyname','namajamkerja','durasi_istirahat','durasi_total'],
     idProperty: 'id'
 });
 
@@ -194,6 +194,13 @@ var formSuratLembur = Ext.create('Ext.form.Panel', {
             ]
         },
         {
+            xtype:'numberfield',
+            minValue:30,
+            fieldLabel:'Durasi Istirahat (Menit)',
+            name:'durasi_istirahat',
+            allowBlank:false
+        },
+        {
             xtype: 'hiddenfield',
             fieldLabel: 'idformulalembur',
             id:'idformulalembur_fRumusLembur',
@@ -321,7 +328,8 @@ Ext.define('GridSuratLembur', {
         {header: 'Jam Kerja', dataIndex: 'namajamkerja', minWidth: 150},
         {header: 'Jam Mulai', dataIndex: 'jammulailembur', minWidth: 150},
         {header: 'Jam Selesai', dataIndex: 'jamakhirlembur', minWidth: 150},
-        {header: 'Durasi', dataIndex: 'durasi', minWidth: 150},
+        {header: 'Istirahat (Menit)', dataIndex: 'durasi_istirahat', minWidth: 150},
+        {header: 'Durasi Lembur (Jam)', dataIndex: 'durasi_total', minWidth: 150},
         {header: 'Formula', dataIndex: 'namarumuslembur', minWidth: 150}
     ]
     , dockedItems: [

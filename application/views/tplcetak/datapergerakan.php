@@ -23,12 +23,15 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>Nama Lengkap</td>
          <td><b>No Pergerakan</td>
          <td><b>Jenis Pergerakan</td>
-         <td><b>Nama Jabatan</td>
+         <td><b>Jabatan Sebelumnya</td>
+         <td><b>Jabatan Baru</td>
          <td><b>Level Jabatan</td>
          <td><b>Level Individu</td>
          <td><b>Kekaryawanan</td>
-         <td><b>Lokasi</td>
-         <td><b>Organisasi</td>
+         <td><b>Lokasi Sebelumnya</td>
+         <td><b>Lokasi Baru</td>
+         <td><b>Organisasi Sebelumnya</td>
+         <td><b>Organisasi Baru</td>
          <td><b>Nama Atasan</td>
          <td><b>Nama Jabatan Atasan</td>
          <td><b>Nama Org Atasan</td>
@@ -46,12 +49,15 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
                  <td><?=$r->nik?></td>  
                  <td><?=$r->namalengkap?></td>
                  <td><?=$r->nopergerakan?></td>
-                 <td><?=$r->namapergerakan?></td>
+                 <td><?=$r->namapergerakan?></td>                 
+                 <td><?=$r->namajabatan_from?></td>
                  <td><?=$r->namajabatan?></td>
                  <td><?=$r->levelnamejabatan?></td>
                  <td><?=$r->levelnameindividu?></td>
-                 <td><?=$r->kekaryaanname?></td>
-                 <td><?=$r->namalokasi?></td>
+                 <td><?=$r->kekaryaanname?></td>                 
+                 <td><?=$r->namalokasi_from?></td>
+                 <td><?=$r->namalokasi?></td>                 
+                 <td><?=$r->namaorg_from?></td>
                  <td><?=$r->namaorg?></td>
                  <td><?=$r->namaatasan?></td>
                  <td><?=$r->namajabatanatasan?></td>

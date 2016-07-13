@@ -5124,5 +5124,9 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
     // echo $this->input->post('postdata');
    }
 
+   function tesitunglembur()
+   {
+        // $totallembur = 's';
+   }
 
 }

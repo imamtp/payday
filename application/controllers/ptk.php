@@ -392,7 +392,7 @@ class ptk extends MY_Controller {
                          $namabulan = ambilBulan($nobulan);
 
                         $data = array(
-                            "tahun" => intval($d['1']),
+                            "tahun" => intval($d['2']),
                             "idcompany" => $qcmp->idcompany,
                             "idjabatan" => $qjab->idjabatan,
                             "idorganisasi" => $qjab->idorganisasi,

@@ -336,22 +336,37 @@ class m_formulalembur extends CI_Model {
         //end upah pegawai
     }
 
+    function jumlahjam($start,$end,$durasi_istirahat)
+    {
+        //itung durasi total lembur dikurang jam istirahat
+        $jumlahjam = jumlahjam(getTimeDiff($start,$end));
+        if($durasi_istirahat!=null)
+        {
+           $jumlahjam = (($jumlahjam*60)-($durasi_istirahat))/60;
+        }
+        return $jumlahjam;
+    }
+
     function hitunglembur($idpelamar,$tanggal,$idformulalembur)
     {
-
-
       $q = $this->db->get_where('lembur',array('idpelamar'=>$idpelamar,'tgllembur'=>$tanggal,'display'=>null));
       $harikerja=0;
       $harilibur=0;
       $hariraya=0;
       $upahlembur=0;
+      $totaljam=0;
+
       foreach ($q->result() as $r) {
         $idwaktulembur = $r->idwaktulembur;
 
-        $formula = $this->db->get_where('rumusanlembur',array('idformulalembur'=>$r->idformulalembur))->row();
+        $formula = $this->db->get_where('rumusanlembur',array('idformulalembur'=>$r->idformulalembur))->row();       
 
-        $jumlahjam = jumlahjam(getTimeDiff($r->mulailembur_jam.':'.$r->mulailembur_menit.':00',$r->akhirlembur_jam.':'.$r->akhirlembur_menit.':00'));
+        
+        // echo intval($r->durasi_istirahat).' ';
         // $jumlahjam = 4;
+        // echo $idpelamar.':'.$jumlahjam.' - '.intval($r->durasi_istirahat).' ';
+        $jumlahjam = $this->jumlahjam($r->mulailembur_jam.':'.$r->mulailembur_menit.':00',$r->akhirlembur_jam.':'.$r->akhirlembur_menit.':00',$r->durasi_istirahat);
+        $totaljam+=$jumlahjam;
 
         $this->db->select('jumlahhari');
         $qhk = $this->db->get_where('pelamar',array('idpelamar'=>$idpelamar))->row();
@@ -433,7 +448,6 @@ class m_formulalembur extends CI_Model {
 
           if($formula->jenisformula=='Satuan Harian')
           {
-            
               if($idwaktulembur==1)
               {
                    //hari kerja
@@ -713,7 +727,8 @@ class m_formulalembur extends CI_Model {
           'harilibur'=>$harilibur,
           'hariraya'=>$hariraya,
           'kenapajak'=>isset($formula->kenapajak) ? $formula->kenapajak : null,
-          'fungsipajak'=>isset($formula->fungsipajak) ? $formula->fungsipajak : null
+          'fungsipajak'=>isset($formula->fungsipajak) ? $formula->fungsipajak : null,
+          'totaljam'=>$totaljam
         );
     }
 
