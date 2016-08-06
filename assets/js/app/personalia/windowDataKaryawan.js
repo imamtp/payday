@@ -61,6 +61,10 @@ Ext.define('TabItemKaryawan', {
                         // Ext.getCmp('idpelamar_fPekerjaan').setValue(Ext.getCmp('idpelamar_dkaryawan').getValue());
                     } else if(i.title=='Benefit')
                         {
+                            Ext.getCmp('formBenefit').getForm().reset();
+                                            // Ext.getCmp('TabBenefit').setActiveTab(1);
+                            storeGridBenefitKaryawan.removeAll();
+
                             var formBenefit = Ext.getCmp('formBenefit');
                                 formBenefit.getForm().load({
                                     url: SITE_URL + 'backend/loadFormData/Benefit/1/personalia',

@@ -33,8 +33,8 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>Organisasi</td>
          <td><b>Kekaryawanan</td>
          <td><b>Perusahaan</td>
-         <td><b>Tgl Efektif</td>
-         <td><b>Tgl Berakhir</td>
+         <td><b>Tgl Mulai Jabatan</td>
+         <td><b>Tgl Akhir Jabatan</td>
          <!-- <td><b>Nama Atasan</td>
          <td><b>Jabatan Atasan</td>
          <td><b>Organisasi Atasan</td> -->
@@ -44,7 +44,7 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
     $no=1;
     // $this->load->model('personalia/m_pekerjaan');
     foreach ($data->result() as $r) {
-            $d = $m_pekerjaan->getLastPekerjaan($r->idpelamar);
+            $d = $m_pekerjaan->getLastPekerjaanv2($r->idpelamar,false,$r->idpergerakanpersonil);
             ?>
             <tr style="font-size: 12px;">
                  <td><?=$r->nik?></td>

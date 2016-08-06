@@ -22,8 +22,8 @@ p.namajabatan,q.namaorg,s.namalokasi,t.levelname as levelnamejabatan,u.levelname
 r.tglmasuk as tglmasuk,r.tglberakhir as tglberakhir,w.namalengkap as namaatasan,ccc.namajabatan as namajabatanatasan,eee.namaorg as namaorgatasan,
 r.idpelamaratasan,r.idlevelindividu,r.idstrukturjabatan,r.idpekerjaan,
 pp.namajabatan as namajabatan_from,qq.namaorg as namaorg_from,ss.namalokasi as namalokasi_from,tt.levelname as levelnamejabatan_from,
-uu.levelname as levelnameindividu_from,vv.kekaryaanname as kekaryaanname_from,rr.tglmasuk as tglmasuk_from,rr.tglberakhir as tglberakhir_from,
-rr.idpelamaratasan as idpelamaratasan_from,ww.namalengkap as namaatasan_from,rr.idstrukturjabatan as idstrukturjabatan_from,cc.namajabatan as namajabatanatasan_from,ee.namaorg as namaorgatasan_from,a.periodekekaryaan,a.jumlahbulankekaryaan,catatanpenyesuaian,startdatenewpay,alasanterminasi,tglterminasi";
+uu.levelname as levelnameindividu_from,vv.kekaryaanname as kekaryaanname_from,rr.tglmasuk as tglmasuk_from,rr.tglberakhir as tglberakhir_from,xxxx.kekaryaanname as kekaryaanname_from,
+rr.idpelamaratasan as idpelamaratasan_from,ww.namalengkap as namaatasan_from,rr.idstrukturjabatan as idstrukturjabatan_from,cc.namajabatan as namajabatanatasan_from,ee.namaorg as namaorgatasan_from,a.periodekekaryaan,a.jumlahbulankekaryaan,catatanpenyesuaian,startdatenewpay,alasanterminasi,tglterminasi,a.idpergerakan";
     }
 
     function fieldCek()
@@ -73,7 +73,7 @@ rr.idpelamaratasan as idpelamaratasan_from,ww.namalengkap as namaatasan_from,rr.
                     LEFT JOIN LEVEL uu ON rr.idlevelindividu = uu.idlevel
                     LEFT JOIN kekaryaan vv ON rr.idkekaryaan = vv.idkekaryaan
                     LEFT JOIN pelamar ww ON rr.idpelamaratasan = ww.idpelamar
-                    
+                    LEFT join kekaryaan xxxx ON rr.idkekaryaan = xxxx.idkekaryaan
                     LEFT  JOIN
                     (
                         SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar

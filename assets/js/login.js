@@ -50,7 +50,7 @@ function timeLogin(){
                     
                     // Reset and Submit buttons
                     ,buttons: [{
-                        text: 'Login',
+                        text: 'Masuk',
                         formBind: true, //only enabled once the form is valid
                         disabled: true,
                         handler: function() {

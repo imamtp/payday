@@ -804,9 +804,12 @@ class laporan extends MY_Controller {
             'data'=>$this->db->query($query),
             'option'=>'excel'
         );
-        // $this->load->model('personalia/m_pekerjaan');
-        // $data['m_pekerjaan'] = $this->m_pekerjaan; 
+        $this->load->model('personalia/m_pekerjaan');
+        $data['m_pekerjaan'] = $this->m_pekerjaan; 
         $data['fontsize'] = 9;
+
+        // $this->load->view('tplcetak/datapergerakan', $data);
+        // return true;
 
         $html = $this->load->view('tplcetak/datapergerakan', $data,true);
 

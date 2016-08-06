@@ -9,7 +9,7 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
 </style>
 <body>
 <center>
-    <table class='tablereport' width='800' border='0' padding="0">
+    <table class='tablereport' width='100%' border='0' padding="0">
     <tr>
         <!-- <td colspan="5">  -->
             <center>
@@ -24,10 +24,13 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>No Pergerakan</td>
          <td><b>Jenis Pergerakan</td>
          <td><b>Jabatan Sebelumnya</td>
-         <td><b>Jabatan Baru</td>
-         <td><b>Level Jabatan</td>
-         <td><b>Level Individu</td>
+         <td><b>Jabatan Baru</td>    
+         <td><b>Kekaryawanan Sebelumnya</td>
          <td><b>Kekaryawanan</td>
+         <td><b>Level Jabatan Sebelumnya</td>
+         <td><b>Level Jabatan</td>
+         <td><b>Level Individu Sebelumnya</td>
+         <td><b>Level Individu</td>
          <td><b>Lokasi Sebelumnya</td>
          <td><b>Lokasi Baru</td>
          <td><b>Organisasi Sebelumnya</td>
@@ -35,14 +38,31 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
          <td><b>Nama Atasan</td>
          <td><b>Nama Jabatan Atasan</td>
          <td><b>Nama Org Atasan</td>
-         <td><b>Tgl Aktif</td>
-         <td><b>Tgl Terminasi</td>
+         <td><b>Tgl Mulai Jabatan</td>
+         <td><b>Tgl Akhir Jabatan</td>
          <td><b>Status</td>
     </tr>
 
     <?php
     $no=1;
     foreach ($data->result() as $r) {
+            if($r->idpergerakan==128)
+            {
+                //tampilan jabatan walaupun sudah terminasi
+                $d = $m_pekerjaan->getLastPekerjaanv2($r->idpelamar,false,$r->idpergerakanpersonil);
+                
+                $r->namajabatan = $d['namajabatan'];
+                $r->namalokasi = $d['namalokasi'];
+                $r->levelnamejabatan = $d['levelnamejabatan'];
+                $r->levelnameindividu = $d['levelnameindividu'];
+                $r->namaorg = $d['namaorg'];
+                $r->namaatasan = $d['namaatasan'];
+                $r->namajabatanatasan = isset($d['namajabatanatasan']) ? $d['namajabatanatasan'] : null;
+                $r->namaorg = $d['namaorg'];
+                $r->kekaryaanname = $d['kekaryaanname'];
+                $r->tglmasuk = $d['tglmasukkaryawan'];
+                $r->tglberakhir = $d['tglberakhir'];
+            }
             ?>
             <tr style="font-size: 12px;">
                  <td><?=$no?></td>
@@ -52,9 +72,12 @@ $borderstyle = "border-bottom: #E6E8E6;  border-bottom-width: thin; border-botto
                  <td><?=$r->namapergerakan?></td>                 
                  <td><?=$r->namajabatan_from?></td>
                  <td><?=$r->namajabatan?></td>
+                 <td><?=$r->kekaryaanname_from?></td>      
+                 <td><?=$r->kekaryaanname?></td>     
+                 <td><?=$r->levelnamejabatan_from?></td> 
                  <td><?=$r->levelnamejabatan?></td>
-                 <td><?=$r->levelnameindividu?></td>
-                 <td><?=$r->kekaryaanname?></td>                 
+                 <td><?=$r->levelnameindividu_from?></td>  
+                 <td><?=$r->levelnameindividu?></td>                            
                  <td><?=$r->namalokasi_from?></td>
                  <td><?=$r->namalokasi?></td>                 
                  <td><?=$r->namaorg_from?></td>

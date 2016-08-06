@@ -37,7 +37,7 @@ var formStatusKawin_ModulOrgaya = Ext.create('Ext.form.Panel', {
             allowBlank: false,
             name: 'namastatuskawin'
         },{
-            xtype:'comboxstatus'
+            xtype:'comboxstatus',hidden:true
         }],
     buttons: [{
             text: 'Batal',
@@ -154,7 +154,7 @@ Ext.define('GridStatusKawin_ModulOrgaya', {
         {header: 'Nama Status Perkawinan', dataIndex: 'namastatuskawin', minWidth: 200,flex:1},
         // {header: 'Deskripsi', dataIndex: 'description', minWidth: 250},
         // {header: 'Urutan', dataIndex: 'urutan', minWidth: 150},
-        {header: 'Status', dataIndex: 'status', minWidth: 150},
+        {header: 'Status', dataIndex: 'status', minWidth: 150,hidden:true},
         {header: 'user in', dataIndex: 'userin', minWidth: 150,hidden:true},
         {header: 'date in', dataIndex: 'datein', minWidth: 150,hidden:true},
         {header: 'user last update', dataIndex: 'usermod', minWidth: 150,hidden:true},

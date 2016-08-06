@@ -371,6 +371,9 @@ Ext.define('GridUpahPergerakan', {
 
                                             Ext.getCmp('btnUbahNilaiUT').show();
 
+                                            
+                                            Ext.getCmp('formSetingPtkp').getForm().reset();
+
                                     }
                                 } else {
                                      Ext.Msg.alert("Info", d.message);

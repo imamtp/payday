@@ -164,6 +164,7 @@ Ext.define('GridJenisPergerakanPersonel', {
             items: [
                 {
                     text: 'Tambah',
+                    hidden:true,
                     iconCls: 'add-icon',
                     handler: function() {
                         Ext.Ajax.request({
@@ -242,6 +243,7 @@ Ext.define('GridJenisPergerakanPersonel', {
                 }, {
                     id: 'btnDeletePergerakanPersonel',
                     text: 'Hapus',
+                    hidden:true,
                     iconCls: 'delete-icon',
                     handler: function() {
                         Ext.Ajax.request({

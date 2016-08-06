@@ -647,6 +647,9 @@ Ext.define('GridPermintaan', {
                         select: function(n,v) { 
                                 filter_prtk(false);
 
+                                orgStore.removeAll();
+                                jabatanStore.removeAll();
+
                                 storeGridPermintaan.load();
 
                                  orgStore.load({
@@ -1081,11 +1084,11 @@ function filter_prtk(opt)
     Ext.getCmp('filtercb_jabatanPermintaanTK').setDisabled(opt);
     Ext.getCmp('namajabatan_filterPermintaanTK').setDisabled(opt);
 
-    if(opt===true)
-    {
+    // if(opt===true)
+    // {
         Ext.getCmp('filtercb_orgPermintaanTK').setValue(null);
         Ext.getCmp('namaorg_filterPermintaanTK').setValue(null);
         Ext.getCmp('filtercb_jabatanPermintaanTK').setValue(null);
         Ext.getCmp('namajabatan_filterPermintaanTK').setValue(null);
-    }
+    // }
 }

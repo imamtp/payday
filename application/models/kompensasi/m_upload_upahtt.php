@@ -54,7 +54,7 @@ class m_upload_upahtt extends CI_Model {
             // $wer.=" and jenisupah='$jenisupah'";
         }
 
-         return $wer.' and '.substr($this->m_data->whereCompany(), 4);
+         return $wer.' '.substr($this->m_data->whereCompany(), 4);
     }
 
     function orderBy() {

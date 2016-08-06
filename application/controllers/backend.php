@@ -759,8 +759,27 @@ class Backend extends MY_Controller {
                 $obj->startdate = backdate2($obj->startdate);
             }
 
-            if ($table == 'VDataKaryawan' || $table == 'VSuratLembur' || $table == 'datapekerjaan' || $table == 'PengajuanIzin') {
-                $d = $this->m_pekerjaan->getLastPekerjaan($obj->idpelamar);
+            if ($table == 'VDataKaryawan' || $table == 'VSuratLembur' || $table == 'datapekerjaan' || $table == 'PengajuanIzin' || $table=='pergerakanpersonil') {
+                
+                if($table=='pergerakanpersonil')
+                {
+                    // $d = $this->m_pekerjaan->getLastPekerjaanPergerakan($obj->idpergerakanpersonil);
+                    $d = $this->m_pekerjaan->getLastPekerjaan($obj->idpelamar,false,$obj->idpergerakanpersonil);
+                } else if($table=='datapekerjaan')
+                {
+                    // $d = $this->m_pekerjaan->getLastPekerjaanPergerakan($obj->idpergerakanpersonil);
+                    $d = $this->m_pekerjaan->getLastPekerjaanv2($obj->idpelamar,false,$obj->idpergerakanpersonil);
+                } else {
+                    $terminasi = true;
+                    $d = $this->m_pekerjaan->getLastPekerjaan($obj->idpelamar,$terminasi);
+                }
+
+
+               
+                // if($obj->idpergerakanpersonil==277)
+                // {
+                //     print_r($d);
+                // }
 
                 $obj->idpekerjaan = $d['idpekerjaan'];
                 $obj->tglmasuk = $d['tglmasuk'];
@@ -803,7 +822,7 @@ class Backend extends MY_Controller {
 																	WHERE statuspergerakan='Disetujui'
 																	GROUP BY idpelamar,tglmasuk
 															) as b ON a.idpelamar = b.idpelamar
-															where a.idpelamar = 36
+															where a.idpelamar = ".$obj->idpelamar."
 															ORDER BY tglmasuk 
 															limit 1");
                         if ($qterm->num_rows() > 0) {
@@ -834,7 +853,12 @@ class Backend extends MY_Controller {
 
             if ($table == 'Pekerjaan') {
                 if ($no == 1) {
-                    $obj->status = 'Aktif';
+                    if ($obj->idpergerakan == 128) {
+                        $obj->status = 'Nonaktif';
+                    } else {
+                        $obj->status = 'Aktif';
+                    }
+                  
                 } else {
                     $obj->status = 'Nonaktif';
                 }
@@ -865,6 +889,30 @@ class Backend extends MY_Controller {
                     $obj->namajabatan = $qJabatanSebelumnya->namajabatan;
                 }
             }
+
+            if ($table == 'VDataKaryawangrid')
+            {
+                //cari tanggal masuk untuk menu 'Data Karyawan'
+                //  $qterm = $this->db->query("SELECT tglmasuk
+                //                                     from pelamar a
+                //                                      LEFT JOIN
+                //                                     (
+                //                                             SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar,tglmasuk
+                //                                             FROM pekerjaan
+                //                                             WHERE statuspergerakan='Disetujui'
+                //                                             GROUP BY idpelamar,tglmasuk
+                //                                     ) as b ON a.idpelamar = b.idpelamar
+                //                                     where a.idpelamar = ".$obj->idpelamar."
+                //                                     ORDER BY tglmasuk 
+                //                                     limit 1");
+                // if ($qterm->num_rows() > 0) {
+                //     $rterm = $qterm->row();
+                //     $obj->tglmasukpeg = $rterm->tglmasuk;
+                //     // echo $obj->idpelamar.':'.$obj->tglmasuk.' ';
+                //     // unset($obj->tglmasuk);
+                // }
+            }
+
 
             $obj->tgllahir = isset($obj->tgllahir) ? backdate2_reverse($obj->tgllahir) : null;
             $obj->tglmasukpeg = isset($obj->tglmasukpeg) ? backdate2_reverse($obj->tglmasukpeg) : null;
@@ -1514,6 +1562,8 @@ class Backend extends MY_Controller {
         $orderbyfield = null;
         $company = false;
         $datamaster = false;
+        $where = null;
+
         if ($data == 'bussinestype') {
             $field = array('idbussinestype', 'namebussines');
         } else if ($data == 'sutri') {
@@ -1560,7 +1610,7 @@ class Backend extends MY_Controller {
             $field = array('idlokasiorg', 'namalokasi');
         } else if ($data == 'kekaryaan') {
             $display = true;
-            $datamaster = true;
+            // $datamaster = true;
             $field = array('idkekaryaan', 'kekaryaanname');
         } else if ($data == 'sextype') {
             $field = array('idsex', 'sexname');
@@ -1580,7 +1630,7 @@ class Backend extends MY_Controller {
             $field = array('idlevel', 'levelname');
         } else if ($data == 'hubkeluarga') {
             $display = true;
-            // $datamaster=true;
+            $datamaster=true;
             $field = array('idhubkeluarga', 'namahubkeluarga');
         } else if ($data == 'agama') {
             $display = true;
@@ -1627,8 +1677,9 @@ class Backend extends MY_Controller {
         }
 
         if ($datamaster) {
-            $this->db->where('idcompany', $this->session->userdata('idcompany'));
-            $this->db->or_where('idcompany', $this->session->userdata('idcompanyparent'));
+            $where.="(idcompany =  '".$this->session->userdata('idcompany')."' OR idcompany =  '".$this->session->userdata('idcompanyparent')."')";
+            // $this->db->where('idcompany', $this->session->userdata('idcompany'));
+            // $this->db->or_where('idcompany', $this->session->userdata('idcompanyparent'));
         }
 
         if ($data == 'kekaryaan') {
@@ -1706,6 +1757,11 @@ class Backend extends MY_Controller {
                 $this->db->where('display', null);
             }
             $q = $this->db->get($data);
+
+            if($where!=null)
+            {
+                $q = $this->db->query($this->db->last_query().' AND '.$where);
+            }
         }
 
 // echo $this->db->last_query();
@@ -1730,9 +1786,7 @@ class Backend extends MY_Controller {
     function feedMonth() {
         $arrMonth = array('01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April', '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus', '09' => 'September', '10' => 'Oktober', '11' => 'Nopember', '12' => 'Desember');
 
-        $json = "{
-                \"success\": true,
-                \"dat\": [";
+        $json = "{\"success\": true,\"dat\": [";
 
         foreach ($arrMonth as $key => $value) {
             $json .= "{";
@@ -1975,6 +2029,11 @@ class Backend extends MY_Controller {
     function tesseq() {
         $this->load->model('m_data');
         echo $this->m_data->getSeqVal('seq_product', 'sys_user', 'user_id');
+    }
+
+    function jam()
+    {
+        echo "Today is " . date("Y/m/d") . "<br>";
     }
 
 }

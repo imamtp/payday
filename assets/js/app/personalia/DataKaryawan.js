@@ -84,7 +84,7 @@ Ext.define('GridDataKaryawan', {
         {header: 'No KTP', dataIndex: 'noktp', minWidth: 150},
         {header: 'No Telp', dataIndex: 'notelp', minWidth: 150},
         {header: 'No Ponsel', dataIndex: 'nohandphone', minWidth: 150},
-        {header: 'Tgl Aktif', dataIndex: 'tglmasukpeg', minWidth: 150},
+        {header: 'Tgl Masuk', dataIndex: 'tglmasukpeg', minWidth: 150},
         {header: 'Tgl Berakhir', dataIndex: 'tglberakhir', minWidth: 150},
         {header: 'Status', dataIndex: 'status', minWidth: 220
                     // ,

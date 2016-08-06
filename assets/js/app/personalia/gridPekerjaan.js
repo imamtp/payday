@@ -434,7 +434,7 @@ Ext.define('GridPekerjaan', {
                 //     }
                 // },
                 {
-                    text: 'Detail',
+                    text: 'Detil',
                     iconCls: 'edit-icon',
                     handler: function() {
                         var grid = Ext.ComponentQuery.query('GridPekerjaan')[0];

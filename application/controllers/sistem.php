@@ -6,7 +6,7 @@ if (!defined('BASEPATH'))
 class sistem extends MY_Controller {
 
     public function index() {
-        
+        echo 'asdad';
     }
     
     function sysmenudata($parent, $active = null)
@@ -443,7 +443,11 @@ class sistem extends MY_Controller {
             $this->db->select('maxemployee');
             $qquota = $this->db->get_where('product',array('productid'=>$qprod->productid,'display'=>null))->row();
 
-            if($r->total<=$qquota->maxemployee)
+            if($qquota->maxemployee==0)
+            {
+                //unlimited
+                $json = array('success' => true, 'message' => 'oke');
+            } else if($r->total<=$qquota->maxemployee)
             {
                 $json = array('success' => true, 'message' => 'oke');
             } else if($r->total>$qquota->maxemployee){

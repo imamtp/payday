@@ -212,4 +212,29 @@ function validasitgl($no,$jenis,$date)
         }
         return array('message'=>$message,'status'=>$status);
     }
+
+
+
+function countDaysMonth($sd,$nd)
+{
+    //count days in between two dates
+    // "2010-06-20"
+
+    $date1=date_create($sd);
+    $date2=date_create($nd);
+    $diff=date_diff($date1,$date2);
+    return $diff;
+
+    // $datetime1 = new DateTime($sd);
+
+    // $datetime2 = new DateTime($nd);
+    // echo $sd.'-'.$nd;
+    // $difference = $datetime1->diff($datetime2);
+
+    // return array(
+    //         'years'=>$difference->y,
+    //         'months'=>$difference->m,
+    //         'days'=>$difference->d
+    //     );
+}
 ?>

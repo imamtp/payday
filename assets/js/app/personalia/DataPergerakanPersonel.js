@@ -2,7 +2,7 @@
 
 Ext.define('GridDataPergerakanPersonelModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpergerakanpersonil','nopergerakan','idpelamar','idcompany','idjabatan','idlevelindividu','idorganisasi','idjabatanatasan','idorganisasiatasan','namaatasan','tglmasuk','tglberakhir','statuspergerakan','userin','datein','namalengkap','companyname','namajabatan','kodejabatan','levelnameJabatan','levelnameindividu','kodeorg','namaorg','kekaryaanname','namalokasi','namajabatanatasan','namaorgatasan','kodeorgatasan','lokasiatasan','namapergerakan','ni','nik','catatanpenyesuaian','namajabatan_from','namalokasi_from','namaorg_from'],
+    fields: ['idpergerakanpersonil','nopergerakan','idpelamar','idcompany','idjabatan','idlevelindividu','idorganisasi','idjabatanatasan','idorganisasiatasan','namaatasan','tglmasuk','tglberakhir','statuspergerakan','userin','datein','namalengkap','companyname','namajabatan','kodejabatan','levelnamejabatan','levelnameindividu','kodeorg','namaorg','kekaryaanname','namalokasi','namajabatanatasan','namaorgatasan','kodeorgatasan','lokasiatasan','namapergerakan','ni','nik','catatanpenyesuaian','namajabatan_from','namalokasi_from','namaorg_from','kekaryaanname_from','levelnamejabatan_from','levelnameindividu_from'],
     idProperty: 'id'
 });
 
@@ -180,6 +180,12 @@ Ext.define('GridDataPergerakanPersonel', {
         {header: 'Nama Lengkap', dataIndex: 'namalengkap', minWidth: 150},
         {header: 'Jabatan Sebelumnya', dataIndex: 'namajabatan_from', minWidth: 150},
         {header: 'Jabatan Baru', dataIndex: 'namajabatan', minWidth: 150},
+        {header: 'Kekaryawanan Sebelumnya', dataIndex: 'kekaryaanname_from', minWidth: 150},
+        {header: 'Kekaryawanan Baru', dataIndex: 'kekaryaanname', minWidth: 150},
+        {header: 'Level Individu Sebelumnya', dataIndex: 'levelnameindividu_from', minWidth: 150},
+        {header: 'Level Individu Baru', dataIndex: 'levelnameindividu', minWidth: 150},
+        {header: 'Level Jabatan Sebelumnya', dataIndex: 'levelnamejabatan_from', minWidth: 150},
+        {header: 'Level Jabatan Baru', dataIndex: 'levelnamejabatan', minWidth: 150},
         {header: 'Lokasi Sebelumnya', dataIndex: 'namalokasi_from', minWidth: 150},
         {header: 'Lokasi Baru', dataIndex: 'namalokasi', minWidth: 150},
         {header: 'Organisasi Sebelumnya', dataIndex: 'namaorg_from', minWidth: 150},
@@ -380,6 +386,8 @@ Ext.define('GridDataPergerakanPersonel', {
                                                   Ext.getCmp('kekaryaanname_fPergerakanBaru').setValue(d.data.kekaryaanname);
                                                 }
                                                 Ext.MessageBox.hide();
+
+                                                Ext.getCmp('tglakhirkekaryaan_fPergerakanBaru').setValue(d.data.tglberakhir);
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert("Load failed", action.result.errorMessage);

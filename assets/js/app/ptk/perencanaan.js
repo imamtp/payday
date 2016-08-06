@@ -400,6 +400,9 @@ Ext.define('GridPerencanaan', {
                         listeners: {
                         select: function(n,v) { 
                                 filter_rtk(false);
+                                orgStore.removeAll();
+                                jabatanStore.removeAll();
+                                
                                 storeGridPerencanaan.load();
 
                                 orgStore.load({
@@ -963,11 +966,11 @@ function filter_rtk(opt)
     Ext.getCmp('filtercb_jabatanPtk').setDisabled(opt);
     Ext.getCmp('namajabatan_filterptk').setDisabled(opt);
 
-    if(opt===true)
-    {
+    // if(opt===true)
+    // {
         Ext.getCmp('filtercb_orgPtk').setValue(null);
         Ext.getCmp('namaorg_filterptk').setValue(null);
         Ext.getCmp('filtercb_jabatanPtk').setValue(null);
         Ext.getCmp('namajabatan_filterptk').setValue(null);
-    } 
+    // } 
 }

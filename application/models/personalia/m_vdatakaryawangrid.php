@@ -16,7 +16,7 @@ class m_vdatakaryawangrid extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.ni,nik,a.namalengkap,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,a.tgllahir,n.sexname,a.noktp,a.notelp,a.nohandphone,aa.tglmasuk as tglmasukpeg,bbb.idpergerakan";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,a.tgllahir,n.sexname,a.noktp,a.notelp,a.nohandphone,pek.tglmasuk as tglmasukpeg,bbb.idpergerakan";
     }
 
     function fieldCek()
@@ -39,7 +39,7 @@ class m_vdatakaryawangrid extends CI_Model {
                         GROUP BY idpelamar
                     ) as x ON a.idpelamar = x.idpelamar
                     LEFT join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
-                    join pergerakanpersonil bbb ON aa.idpergerakanpersonil = bbb.idpergerakanpersonil
+                    LEFT join pergerakanpersonil bbb ON aa.idpergerakanpersonil = bbb.idpergerakanpersonil
                     LEFT JOIN strukturjabatan b ON aa.idstrukturjabatan = b.idstrukturjabatan
                     LEFT JOIN jabatan c ON b.idjabatan = c.idjabatan
                     LEFT JOIN lokasi_org d ON aa.idlokasiorg = d.idlokasiorg
@@ -63,7 +63,15 @@ class m_vdatakaryawangrid extends CI_Model {
                     LEFT JOIN strukturjabatan bb ON aaa.idstrukturjabatan = bb.idstrukturjabatan
                     LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
                     LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi
-                    left join sextype n ON a.idsex = n.idsex";
+                    left join sextype n ON a.idsex = n.idsex
+                    LEFT  JOIN
+                    (
+                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
+                        FROM pekerjaan
+                        WHERE statuspergerakan='Disetujui'
+                        GROUP BY idpelamar
+                    ) as xxx ON a.idpelamar = xxx.idpelamar
+                    left join pekerjaan pek ON xxx.idpekerjaan = pek.idpekerjaan";
 
         return $query;
     }

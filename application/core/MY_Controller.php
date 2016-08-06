@@ -1,7 +1,7 @@
 <?php
 
 //require_once($_SERVER['DOCUMENT_ROOT'].'/bablast/assets/libs/Smarty.class.php');
-require_once(DOCUMENTROOT.'/assets/libs/SmartyBC.class.php');
+require_once(DOCUMENTROOT.'kopi/assets/libs/SmartyBC.class.php');
         
 class MY_Controller extends CI_Controller{
     
@@ -22,10 +22,10 @@ class MY_Controller extends CI_Controller{
         // $this->load->model('purchase/m_purchase');
         $this->load->helper('common');
         
-        $this->smarty->template_dir = DOCUMENTROOT.'/assets/template/templates/';
-        $this->smarty->compile_dir = DOCUMENTROOT.'/assets/template/templates_c/';
-        $this->smarty->config_dir = DOCUMENTROOT.'/assets/template/configs/';
-        $this->smarty->cache_dir = DOCUMENTROOT.'/assets/template/cache/';
+        $this->smarty->template_dir = DOCUMENTROOT.'/kopi/assets/template/templates/';
+        $this->smarty->compile_dir = DOCUMENTROOT.'/kopi/assets/template/templates_c/';
+        $this->smarty->config_dir = DOCUMENTROOT.'/kopi/assets/template/configs/';
+        $this->smarty->cache_dir = DOCUMENTROOT.'/kopi/assets/template/cache/';
         
         $company = new stdClass();
         if($this->session->userdata('idcompany')!=null)
@@ -33,7 +33,7 @@ class MY_Controller extends CI_Controller{
             $company = $this->db->query("select logo,companyname from company where idcompany=". $this->session->userdata('idcompany')."")->row();
         } else if($this->session->userdata('idcompany')=='')
             {
-                $company->logo = 'nd.png';
+                $company->logo = 'NatadayaAplikasiTRANSPARANT2.png';
                 $company->companyname = 'NATADAYA';
             } else {
                     $company->logo = null;

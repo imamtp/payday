@@ -519,7 +519,9 @@ class kompensasi extends MY_Controller {
         $this->load->model('kompensasi/m_lembur');
 
         //getweekdays
-        $numdayswork = $this->get_weekdays($startdate,$enddate);
+        // $numdayswork = $this->get_weekdays($startdate,$enddate);
+        $numdayswork = countDaysMonth($startdate,$enddate)->days+1; //dihitung total dengan weekend
+
         // echo $startdateArr[0].'-'.$startdateArr[1].'-01';
         $numfulldayswork = $this->get_weekdays($startdateArr[0].'-'.$startdateArr[1].'-01',$enddate);
 
@@ -536,35 +538,8 @@ class kompensasi extends MY_Controller {
         } else {
             $wernama = null;
         }
-        
-        // $sqlpeg = "select a.idpelamar,idptkp,namalengkap,aaa.tglmasuk,aa.tglberakhir,punyanpwp,biayajabatan,
-        //             jenispotonganpph,bb.idpergerakan,b.nik,c.companycode,e.kodeorg,f.namajabatan,bb.idpergerakan
-        //             from pelamar a
-        //             join calonpelamar b ON a.idpelamar = b.idpelamar
-        //             join company c ON a.idcompany = c.idcompany
-        //             JOIN
-        //             (
-        //                 SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
-        //                 FROM pekerjaan
-        //                 WHERE statuspergerakan='Disetujui'
-        //                 GROUP BY idpelamar
-        //             ) as x ON a.idpelamar = x.idpelamar
-        //             join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
-        //             left join strukturjabatan d ON aa.idstrukturjabatan = d.idstrukturjabatan
-        //             left join organisasi e ON d.idorganisasi = e.idorganisasi
-        //             left join jabatan f ON d.idjabatan = f.idjabatan
-        //             JOIN
-        //             (
-        //                 SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
-        //                 FROM pekerjaan
-        //                 WHERE statuspergerakan='Disetujui'
-        //                 GROUP BY idpelamar
-        //             ) as xx ON a.idpelamar = xx.idpelamar
-        //             join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
-        //             left join pergerakanpersonil bb ON aa.idpergerakanpersonil = bb.idpergerakanpersonil
-        //             where a.idcompany=$idcompany and a.idptkp is not null $wernama 
-        //             and ('$startdate' between aa.tglmasuk and aa.tglberakhir OR '$startdate' between aaa.tglmasuk and aaa.tglberakhir)"
-        //         . " order by b.nik";
+
+
           $sqlpeg = "select a.idpelamar,idptkp,namalengkap,aaa.tglmasuk,aa.tglberakhir,punyanpwp,biayajabatan,
                     jenispotonganpph,bb.idpergerakan,b.nik,c.companycode,e.kodeorg,f.namajabatan,bb.idpergerakan
                     from pelamar a
@@ -590,13 +565,13 @@ class kompensasi extends MY_Controller {
                     ) as xx ON a.idpelamar = xx.idpelamar
                     join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
                     left join pergerakanpersonil bb ON aa.idpergerakanpersonil = bb.idpergerakanpersonil
-                    where a.idcompany=$idcompany and a.idptkp is not null $wernama 
-                    and ('$startdate' >= aaa.tglmasuk)"
+                    where a.idcompany=$idcompany and a.idptkp is not null $wernama
+                    and ('$startdate' >= aaa.tglmasuk OR aaa.tglmasuk >= '$startdate')"
                 . " order by b.nik";
        // echo $sqlpeg; exit;
        // exit; and (aaa.tglmasuk between '$startdate' and '$enddate')"
         $qpeg = $this->db->query($sqlpeg);
-
+        
         $data=array();
         $arrJson=array();
         $i=0;
@@ -685,15 +660,6 @@ class kompensasi extends MY_Controller {
             }
 
              //first payroll
-            // $qfpayroll = $this->db->query("select tglgaji from payrolldata where idpelamar=".$rpeg->idpelamar." ORDER BY tglgaji DESC limit 1");
-            // if($qfpayroll->num_rows()>0)
-            // {
-            //     $rqfpayroll = $qfpayroll->row();
-            //     $tglgajipertamaArr = explode('-', $rqfpayroll->tglgaji);
-            //     $data[$i]['tglgajipertama'] = $tglgajipertamaArr[0].'-'.$tglgajipertamaArr[1].'-01';
-            // } else {
-            //     $data[$i]['tglgajipertama'] = $startdate;
-            // }
             $data[$i]['tglgajipertama'] = $this->m_komponenupah->getFirstPayroll($rpeg->idpelamar,$startdate);
             $obj->tglgajipertama = $data[$i]['tglgajipertama'];
             //end first payroll
@@ -701,17 +667,6 @@ class kompensasi extends MY_Controller {
             //itung jumlah periode kerja
             $qtglmasuk = $this->db->query("select min(tglmasuk) as tglmasuk from pekerjaan where idpelamar=".$rpeg->idpelamar." ORDER BY tglmasuk limit 1")->row();
            
-
-            // $d1 = strtotime($startdate);
-            // $d2 = strtotime($rpeg->tglmasuk);
-            // $min_date = min($d1, $d2);
-            // $max_date = max($d1, $d2);
-            // echo $max_date;
-            // $ix = 0;
-            // while (($min_date = strtotime("+1 MONTH", $min_date)) <= $max_date) {
-            //     $ix++;
-            // }
-            // echo $rpeg->tglmasuk.','.$startdate;
             $data[$i]['masakerja'] = diffInMonths($rpeg->tglmasuk,$startdate);
             $obj->masakerja = $data[$i]['masakerja'];
             $data[$i]['tglmasuk'] = $rpeg->tglmasuk;
@@ -735,9 +690,38 @@ class kompensasi extends MY_Controller {
                                                 where a.idpelamar = ".$rpeg->idpelamar." and b.idpergerakan=128 and b.statuspergerakan='Disetujui'")->row();
             if($qterminate->tglberakhir!=null)
             { 
+               
                  // $rterminate = $qterminate->row();
                  $tglakhirjabatan = $qterminate->tglberakhir;
                  $tglakhirjabatanArr = explode('-', $tglakhirjabatan);
+
+
+                 //hitung hari proporsional
+                    //deteksi apakah periode penggajian dalam bulan yang sama dengan tanggal masuk karyawan
+                 $qDetectTglMasuk = $this->db->query("select
+                                                            a.tglmasuk
+                                                        from
+                                                            pekerjaan a
+                                                        join pergerakanpersonil b ON a .idpergerakanpersonil = b.idpergerakanpersonil
+                                                        where
+                                                            a .idpelamar = ".$rpeg->idpelamar."
+                                                        and b.idpergerakan <> 128
+                                                        and b.statuspergerakan = 'Disetujui' 
+                                                        and (a.tglmasuk > '".$startdate."' and a.tglmasuk < '".$enddate."')
+                                                        order by a.idpekerjaan desc
+                                                        limit 1");
+                 if($qDetectTglMasuk->num_rows()>0)
+                 {
+                    $rDetectTglMasuk = $qDetectTglMasuk->row();
+                    $date1 = new DateTime($rDetectTglMasuk->tglmasuk);
+                 } else {
+                    $date1 = new DateTime($startdate);
+                 }
+                 $date2 = new DateTime($tglakhirjabatan);
+
+                 // echo $this->db->last_query();                 
+                 $proporsionalDays = $date2->diff($date1)->format("%a")+1;
+                 //end hitung hari proporsional
             } else {
 
                  $qterminate = $this->db->query("select max(a.tglberakhir) as tglberakhir
@@ -789,17 +773,7 @@ class kompensasi extends MY_Controller {
                 }
                
             }
-            // $today_dt = new DateTime($enddate);
-            // $expire_dt = new DateTime($obj->tglakhirjabatan);
 
-            // if ($today_dt>=$expire_dt) {  
-            //     echo 'asd '.$enddate;
-            //     exit;
-            //      break;
-            // }
-// echo $qtglmasuk->tglmasuk.','.$tglakhirjabatan;
-            // echo $data[$i]['tglgajipertama'].','.$akhirtahun;
-            // echo $rpeg->idpelamar.':'.intval($tglakhirjabatanArr[0])."==".intval($startdateArr[0]).'=';
             if(intval($tglakhirjabatanArr[0])==intval($startdateArr[0]))
             {
                 //tahun terminasi sama dengan tahun penggajian
@@ -820,14 +794,6 @@ class kompensasi extends MY_Controller {
                 }
                
             } else {
-                // echo diffInMonths($qtglmasuk->tglmasuk,$akhirtahun);
-                // exit;
-                // if ($expire_dt < $today_dt) {  
-                //      $data[$i]['masapajaksetahun'] = 12;
-                // } else {
-                //      $data[$i]['masapajaksetahun'] = 12;
-                //     // 
-                // }
                 $data[$i]['masapajaksetahun'] = diffInMonths($qtglmasuk->tglmasuk,$akhirtahun) > 12 ? 12 : diffInMonths($qtglmasuk->tglmasuk,$akhirtahun);
             }
             // echo $data[$i]['masapajaksetahun'].' ';
@@ -873,7 +839,17 @@ class kompensasi extends MY_Controller {
                     // $penghasilannet += $rUT->nilai;
                 }
 
-                $totalUT+=$rUT->nilai;
+                if(isset($proporsionalDays))
+                {
+                    //proprate
+                    $prorata = $rUT->nilai/$numdayswork;
+                    $totalUT+=$prorata*$proporsionalDays;
+                } else {
+                    $totalUT+=$rUT->nilai;
+                }
+               
+
+                 //
 
                 if($commit=='true')
                 {
@@ -1861,7 +1837,9 @@ class kompensasi extends MY_Controller {
                 $obj->takehomepay = $data[$i]['takehomepay'];
                 // echo $data[$i]['takehomepay'].' ';
             }
-            $data[$i]['takehomepay'] = ($data[$i]['takehomepay']/$numfulldayswork)*$numdayswork;
+            // echo '('.$data[$i]['takehomepay'].'/'.$numdayswork.')*'.$proporsionalDays;
+            
+            // $data[$i]['takehomepay'] = ($data[$i]['takehomepay']/$numdayswork)*$proporsionalDays;
             $obj->takehomepay = $data[$i]['takehomepay'];
 
             if($commit=='true')
@@ -4897,7 +4875,7 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
             $file = $this->upload->data()['full_path'];
             $orig_name = $this->upload->data()['orig_name'];
 
-            require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+            require_once "application/libraries/simplexlsx.class.php";
             $xlsx = new SimpleXLSX($file);
             $getWorksheetName = $xlsx->getWorksheetName();
 
@@ -4906,15 +4884,20 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
 
             $start = 1;
             while (isset($val[$start])) {
+                // unset($idpelamar);
                 $d = $val[$start];
                 if($d['0']!='')
                 {
                     $valid = $this->validasiImportUTT($d);
+                    // exit;
                     // print_r($valid);
+                    // echo '<hr>';
+                    // exit;
                     
                    
                     if ($valid['status']) {
                         $idpelamar = $valid['idpelamar'];
+                        // echo $idpelamar.' ';
                         $oke = 'true';
                         // $qseq = $this->db->query("select nextval('seq_upload') as idupload")->row();
                         // $idupload = $qseq->idupload;
@@ -4942,6 +4925,8 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
                          // $qnik = $this->db->get_where('calonpelamar',array('nik'=>$d[1]))->row();
                          $sd = explode('.', $d[4]);
                          $nd = explode('.', $d[5]);
+
+                         $idpelamar = $this->getIdPelamar($d);
 
                          $data = array(
                                 "idpelamar" => $idpelamar,
@@ -4989,7 +4974,7 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }  else {
             $code = $d['1'];
             $tgl = date('Y-m-d');
-            $qemp = $this->db->query("select nik,a.idpelamar
+            $qemp = $this->db->query("select g.nik,a.idpelamar
                                     from pelamar a
                                     LEFT JOIN
                                     (
@@ -5015,12 +5000,15 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
                                     left join kekaryaan d ON aa.idkekaryaan = d.idkekaryaan
                                     left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
                                     left join company f ON a.idcompany = f.idcompany  
+                                    left join calonpelamar g ON a.idpelamar = g.idpelamar
                                     WHERE TRUE AND a.display is null and ('".$tgl."' between aa.tglmasuk and aa.tglberakhir OR '".$tgl."' between aaa.tglmasuk and aaa.tglberakhir)  ".$this->m_data->whereCompany()."
-                                    AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null) AND bb.idpergerakan!=128 and nik='".$code."'");
+                                    AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null) AND bb.idpergerakan!=128 and g.nik='".$code."'");
             if($qemp->num_rows()>0)
             {
                 $remp = $qemp->row();
                 $idpelamar = $remp->idpelamar;
+
+                // echo $this->db->last_query();
             } else {
                 $status = false;
                 $message = 'Error data NO ' . $d['0'] . ': NIK tidak ada di dalam database ';
@@ -5112,6 +5100,43 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
        
         return array('status' => $status, 'message' => $message,'idpelamar'=>$idpelamar);
+   }
+
+   function getIdPelamar($d)
+   {
+            $code = $d['1'];
+            $tgl = date('Y-m-d');
+            $qemp = $this->db->query("select g.nik,a.idpelamar
+                                    from pelamar a
+                                    LEFT JOIN
+                                    (
+                                        SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
+                                        FROM pekerjaan
+                                        WHERE statuspergerakan='Disetujui'
+                                        GROUP BY idpelamar
+                                    ) as x ON a.idpelamar = x.idpelamar
+                                    left join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
+                                    join pergerakanpersonil bb ON aa.idpergerakanpersonil = bb.idpergerakanpersonil
+                                    LEFT JOIN
+                                    (
+                                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
+                                        FROM pekerjaan
+                                        WHERE statuspergerakan='Disetujui'
+                                        GROUP BY idpelamar
+                                    ) as xx ON a.idpelamar = xx.idpelamar
+                                    left join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan                    
+                                    LEFT join (select nik,idpelamar,statuscalon 
+                                                    from calonpelamar
+                                                    where statuscalon='Disetujui') k ON a.idpelamar = k.idpelamar
+                                    LEFT join sextype c ON a.idsex = c.idsex
+                                    left join kekaryaan d ON aa.idkekaryaan = d.idkekaryaan
+                                    left join strukturjabatan e ON aa.idstrukturjabatan = e.idstrukturjabatan
+                                    left join company f ON a.idcompany = f.idcompany  
+                                    left join calonpelamar g ON a.idpelamar = g.idpelamar
+                                    WHERE TRUE AND a.display is null and ('".$tgl."' between aa.tglmasuk and aa.tglberakhir OR '".$tgl."' between aaa.tglmasuk and aaa.tglberakhir)  ".$this->m_data->whereCompany()."
+                                    AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null) AND bb.idpergerakan!=128 and g.nik='".$code."'");
+       $remp = $qemp->row();
+       return $remp->idpelamar;
    }
 
    function hapus_upload_upahtt()

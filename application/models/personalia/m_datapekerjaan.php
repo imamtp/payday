@@ -16,7 +16,7 @@ class m_datapekerjaan extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,bbb.idpergerakan";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,bbb.idpergerakan,aa.idpergerakanpersonil";
     }
 
     function fieldCek()
@@ -51,7 +51,7 @@ class m_datapekerjaan extends CI_Model {
                     LEFT join kekaryaan v ON aa.idkekaryaan = v.idkekaryaan
                     JOIN calonpelamar k ON a.idpelamar = k.idpelamar
                     left join pelamar l ON aa.idpelamaratasan = l.idpelamar
-                    join company m ON a.idcompany = m.idcompany
+                     left join company m ON a.idcompany = m.idcompany
                     LEFT  JOIN
                     (
                         SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar

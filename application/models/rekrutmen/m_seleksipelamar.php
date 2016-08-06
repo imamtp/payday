@@ -55,9 +55,9 @@ class m_seleksipelamar extends CI_Model {
             // $wer .= " AND a.idpelamar not in (select idpelamar from calonpelamar where statuscalon!='Disetujui' or statuscalon!='Tindak Lanjut')";
         if($this->input->post('dihapus')=='true')
         {
-            $wer.=" a.display=0 ";
+            $wer.=" (a.display is null OR a.display=0)";
         } else {
-            $wer.=" a.display is null ";
+            $wer.=" (a.display is null AND b.display is null)";
         }
 
          return "$wer ".$this->m_data->whereCompany('b',false)."";

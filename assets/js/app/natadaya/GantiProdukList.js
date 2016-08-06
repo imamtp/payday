@@ -72,8 +72,17 @@ Ext.define('GridGantiProdukList', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                // alert(Ext.getCmp('totalkaryawan_GantiProduk').getValue()*1+'>'+selectedRecord.get('maxemployee')*1);
 
-                    if(Ext.getCmp('idproduct_GantiProduk').getValue()==selectedRecord.get('productid'))
+                if(selectedRecord.get('maxemployee')*1==0)
+                {
+                    //unlimited
+                    Ext.getCmp('idproductnew_GantiProduk').setValue(selectedRecord.get('productid'));
+                    Ext.getCmp('productcodenew_GantiProduk').setValue(selectedRecord.get('productcode'));
+                    Ext.getCmp('productnamenew_GantiProduk').setValue(selectedRecord.get('productname'));
+
+                    Ext.getCmp('wGridGantiProdukListPopup').hide();
+                } else if(Ext.getCmp('idproduct_GantiProduk').getValue()==selectedRecord.get('productid'))
                     {
                         Ext.Msg.alert('Info', 'Produk Tidak Boleh Sama');
                     } else {

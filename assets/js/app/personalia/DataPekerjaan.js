@@ -377,8 +377,8 @@ Ext.define('GridDataPekerjaan', {
         {header: 'Nama Jabatan', dataIndex: 'namajabatan', minWidth: 150},
         {header: 'Nama Lokasi', dataIndex: 'namalokasi', minWidth: 150},
         {header: 'Kekaryawanan', dataIndex: 'kekaryaanname', minWidth: 150},
-        {header: 'Tgl Masuk', dataIndex: 'tglmasuk', minWidth: 150},
-        {header: 'Tgl Berakhir', dataIndex: 'tglberakhir', minWidth: 150},
+        {header: 'Tgl Mulai Jabatan', dataIndex: 'tglmasuk', minWidth: 150},
+        {header: 'Tgl Akhir Jabatan', dataIndex: 'tglberakhir', minWidth: 150},
         // {header: 'Status', dataIndex: 'status', minWidth: 150},
         // {header: 'user in', dataIndex: 'userin', minWidth: 150},
         // {header: 'date in', dataIndex: 'datein', minWidth: 150}
@@ -579,7 +579,7 @@ Ext.define('GridDataPekerjaan', {
                                 labelWidth:170,
                                 name:'startdate',
                                 // allowBlank: false,
-                                fieldLabel: 'Tanggal Masuk',
+                                fieldLabel: 'Tanggal Mulai Jabatan',
                                 listeners: {
                                     'change': function(field, newValue, oldValue) {
                                         // if (Ext.getCmp('startdate_DataPekerjaan').getValue() != null && Ext.getCmp('enddate_DataPekerjaan').getValue() != null)
