@@ -37,7 +37,37 @@ class m_level extends CI_Model {
     }
 
     function whereQuery() {
-         return "a.display is null ".$this->m_data->whereCompany()."";
+        $pergerakan = $this->input->post('pergerakan');
+        $idlevelindividu = $this->input->post('idlevelindividu');
+        $werlevel = null;
+
+        if($pergerakan!=null)
+        {
+            $ql = $this->db->query("select urutan from level where idlevel = $idlevelindividu")->row();
+        }
+
+        if($pergerakan=='PENINGKATAN LEVEL INDIVIDU')
+        {            
+            $werlevel = " and a.urutan > ".$ql->urutan."";
+        }
+
+        if($pergerakan=='PENURUNAN LEVEL INDIVIDU')
+        {
+            $werlevel = " and a.urutan < ".$ql->urutan."";
+        }
+
+        if($pergerakan=='PROMOSI')
+        {
+            $werlevel = " and a.urutan > ".$ql->urutan."";
+        }
+
+        if($pergerakan=='DEMOSI')
+        {
+            $werlevel = " and a.urutan < ".$ql->urutan."";
+        }
+
+
+         return "a.display is null ".$this->m_data->whereCompany()." ".$werlevel;
     }
 
     function orderBy() {

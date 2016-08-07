@@ -300,6 +300,12 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                     id: 'namajabatan_fPergerakanP_from',
                 },
                 {
+                    xtype: 'hiddenfield',
+                    fieldLabel: 'idleveljabatan_fPergerakanP',
+                    id: 'idleveljabatan_fPergerakanP_from',
+                    name: 'idleveljabatan_from'
+                },
+                {
                     xtype: 'displayfield',
                     fieldLabel: 'Level Jabatan',
                     id: 'levelnameJabatan_fPergerakanP_from',
@@ -490,7 +496,12 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                     emptyText: 'Pilih Jabatan...',
                     onTriggerClick: function() {
                         wGridJabatanListPopup.show();
-                        storeGridJabatanList.load();
+                        storeGridJabatanList.load({
+                                params:{
+                                    pergerakan: Ext.getCmp('comboxpergerakan_fPergerakanP').getValue(),
+                                    idleveljabatan: Ext.getCmp('idleveljabatan_fPergerakanP_from').getValue()
+                                }
+                            });
                     }
                 }), {
                     xtype: 'displayfield',
@@ -514,7 +525,13 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                     emptyText: 'Pilih Level Individu...',
                     onTriggerClick: function() {
                         wGridLevelIndividuListPopup.show();
-                        storeGridLevelIndividuList.load();
+                        storeGridLevelIndividuList.load(
+                            {
+                                params:{
+                                    pergerakan: Ext.getCmp('comboxpergerakan_fPergerakanP').getValue(),
+                                    idlevelindividu: Ext.getCmp('idlevelindividu_fPergerakanP_from').getValue()
+                                }
+                            });
                     }
                 }), {
                     xtype: 'comboxlokasi',
@@ -556,7 +573,7 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                   hidden:true,
                   name:'kekaryaanname',
                   id: 'kekaryaanname_fPergerakanBaru',
-                  allowBlank:false,
+                  // allowBlank:false,
                   listeners: {
                       change: function(field, newValue, oldValue) {
                           if(newValue=='TETAP')
@@ -759,7 +776,7 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                         if (form.isValid()) {
                             form.submit({
                                 // url: SITE_URL + 'backend/saveform/PergerakanPersonil/personalia',
-                                url: SITE_URL + 'personalia/saveProsesPergerakan',
+                                url: SITE_URL + 'personalia/saveProsesPergerakan2',
                                 params: {
                                     statuspergerakan: 'Diajukan'
                                 },

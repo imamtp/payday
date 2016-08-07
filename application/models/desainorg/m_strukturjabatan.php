@@ -46,6 +46,27 @@ class m_strukturjabatan extends CI_Model {
         
         $werdate = '';
 
+        //PERGERAKAN
+        $pergerakan = $this->input->post('pergerakan');
+        $idleveljabatan = $this->input->post('idleveljabatan');
+        $werPergerakan = null;
+
+        if($pergerakan!=null)
+        {
+            $ql = $this->db->query("select urutan from level where idlevel = $idleveljabatan")->row();
+        }
+
+        if($pergerakan=='PROMOSI')
+        {
+           $werPergerakan = " and e.urutan > ".$ql->urutan."";
+        }
+
+        if($pergerakan=='DEMOSI')
+        {
+           $werPergerakan = " and e.urutan < ".$ql->urutan."";
+        }
+        //END PERGERAKAN
+
         if($startdate!='' && $enddate!='')
         {
             $werdate = " AND (a.startdate>='$startdate' AND a.enddate<='$enddate') ";
@@ -64,7 +85,7 @@ class m_strukturjabatan extends CI_Model {
             $werdate .= " AND ('".$y."-".date('m')."-".date('d')."' between a.startdate and a.enddate)";
         }
         // return "a.display is null and now() between a.startdate and a.enddate ". $this->m_data->whereCompany()."";
-        return "a.display is null $werdate ". $this->m_data->whereCompany()."";
+        return "a.display is null $werdate ". $this->m_data->whereCompany()." ".$werPergerakan;
     }
 
     function orderBy() {

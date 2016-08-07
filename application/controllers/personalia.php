@@ -644,6 +644,328 @@ class personalia extends MY_Controller {
         }
     }
 
+    function getTglMasuk($idpelamar)
+    {
+        //TGL MASUK
+        $qEntry = $this->db->query("SELECT tglmasuk
+                                    from pelamar a
+                                     LEFT JOIN
+                                    (
+                                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar,tglmasuk
+                                        FROM pekerjaan
+                                        WHERE statuspergerakan='Disetujui'
+                                        GROUP BY idpelamar,tglmasuk
+                                    ) as b ON a.idpelamar = b.idpelamar
+                                    where a.idpelamar = $idpelamar
+                                    ORDER BY tglmasuk 
+                                    limit 1");
+        //END TGL MASUK
+        $rDateEntry = $qEntry->row();
+        return $rDateEntry->tglmasuk;
+    }
+
+    function getTglMasukSebelumnya($idpelamar)
+    {
+      //TGL MASUK sebelumnya
+        $qEntry = $this->db->query("select idpekerjaan,tglmasuk,tglberakhir from pekerjaan 
+                                    where idpelamar = $idpelamar and statuspergerakan = 'Disetujui'
+                                    order by idpekerjaan desc limit 1");
+        //END TGL MASUK
+        $rDateEntry = $qEntry->row();
+        return $rDateEntry->tglmasuk;
+    }
+
+    function saveProsesPergerakan2()
+    {
+        $idpergerakanpersonil = $this->input->post('idpergerakanpersonil');
+        $idpelamaratasan = $this->input->post('idpelamaratasan');
+        $idpelamar = $this->input->post('idpelamar');
+        $statuspergerakan = $this->input->post('statuspergerakan');
+        $idlokasiorg = $this->m_data->getID('lokasi_org', 'namalokasi', 'idlokasiorg', $this->input->post('namalokasi'));
+        $idlevelindividu = $this->input->post('idlevelindividu');
+        $idstrukturjabatan_from = $this->input->post('idstrukturjabatan_from');
+        $idstrukturjabatan = $this->input->post('idstrukturjabatan');
+        $idkekaryaan = $this->m_data->getID('kekaryaan', 'kekaryaanname', 'idkekaryaan', $this->input->post('kekaryaanname'));
+        $idpergerakan = $this->m_data->getID('pergerakan', 'namapergerakan', 'idpergerakan', $this->input->post('namapergerakan'));
+        $idpekerjaanfrom = $this->input->post('idpekerjaanfrom') == null ? null : $this->input->post('idpekerjaanfrom');
+        $startdatenewpay = $this->input->post('startdatenewpay') == null ? null : backdate2($this->input->post('startdatenewpay'));
+        $tglterminasi = $this->input->post('tglterminasi') == null ? null : backdate2($this->input->post('tglterminasi'));
+
+        $tglmasuk = $this->input->post('tglmasuk')!=null ? backdate2_reverse($this->input->post('tglmasuk')) : null;
+        $tglberakhir = $this->input->post('tglberakhir')!=null ? backdate2_reverse($this->input->post('tglberakhir')) : null;
+        //blok pergerakan personil ke level individu yang sama
+        // $this->db->select('idlevelindividu');
+
+      
+
+        if($idpergerakan==58 || $idpergerakan==120)
+        {
+          //PERUBAHAN STATUS//LULUS PERCOBAAN
+          //Tidak Boleh < Tgl Masuk          
+
+          $sd = new DateTime($tglmasuk);
+          $sd2 = new DateTime($this->getTglMasuk($idpelamar));
+          if($sd < $sd2)
+          {
+            echo json_encode(array('success' => false, 'message' => 'Tanggal efektif tidak boleh kurang dari tanggal masuk pegawai'));
+            exit;
+          }
+            // $this->savePergerakanPerStatus($idpekerjaanfrom,$idkekaryaan,$statuspergerakan);
+            // exit;
+        }
+
+        if($idpergerakan==121)
+        {
+          //LULUS ORIENTASI
+          //Tidak Boleh < Tgl Efektif Perg. Personil Sblmnya
+          $sd = new DateTime($tglmasuk);
+          $sd2 = new DateTime($this->getTglMasukSebelumnya($idpelamar));
+          if($sd < $sd2)
+          {
+            echo json_encode(array('success' => false, 'message' => 'Tanggal efektif tidak boleh kurang dari tanggal efektif pergerakan personil sebelumnya'));
+            exit;
+          }
+        }
+
+        if($idpergerakan==122 || $idpergerakan==127 || $idpergerakan==123 || $idpergerakan==125 || $idpergerakan== 124 || $idpergerakan==129)
+        {
+          /*
+            PENINGKATAN LEVEL INDIVIDU
+            PENURUNAN LEVEL INDIVIDU
+            PROMOSI
+            DEMOSI
+            MUTASI
+            PERPANJANGAN KONTRAK
+              Tgl Efektif : Tidak Boleh < Tgl Efektif Perg. Personil Sblmnya
+              Tgl Berakhir : Tidak Boleh < Tgl Efektif
+          */
+          $sd = new DateTime($tglmasuk);
+          $sd2 = new DateTime($this->getTglMasukSebelumnya($idpelamar));
+          if($sd < $sd2)
+          {
+            echo json_encode(array('success' => false, 'message' => 'Tanggal efektif tidak boleh kurang dari tanggal efektif pergerakan personil sebelumnya'));
+            exit;
+          }
+
+          //
+          $sdd = new DateTime($tglberakhir);
+          if($sdd < $sd)
+          {
+            echo json_encode(array('success' => false, 'message' => 'Tanggal berakhir tidak boleh kurang dari tanggal efektif'));
+            exit;
+          }
+        }
+
+        if($idpergerakan==128)
+        {
+          //TERMINASI
+          $tglberakhir = $tglmasuk;
+        }
+
+        if($idpergerakan==106)
+        {
+          //PENYESUAIAN UPAH
+          $sd = new DateTime($tglmasuk);
+          $sd2 = new DateTime($this->getTglMasukSebelumnya($idpelamar));
+          if($sd < $sd2)
+          {
+            echo json_encode(array('success' => false, 'message' => 'Tanggal efektif tidak boleh kurang dari tanggal efektif pergerakan personil sebelumnya'));
+            exit;
+          }
+        }
+
+//  echo json_encode(array('success' => false, 'message' => 'as'));        
+// exit;
+        if($statuspergerakan!='Ditolak')
+       {
+                if($idpergerakan!=131 && $idpergerakan!=128 && $idpergerakan!=120 && $idpergerakan!=121 && $this->input->post('penyesuaianstatus')!='true') 
+                {
+                    //bukan PENEMPATAN BARU,terminasi
+
+                  
+                } //END   if($idpergerakan!=131)
+                  else if($idpergerakan==131)
+                  {
+                    //penempatan baru
+                    $this->db->where('idpelamar',$idpelamar);
+                    $this->db->update('calonpelamar',array('statuscalon'=>$statuspergerakan));
+                  }
+        }
+
+        $dt = new DateTime();
+        $tanggalwaktu = $dt->format('Y-m-d H:i:s');
+
+        $this->db->trans_start();
+
+        if($this->input->post('idpergerakanpersonil') == '')
+        {
+            $idpergerakanpersonil = $this->m_data->getSeqVal('seq_pergerakanpersonil');
+            $state = 'insert';
+        } else {
+            $state = 'update';
+           $idpergerakanpersonil = $this->input->post('idpergerakanpersonil');
+        }
+
+         $dataPergerakan = array(
+            'idpergerakanpersonil' => $idpergerakanpersonil,
+//            'idunit' => $this->m_data->getID('unit', 'namaunit', 'idunit', $this->input->post('namaunit')),
+            // 'idcompany' => $this->input->post('idcompany'),
+            'idpekerjaanfrom' => $idpekerjaanfrom,
+            'nopergerakan' => $this->input->post('nopergerakan'),
+            'idcompany' => $this->session->userdata('idcompany'),
+            // 'idjabatan' => $this->input->post('idjabatan'),
+            // 'startdate' => backdate2_reverse($this->input->post('startdate')),
+            // 'enddate' => backdate2_reverse($this->input->post('enddate')),
+            'idpelamar' =>$idpelamar,
+            'idstrukturjabatanfrom' =>$idstrukturjabatan_from == null ? null : $idstrukturjabatan_from,
+            // 'idpelamaratasan' =>$this->input->post('idpelamaratasan'),
+            // 'idorganisasi' =>$this->input->post('idorganisasi'),
+            // 'idcompany' =>$this->input->post('idcompany'),
+            // 'idjabatan' =>$this->input->post('idjabatan'),
+            // 'idlevelindividu' =>$this->input->post('idlevelindividu'),
+            // 'idorganisasi' =>$this->input->post('idorganisasi'),
+            // 'idkekaryaan' =>$this->m_data->getID('kekaryaan', 'kekaryaanname', 'idkekaryaan', $this->input->post('kekaryaanname')),
+            // 'idjabatanatasan' =>$this->input->post('idjabatanatasan'),
+            // 'idorganisasiatasan' =>$this->input->post('idorganisasiatasan'),
+            // 'idlokasiorg' =>$idlokasiorg,
+            // 'idlokasiorgatasan' =>$this->m_data->getID('lokasi_org', 'namalokasi', 'idlokasiorg', $this->input->post('lokasiatasan')),
+            // 'tglmasuk' =>backdate2_reverse($this->input->post('tglmasuk')),
+            // 'tglberakhir' =>backdate2_reverse($this->input->post('tglberakhir')),
+            // 'namaatasan' =>$this->input->post('namaatasan'),
+            'statuspergerakan' =>$statuspergerakan,
+             'idpergerakan' =>$idpergerakan,
+             'periodekekaryaan' => $this->input->post('periodekekaryaan'),
+             'jumlahbulankekaryaan' => $this->input->post('jumlahbulankekaryaan'),
+             'catatanpenyesuaian'=>$this->input->post('catatanpenyesuaian'),
+             'startdatenewpay'=>$startdatenewpay,
+             'alasanterminasi'=>$this->input->post('alasanterminasi'),
+             'tglterminasi'=>$tglterminasi
+        );
+
+        if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
+        {
+          if($idpergerakan!=128) //selain terminasi
+          {
+            // $tglmasuk = $this->input->post('tglmasuk')!=null ? backdate2_reverse($this->input->post('tglmasuk')) : null;
+          } else {
+            $tglmasuk = $tglterminasi;
+          }
+
+          $d = array(
+                "idpergerakanpersonil"=>$idpergerakanpersonil,
+                "idpelamar" => $idpelamar,
+                "idlevelindividu" => $idlevelindividu == null ? null : $idlevelindividu,
+                "idlokasiorg" => $idlokasiorg == null ? null : $idlokasiorg,
+                "idkekaryaan"  => $idkekaryaan == null ? null : $idkekaryaan,
+                "tglmasuk" => $tglmasuk,
+                "tglberakhir" => $tglberakhir,
+                "idstrukturjabatan" => $idstrukturjabatan == null ? null : $idstrukturjabatan,
+                "idpelamaratasan" => $this->input->post('idpelamaratasan') =='' ? null : $this->input->post('idpelamaratasan'),
+                "statuspergerakan" =>$statuspergerakan
+          );
+        }
+
+      if($state=='insert')
+      {
+            if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
+            {
+                $d['idpekerjaan'] = $this->m_data->getSeqVal('seq_datapegawai');
+                $idpekerjaanPenyesuaian = $d['idpekerjaan'];
+            } else {
+                $idpekerjaanPenyesuaian = $idpekerjaanfrom;
+            }
+
+            $d['userin'] = $this->session->userdata('username');
+            $d['datein'] = $tanggalwaktu;
+            $d['usermod'] = $this->session->userdata('username');
+            $d['datemod'] = $tanggalwaktu;
+
+            $this->db->insert('pergerakanpersonil',$dataPergerakan);
+
+            if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
+            {
+               $this->db->insert('pekerjaan',$d);
+            }
+
+        } else {
+            $d['usermod'] = $this->session->userdata('username');
+            $d['datemod'] = $tanggalwaktu;
+
+            $this->db->where('idpergerakanpersonil',$idpergerakanpersonil);
+            $this->db->update('pergerakanpersonil',$dataPergerakan);
+
+            if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
+            {
+                $this->db->where('idpergerakanpersonil',$idpergerakanpersonil);
+               $this->db->update('pekerjaan',$d);
+
+                $qpk = $this->db->get_where('pekerjaan',array('idpergerakanpersonil'=>$idpergerakanpersonil))->row();
+                $idpekerjaanPenyesuaian = $qpk->idpekerjaan;
+            } else {
+                $idpekerjaanPenyesuaian = $idpekerjaanfrom;
+            }
+            
+           
+        }
+
+
+       if($statuspergerakan=='Disetujui')
+       {
+            if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
+            {
+                     //update semua bawahan
+                      $qbawahan = $this->db->get_where('pergerakanpersonilbawahan',array('idpergerakanpersonil'=>$idpergerakanpersonil));
+                      foreach ($qbawahan->result() as $r) {
+                        $this->db->where('idpekerjaan',$r->idpekerjaan);
+                        $dbawahan = array(
+                            'idpelamaratasan'=>$r->idpelamaratasan
+                          );
+                        $this->db->update('pekerjaan',$dbawahan);
+                      }
+
+                        $this->db->where(array('idpergerakanpersonil'=>$idpergerakanpersonil));
+                        $this->db->delete('pergerakanpersonilbawahan');
+                        //end update semua bawahan
+            }
+
+            //simpan ke tabel penyesuan untuk nanti melakukan penyesuan upah karyawan baru maupun lama
+            $dpenyesuaian = array(
+              "idpelamar" => $idpelamar,
+              "idpergerakanpersonil" => $idpergerakanpersonil,
+              "idpekerjaan" => $idpekerjaanPenyesuaian,
+              "datein" => $tanggalwaktu,
+              // "tipe" => 'baru',
+              "status" =>0
+            );
+
+            if($idpergerakan==131)//penempatan baru
+            {
+                $dpenyesuaian['tipe'] = 'baru';
+            } else {
+                $dpenyesuaian['tipe'] = 'pergerakan';
+            }
+
+            $qcek = $this->db->get_where('penyesuaian',array(
+              "idpelamar" => $idpelamar,
+              "idpergerakanpersonil" => $idpergerakanpersonil,
+              "idpekerjaan" => $idpekerjaanPenyesuaian));
+            if($qcek->num_rows()<=0)
+            {
+              $this->db->insert('penyesuaian',$dpenyesuaian);
+            }
+        }
+
+        // echo 'asdsad';
+
+      if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo json_encode(array('success' => false, 'message' => 'Data gagal disimpan'));
+        } else {
+            $this->db->trans_commit();
+            echo json_encode(array('success' => true, 'message' => 'Data telah tersimpan'));
+        }
+    }
+
      function teshari()
     {
       $date = '2015-11-02'; 

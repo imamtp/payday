@@ -16,7 +16,7 @@ class m_personil4pergerakan extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.ni,nik,a.namalengkap,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,aa.idstrukturjabatan,c.idjabatan,aa.idpekerjaan,c.namajabatan,aa.idlevelindividu,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,c.idlevel as idleveljabatan";
     }
 
     function fieldCek()

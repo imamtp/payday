@@ -1,6 +1,6 @@
 Ext.define('GridPersonilListModel', {
      extend: 'Ext.data.Model',
-   fields: ['idpelamar','idpekerjaan','idstrukturjabatan','ni','nik','namalengkap','companyname','tgllahir','idjabatan','kodejabatan','namajabatan','levelnamejabatan','levelnameindividu','namalokasi','idorganisasi','kodeorg','namaorg','namalokasi','tglmasuk','tglberakhir','kekaryaanname'],
+   fields: ['idpelamar','idpekerjaan','idstrukturjabatan','ni','nik','namalengkap','companyname','tgllahir','idjabatan','kodejabatan','namajabatan','levelnamejabatan','levelnameindividu','namalokasi','idorganisasi','kodeorg','namaorg','namalokasi','tglmasuk','tglberakhir','kekaryaanname','idjabatan','idlevelindividu','idleveljabatan'],
     idProperty: 'id'
 });
 
@@ -72,6 +72,134 @@ Ext.define('GridPersonilList', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                    var comboxkekaryaan_fPergerakanP = Ext.getCmp('comboxkekaryaan_fPergerakanP');
+
+                    var idjabatan_fPergerakanP = Ext.getCmp('idjabatan_fPergerakanP');
+                    var namajabatan_fPergerakanP = Ext.getCmp('namajabatan_fPergerakanP');
+                    var levelnameJabatan_fPergerakanP = Ext.getCmp('levelnameJabatan_fPergerakanP');
+                    var idlevelindividu_fPergerakanP = Ext.getCmp('idlevelindividu_fPergerakanP');
+                    var levelnameindividu_fPergerakanP = Ext.getCmp('levelnameindividu_fPergerakanP');
+
+
+                    // comboxkekaryaan_fPergerakanP.setReadOnly(false);
+                    // comboxkekaryaan_fPergerakanP.show();
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PERUBAHAN STATUS')
+                    {
+                        if(selectedRecord.get('kekaryaanname')!=='KONTRAK')
+                        {
+                            Ext.Msg.alert('Info', 'Pergerakan <b>PERUBAHAN STATUS</b> hanya bisa dilakukan untuk status kekaryawanan <b>KONTRAK</b>');
+                           
+                            return false;
+                        } else {
+                            idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                            namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                            namajabatan_fPergerakanP.setReadOnly(true);
+                            levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+                            idlevelindividu_fPergerakanP.setValue(selectedRecord.get('idlevelindividu'));
+                            levelnameindividu_fPergerakanP.setValue(selectedRecord.get('levelnameindividu'));
+                            levelnameindividu_fPergerakanP.setReadOnly(true);
+
+                            comboxkekaryaan_fPergerakanP.setValue('TETAP');
+                            comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                        }
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='LULUS PERCOBAAN')
+                    {
+                        if(selectedRecord.get('kekaryaanname')!=='PERCOBAAN')
+                        {
+                             Ext.Msg.alert('Info', 'Pergerakan <b>LULUS PERCOBAAN</b> hanya bisa dilakukan untuk status kekaryawanan <b>PERCOBAAN</b>');                                                     
+                            return false;
+                        } else {
+                            idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                            namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                            namajabatan_fPergerakanP.setReadOnly(true);
+                            levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+                            idlevelindividu_fPergerakanP.setValue(selectedRecord.get('idlevelindividu'));
+                            levelnameindividu_fPergerakanP.setValue(selectedRecord.get('levelnameindividu'));
+                            levelnameindividu_fPergerakanP.setReadOnly(true);
+
+                            comboxkekaryaan_fPergerakanP.setValue('TETAP');
+                            comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                        }
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='LULUS ORIENTASI')
+                    {
+                            idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                            namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                            namajabatan_fPergerakanP.setReadOnly(true);
+                            levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+                            idlevelindividu_fPergerakanP.setValue(selectedRecord.get('idlevelindividu'));
+                            levelnameindividu_fPergerakanP.setValue(selectedRecord.get('levelnameindividu'));
+                            levelnameindividu_fPergerakanP.setReadOnly(true);
+
+                            if(selectedRecord.get('kekaryaanname')==='PERCOBAAN')
+                            {
+                                comboxkekaryaan_fPergerakanP.setValue('TETAP');
+                                comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                            } else if(selectedRecord.get('kekaryaanname')==='TETAP')
+                                {
+                                    comboxkekaryaan_fPergerakanP.setValue('TETAP');
+                                    comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                                } else {
+                                        comboxkekaryaan_fPergerakanP.setReadOnly(false);
+                                    }
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PENINGKATAN LEVEL INDIVIDU' || Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PENURUNAN LEVEL INDIVIDU')
+                    {
+                        idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                        namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                        namajabatan_fPergerakanP.setReadOnly(true);
+                        levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+
+                        comboxkekaryaan_fPergerakanP.setValue(selectedRecord.get('kekaryaanname'));
+                        comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PROMOSI')
+                    {
+                        comboxkekaryaan_fPergerakanP.setValue(selectedRecord.get('kekaryaanname'));
+                        comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='MUTASI' && Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='TERMINASI')
+                    {
+                        idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                        namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                        namajabatan_fPergerakanP.setReadOnly(true);
+                        levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+                        idlevelindividu_fPergerakanP.setValue(selectedRecord.get('idlevelindividu'));
+                        levelnameindividu_fPergerakanP.setValue(selectedRecord.get('levelnameindividu'));
+                        levelnameindividu_fPergerakanP.setReadOnly(true);
+
+                        comboxkekaryaan_fPergerakanP.setValue(selectedRecord.get('kekaryaanname'));
+                        comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PERPANJANGAN KONTRAK')
+                    {
+                         if(selectedRecord.get('kekaryaanname')!=='KONTRAK')
+                        {
+                             Ext.Msg.alert('Info', 'Pergerakan <b>PERPANJANGAN KONTRAK</b> hanya bisa dilakukan untuk status kekaryawanan <b>KONTRAK</b>');                                                     
+                            return false;
+                        } else {
+                            idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                            namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                            namajabatan_fPergerakanP.setReadOnly(true);
+                            levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+                            idlevelindividu_fPergerakanP.setValue(selectedRecord.get('idlevelindividu'));
+                            levelnameindividu_fPergerakanP.setValue(selectedRecord.get('levelnameindividu'));
+                            levelnameindividu_fPergerakanP.setReadOnly(true);
+
+                            comboxkekaryaan_fPergerakanP.setValue(selectedRecord.get('kekaryaanname'));
+                            comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                        }
+                    }
+
+
 
                     Ext.getCmp('idpelamar_fPergerakanP_from').setValue(selectedRecord.get('idpelamar'));
                     Ext.getCmp('idperkerjaan_fPergerakanP_from').setValue(selectedRecord.get('idpekerjaan'));
@@ -82,8 +210,9 @@ Ext.define('GridPersonilList', {
                     Ext.getCmp('ni_fPergerakanP_from').setValue(selectedRecord.get('ni'));
                     // Ext.getCmp('idjabatan_fPergerakanP_from').setValue(selectedRecord.get('idjabatan'));
                     Ext.getCmp('namajabatan_fPergerakanP_from').setValue(selectedRecord.get('namajabatan'));
+                    Ext.getCmp('idleveljabatan_fPergerakanP_from').setValue(selectedRecord.get('idleveljabatan'));
                     Ext.getCmp('levelnameJabatan_fPergerakanP_from').setValue(selectedRecord.get('levelnamejabatan'));
-                    // Ext.getCmp('idlevelindividu_fPergerakanP_from').setValue(selectedRecord.get('idlevelindividu'));
+                    Ext.getCmp('idlevelindividu_fPergerakanP_from').setValue(selectedRecord.get('idlevelindividu'));
                     Ext.getCmp('levelnameindividu_fPergerakanP_from').setValue(selectedRecord.get('levelnameindividu'));
                     Ext.getCmp('namalokasi_fPergerakanP_from').setValue(selectedRecord.get('namalokasi'));
                     // Ext.getCmp('idorganisasi_fPergerakanP_from').setValue(selectedRecord.get('idorganisasi'));
@@ -101,6 +230,13 @@ Ext.define('GridPersonilList', {
                     if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PROMOSI')
                     {
                         Ext.getCmp('comboxkekaryaan_fPergerakanP').setValue(selectedRecord.get('kekaryaanname'));
+                    }
+
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PENEMPATAN BARU')
+                    {
+                        namajabatan_fPergerakanP.setReadOnly(false);
+                        levelnameindividu_fPergerakanP.setReadOnly(false);
+                        comboxkekaryaan_fPergerakanP.setReadOnly(false);
                     }
 
                     // if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='PERUBAHAN STATUS')
@@ -142,8 +278,8 @@ Ext.define('GridPersonilList', {
             }
         },
         {header: 'idpelamar', dataIndex: 'idpelamar', hidden: true},
-         {header: 'Nama Perusahaan', dataIndex: 'companyname', minWidth: 200},
-        // {header: 'NI', dataIndex: 'ni', minWidth: 100},
+        {header: 'Nama Perusahaan', dataIndex: 'companyname', minWidth: 200},
+        {header: 'Kekaryawanan', dataIndex: 'kekaryaanname', minWidth: 100},
         {header: 'NIK', dataIndex: 'nik', minWidth: 100},
         {header: 'Nama lengkap', dataIndex: 'namalengkap', minWidth: 150},
         {header: 'Nama jabatan', dataIndex: 'namajabatan', minWidth: 150},
