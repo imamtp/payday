@@ -109,8 +109,20 @@ class m_gantiproduk extends CI_Model {
             exit;
         }
 
+        $newbalance = $qsa->balance-$q->price;
         $this->db->where('aggrementno',$aggrementno);
-        $this->db->update('adminsuper',array('productid'=>$productidnew,'balance'=>$qsa->balance-$q->price));
+        $this->db->update('adminsuper',array('productid'=>$productidnew,'balance'=>$newbalance));
+
+         //save history
+        $dhist = array(
+                "user_id" => $this->session->userdata('userid'),
+                "productid" => $productidnew,
+                "oldbalance" => $qsa->balance,
+                "newbalance" => $newbalance,
+                "tanggal" => gmdate('Y-m-d'),
+                "datein" => $this->tanggalWaktu()
+            );
+        $this->db->insert('debthistory',$dhist);
 
         $data = array(
             'idgantiproduk' => $this->input->post('idgantiproduk') == '' ? $this->m_data->getSeqVal('seq_product') : $this->input->post('idgantiproduk'),
