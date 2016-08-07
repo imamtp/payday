@@ -270,6 +270,7 @@ class ptk extends MY_Controller {
                 'idperencanaantk' => $this->input->post('idperencanaantk') == '' ? $this->m_data->getSeqVal('seq_perencanaantk') : $this->input->post('idperencanaantk'),
     //            'idunit' => $this->m_data->getID('unit', 'namaunit', 'idunit', $this->input->post('namaunit')),
                 'tahun' => $this->input->post('tahun'),
+                'userin' => $this->session->userdata('username'),
                 'idcompany' => $idcompany,
                 // 'startdate' => backdate2_reverse($this->input->post('startdate')),
                 // 'enddate' => backdate2_reverse($this->input->post('enddate')),

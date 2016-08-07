@@ -61,14 +61,26 @@ Ext.define('TabItemPergerakanPersonil', {
                 i.tab.on('click', function(){
                     if(i.title=='Daftar Bawahan')
                     {
+                        storeGridBawahan.removeAll();
+
                         storeGridBawahan.on('beforeload',function(store, operation,eOpts){
                             operation.params={
                                         'extraparams': 'aa.idpelamaratasan:'+Ext.getCmp('idpelamar_fPergerakanP_from').getValue()
                                       };
                                   });
                         storeGridBawahan.load();
+                        // console.log(Ext.getCmp('btnDetailBawahanPergerakan'));
+//                         var idpelamar = Ext.getCmp('idpelamar_fPergerakanP_from').getValue();
+//                         console.log('id:'+idpelamar);
+// Ext.getCmp('btnDetailBawahanPergerakanx').hide();
+//                         if(idpelamar===null)
+//                         {
+                            
+//                         } else {
+//                             Ext.getCmp('btnDetailBawahanPergerakanx').show();
+//                         }
 
-                        // var idpergerakanpersonil = Ext.getCmp('idpergerakanpersonil_fPergerakanP').getValue();
+                       // Ext.getCmp('btnDetailBawahanPergerakanx').show();
                         // if(idpergerakanpersonil=='')
                         // {
                         //     Ext.Msg.alert("Info", "Data Pergerakan Personil Belum Diinput");
@@ -312,7 +324,7 @@ Ext.define('GridDataPergerakanPersonel', {
 
                                     Ext.getCmp('BtnDisetujuiPergerakan').setDisabled(false);
                                     Ext.getCmp('BtnDiajukanPergerakan').setDisabled(false);
-                                    Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);    
+                                    // Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);    
 
                                     Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
                                 } else {
@@ -388,6 +400,8 @@ Ext.define('GridDataPergerakanPersonel', {
                                                 Ext.MessageBox.hide();
 
                                                 Ext.getCmp('tglakhirkekaryaan_fPergerakanBaru').setValue(d.data.tglberakhir);
+
+
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert("Load failed", action.result.errorMessage);
@@ -408,6 +422,8 @@ Ext.define('GridDataPergerakanPersonel', {
                                         Ext.getCmp('TabItemPergerakanPersonil').items.getAt(1).setDisabled(false);
 
                                         Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
+
+
                                     }
                                 } else {
                                      Ext.Msg.alert("Info", d.message);

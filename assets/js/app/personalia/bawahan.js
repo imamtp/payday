@@ -58,7 +58,7 @@ var formBawahan = Ext.create('Ext.form.Panel', {
             name: 'namalokasi'
         },
         {
-            xtype: 'textfield',
+            xtype: 'hiddenfield',
             id: 'idpelamaratasan_fBawahan',
             name: 'idpelamaratasan'
         },
@@ -204,6 +204,38 @@ Ext.define('GridBawahan', {
     //     padding: '5 5 15 5'
     // },
     columns: [
+        {
+            text: 'Ubah Utasan',
+            width: 45,
+            // menuDisabled: true,
+            xtype: 'actioncolumn',
+            tooltip: 'Ubah Utasan',
+            align: 'center',
+            icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
+            handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                    // Ext.getCmp('companynameOrganisasi').setValue(selectedRecord.get('companyname'));
+                    // console.log(selectedRecord.get('idpekerjaan'));
+                    
+                      var formBawahan = Ext.getCmp('formBawahan');
+                            formBawahan.getForm().load({
+                                url: SITE_URL + 'backend/loadFormData/pekerjaan/1/personalia',
+                                params: {
+                                    extraparams: 'a.idpekerjaan:' + selectedRecord.get('idpekerjaan')
+                                },
+                                success: function(form, action) {
+                                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                                },
+                                failure: function(form, action) {
+                                    Ext.Msg.alert("Load failed", action.result.errorMessage);
+                                }
+                            })
+
+                            wBawahan.show();
+                            Ext.getCmp('statusformBawahan').setValue('edit');
+                            Ext.getCmp('idpergerakanpersonil_fBawahan').setValue(Ext.getCmp('idpergerakanpersonil_fPergerakanP').getValue());
+                            Ext.getCmp('statuspergerakan_fBawahan').setValue(Ext.getCmp('statuspergerakan_fPergerakanP').getValue());
+            }
+        },
         {header: 'idpekerjaan', dataIndex: 'idpekerjaan', hidden: true},
         {header: 'idpelamar', dataIndex: 'idpelamar', hidden: true},
         {header: 'NIK', dataIndex: 'nik', minWidth: 150},
@@ -231,14 +263,16 @@ Ext.define('GridBawahan', {
                 //     }
                 // },
                 {
-                    text: 'Ubah Atasan',
+                    text: 'Ubah Atasanx',
                     hidden:true,
-                    id:'btnDetailBawahanPergerakan',
+                    id:'btnDetailBawahanPergerakanx',
                     iconCls: 'edit-icon',
                     handler: function() {
-                        var grid = Ext.ComponentQuery.query('GridBawahan')[0];
-                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        // var grid = Ext.ComponentQuery.query('GridBawahan')[0];
+                        var grid = Ext.getCmp('GridBawahanID');
+                        // var selectedRecord = grid.getSelectionModel().getSelection()[0];
                         var data = grid.getSelectionModel().getSelection();
+                        console.log(grid);
                         if (data.length == 0)
                         {
                             Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
