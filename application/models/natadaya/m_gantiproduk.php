@@ -141,6 +141,12 @@ class m_gantiproduk extends CI_Model {
         return $data;
     }
 
+    function tanggalWaktu()
+    {
+        $dt = new DateTime();
+        return $dt->format('Y-m-d H:i:s');
+    }
+
 }
 
 ?>
