@@ -373,7 +373,8 @@ Ext.define('GridConfigUpahTTTahun', {
                     text: 'Tambah',
                     iconCls: 'add-icon',
                     handler: function() {
-
+                        Ext.getCmp('formConfigUpahTTTahun').getForm().reset();
+                        
                         Ext.Ajax.request({
                             url: SITE_URL + 'sistem/cekakses',
                             method: 'POST',

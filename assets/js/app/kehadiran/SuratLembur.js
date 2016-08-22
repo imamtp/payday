@@ -341,7 +341,7 @@ Ext.define('GridSuratLembur', {
                     text: 'Tambah',
                     iconCls: 'add-icon',
                     handler: function() {
-
+                        Ext.getCmp('formSuratLembur').getForm().reset();
                         Ext.Ajax.request({
                             url: SITE_URL + 'sistem/cekakses',
                             method: 'POST',
@@ -354,6 +354,7 @@ Ext.define('GridSuratLembur', {
                                 {
                                     wSuratLembur.show();
                                     Ext.getCmp('statusformSuratLembur').setValue('input');
+                                    
                                 } else {
                                      Ext.Msg.alert("Info", d.message);
                                 }

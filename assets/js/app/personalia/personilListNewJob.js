@@ -81,9 +81,14 @@ Ext.define('GridPersonilNewJobList', {
             }
         },
         {header: 'idpelamar', dataIndex: 'idpelamar', hidden: true},
-        // {header: 'NI', dataIndex: 'ni', minWidth: 100},
+        {header: 'Nama Perusahaan', dataIndex: 'companyname', minWidth: 200},
+        {header: 'Kekaryawanan', dataIndex: 'kekaryaanname', minWidth: 100},
         {header: 'NIK', dataIndex: 'nik', minWidth: 100},
-        {header: 'Nama lengkap', dataIndex: 'namalengkap', minWidth: 150,flex:1}
+        {header: 'Nama lengkap', dataIndex: 'namalengkap', minWidth: 150},
+        {header: 'Nama jabatan', dataIndex: 'namajabatan', minWidth: 150},
+        {header: 'Nama Organisasi', dataIndex: 'namaorg', minWidth: 150},
+        {header: 'Kode Organisasi', dataIndex: 'kodeorg', minWidth: 150},
+        {header: 'Lokasi', dataIndex: 'namalokasi', minWidth: 150},
     ]
     , dockedItems: [
         {

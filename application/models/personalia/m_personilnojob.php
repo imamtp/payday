@@ -16,7 +16,7 @@ class m_personilnojob extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.ni,nik,a.namalengkap,x.idpekerjaan,k.statuscalon,a.display,a.idcompany,m.companyname";
+        return "a.idpelamar,a.ni,nik,a.namalengkap,x.idpekerjaan,k.statuscalon,a.display,a.idcompany,m.companyname,f.kekaryaanname,c.namajabatan,e.namaorg,e.kodeorg,namalokasi";
     }
 
     function fieldCek()
@@ -31,15 +31,37 @@ class m_personilnojob extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a
+           LEFT  JOIN
+                    (
+                        SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
+                        FROM pekerjaan
+                        WHERE statuspergerakan='Disetujui'
+                        GROUP BY idpelamar
+                    ) as x ON a.idpelamar = x.idpelamar
+                    LEFT join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
+                    LEFT JOIN strukturjabatan b ON aa.idstrukturjabatan = b.idstrukturjabatan
+                    LEFT JOIN jabatan c ON b.idjabatan = c.idjabatan
+                    LEFT JOIN lokasi_org d ON aa.idlokasiorg = d.idlokasiorg
+                    LEFT JOIN organisasi e ON b.idorganisasi = e.idorganisasi
+                    LEFT JOIN kekaryaan f ON aa.idkekaryaan = f.idkekaryaan
+                    LEFT JOIN pelamar g ON aa.idpelamaratasan = g.idpelamar
+                    LEFT JOIN level j ON aa.idlevelindividu = j.idlevel
+                    LEFT JOIN level i ON c.idlevel = i.idlevel
+                    LEFT join kekaryaan v ON aa.idkekaryaan = v.idkekaryaan
+                    JOIN calonpelamar k ON a.idpelamar = k.idpelamar
+                    left join pelamar l ON aa.idpelamaratasan = l.idpelamar
+                    join company m ON a.idcompany = m.idcompany
                     LEFT  JOIN
-          (
-          		SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
-          		FROM pekerjaan
-          		WHERE statuspergerakan='Disetujui'
-          		GROUP BY idpelamar
-          ) as x ON a.idpelamar = x.idpelamar
-          JOIN calonpelamar k ON a.idpelamar = k.idpelamar
-          join company m ON a.idcompany = m.idcompany";
+                    (
+                        SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
+                        FROM pekerjaan
+                        WHERE statuspergerakan='Disetujui'
+                        GROUP BY idpelamar
+                    ) as xx ON xx.idpelamar = aa.idpelamaratasan
+                    LEFT JOIN pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
+                    LEFT JOIN strukturjabatan bb ON aaa.idstrukturjabatan = bb.idstrukturjabatan
+                    LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
+                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi";
         return $query;
     }
 
