@@ -1,7 +1,7 @@
 <?php
 
 //require_once($_SERVER['DOCUMENT_ROOT'].'/bablast/assets/libs/Smarty.class.php');
-require_once(DOCUMENTROOT.'kopi/assets/libs/SmartyBC.class.php');
+require_once(DOCUMENTROOT.'assets/libs/SmartyBC.class.php');
         
 class MY_Controller extends CI_Controller{
     
@@ -24,10 +24,10 @@ class MY_Controller extends CI_Controller{
 
         $dt = new DateTime();
         
-        $this->smarty->template_dir = DOCUMENTROOT.'/kopi/assets/template/templates/';
-        $this->smarty->compile_dir = DOCUMENTROOT.'/kopi/assets/template/templates_c/';
-        $this->smarty->config_dir = DOCUMENTROOT.'/kopi/assets/template/configs/';
-        $this->smarty->cache_dir = DOCUMENTROOT.'/kopi/assets/template/cache/';
+        $this->smarty->template_dir = DOCUMENTROOT.'/assets/template/templates/';
+        $this->smarty->compile_dir = DOCUMENTROOT.'/assets/template/templates_c/';
+        $this->smarty->config_dir = DOCUMENTROOT.'/assets/template/configs/';
+        $this->smarty->cache_dir = DOCUMENTROOT.'/assets/template/cache/';
         
         $company = new stdClass();
         if($this->session->userdata('idcompany')!=null)
@@ -72,11 +72,13 @@ class MY_Controller extends CI_Controller{
         //deposit
         $outofbalance='false';
         $balance=0;
+
         if($this->session->userdata('group_id')!=1)
         {
             //bukan master admin cek deposit by idcompany
             $this->db->select('balance,productid,startdate,user_id,idsuperadmin');
             $qdeposit = $this->db->get_where('adminsuper',array('idcompany'=>$this->session->userdata('idcompany'),'display'=>null));
+     // echo $this->db->last_query();
             if($qdeposit->num_rows()>0)
             {
                 $r = $qdeposit->row();
@@ -149,6 +151,18 @@ class MY_Controller extends CI_Controller{
 
                
 
+            } else {
+                if($this->session->userdata('idcompanyparent')!='')
+                {
+                    $q = $this->db->query("select a.price 
+                                from product a
+                                join adminsuper b ON a.productid = b.productid
+                                where idcompany = ".$this->session->userdata('idcompanyparent')."")->row();
+                    if(intval($q->price)==0)
+                    {
+                        $outofbalance='false';
+                    }
+                }
             }
         }
         $this->smarty->assign('outofbalance',  $outofbalance);
