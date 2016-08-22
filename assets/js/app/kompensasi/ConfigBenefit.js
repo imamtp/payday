@@ -455,6 +455,8 @@ Ext.define('GridConfigBenefit', {
                     text: 'Tambah',
                     iconCls: 'add-icon',
                     handler: function() {
+                        Ext.getCmp('formConfigBenefit').getForm().reset();
+                        
                         Ext.Ajax.request({
                             url: SITE_URL + 'sistem/cekakses',
                             method: 'POST',
