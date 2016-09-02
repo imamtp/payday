@@ -71,7 +71,15 @@ class m_vdatakaryawangrid extends CI_Model {
                         WHERE statuspergerakan='Disetujui'
                         GROUP BY idpelamar
                     ) as xxx ON a.idpelamar = xxx.idpelamar
-                    left join pekerjaan pek ON xxx.idpekerjaan = pek.idpekerjaan";
+                    left join pekerjaan pek ON xxx.idpekerjaan = pek.idpekerjaan
+                    LEFT  JOIN
+                    (
+                        SELECT a.idpelamar,a.tglmasuk
+                        FROM pekerjaan a
+                        LEFT join pergerakanpersonil b ON a.idpergerakanpersonil = b.idpergerakanpersonil
+                        WHERE b.statuspergerakan='Disetujui' and b.idpergerakan=128  
+                        GROUP BY a.idpelamar,a.tglmasuk
+                    ) as term ON a.idpelamar = term.idpelamar";
 
         return $query;
     }
@@ -120,10 +128,10 @@ class m_vdatakaryawangrid extends CI_Model {
          $wer .=" AND (k.statuscalon='Disetujui' OR a.status='Belum Ada Status' OR a.status='Disetujui' OR a.status is null)";
 
 		 $datenow = gmdate('Y-m-d');
-		 
+		 // echo $datenow.' ';
          if($aktif=='true')
          {
-            return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir OR '$datenow' between aaa.tglmasuk and aaa.tglberakhir) $wer AND bbb.idpergerakan!=128";
+            return "a.display is null and (('$datenow' between aa.tglmasuk and aa.tglberakhir) OR ('$datenow' between aaa.tglmasuk and aaa.tglberakhir) OR ('$datenow' <= term.tglmasuk)) $wer";
          } else {
             // $wer = str_replace("WHERE TRUE AND", "WHERE TRUE", $wer);
             // return "$wer";
