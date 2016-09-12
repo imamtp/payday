@@ -719,7 +719,14 @@ class kompensasi extends MY_Controller {
                  } else {
                     $date1 = new DateTime($startdate);
                  }
-                 $date2 = new DateTime($tglakhirjabatan);
+                 $now    = new DateTime($enddate);
+                 $future = new DateTime($tglakhirjabatan);
+                 if($future>$now)
+                 {
+                    $date2 = new DateTime($enddate);
+                 } else {
+                    $date2 = new DateTime($tglakhirjabatan);   
+                 }
 
                  // echo $this->db->last_query();                 
                  $proporsionalDays = $date2->diff($date1)->format("%a")+1;
