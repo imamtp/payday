@@ -1633,7 +1633,7 @@ class kompensasi extends MY_Controller {
 
                         $penghasilannet = $data[$i]['penerimaanbruto']-($benefitEmp+$data[$i]['biayajabatan'])-($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
                         
-                        // echo                         
+                        // echo $obj->totalUTT;                        
                         $totalpendapatan =  $data[$i]['totalUT']+$obj->totalUTT+$obj->totallembur+$obj->benefitCmp+ $data[$i]['tunjanganpajak'];
                         // echo $data[$i]['totalUT'].'+'.$data[$i]['totalUTT'].'+'.$obj->totallembur.'+'.$obj->benefitCmp.'+'.$data[$i]['tunjanganpajak'];
                         // exit;
@@ -1797,7 +1797,7 @@ class kompensasi extends MY_Controller {
                         // exit;
                         if (strpos($data[$i]['takehomepay'], '.') !== false) {
                              //24-8-16
-                             $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT);
+                             $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']);
 
                             //24-8-16
                             // $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']);
@@ -1829,7 +1829,7 @@ class kompensasi extends MY_Controller {
                             
                             $data[$i]['pphsebulan'] = $obj->pphterminasi;
 
-                            $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$obj->pphsebulan +$obj->totalUTT);
+                            $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$obj->pphsebulan);
                             $obj->takehomepay = $data[$i]['takehomepay'];
 
                             //$obj->pajakterutangdes = $obj->tunjanganpajak;
