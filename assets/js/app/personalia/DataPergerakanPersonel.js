@@ -405,7 +405,11 @@ Ext.define('GridDataPergerakanPersonel', {
 
                                                 Ext.getCmp('tglakhirkekaryaan_fPergerakanBaru').setValue(d.data.tglberakhir);
 
-
+                                                if(d.data.idpergerakan*1==128)
+                                                {
+                                                    //terminasi
+                                                    Ext.getCmp('tglterminasi').setValue(d.data.tglmasuk);
+                                                }
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert("Load failed", action.result.errorMessage);
