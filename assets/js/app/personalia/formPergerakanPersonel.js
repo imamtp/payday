@@ -30,6 +30,8 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
         listeners: {
             change: function(field, newValue, oldValue) {
                 
+                // Ext.getCmp('formPergerakanPersonel').getForm.reset();
+                
                 var TabItemPergerakanPersonil = Ext.getCmp('TabItemPergerakanPersonil');
                 var namajabatan = Ext.getCmp('namajabatan_fPergerakanP_from');
                 var levelnameJabatan = Ext.getCmp('levelnameJabatan_fPergerakanP_from');

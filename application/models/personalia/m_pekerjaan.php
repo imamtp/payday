@@ -287,7 +287,7 @@ class m_pekerjaan extends CI_Model {
                 ORDER BY tglmasuk $orderBy
                 limit 1";
         $q = $this->db->query($sql);
-        if($idpelamar==207)
+        if($idpergerakanpersonil==326)
 		 {
             // echo $sql;
         }

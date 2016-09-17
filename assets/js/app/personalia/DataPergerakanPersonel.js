@@ -308,7 +308,7 @@ Ext.define('GridDataPergerakanPersonel', {
                                     Ext.getCmp('BtnDisetujuiPergerakan').show();
                                     Ext.getCmp('BtnDiajukanPergerakan').show();
 
-                                    Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);
+                                    // Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);
 
                                     Ext.getCmp('TabItemPergerakanPersonil').items.getAt(1).setDisabled(false);
 
@@ -330,7 +330,12 @@ Ext.define('GridDataPergerakanPersonel', {
 
                                     Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
 
+                                    Ext.getCmp('namajabatan_fPergerakanP').setDisabled(false);
+                                    Ext.getCmp('levelnameindividu_fPergerakanP').setDisabled(false);
+                                    Ext.getCmp('kekaryaanname_fPergerakanBaru').setDisabled(false);
+                                    Ext.getCmp('kekaryaanname_fPergerakanBaru').setReadOnly(false);
 
+                                    Ext.getCmp('comboxpergerakan_fPergerakanP').setReadOnly(false);
                                 } else {
                                      Ext.Msg.alert("Info", d.message);
                                 }
@@ -431,7 +436,7 @@ Ext.define('GridDataPergerakanPersonel', {
 
                                         Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
 
-
+                                        Ext.getCmp('comboxpergerakan_fPergerakanP').setReadOnly(true);
                                     }
                                 } else {
                                      Ext.Msg.alert("Info", d.message);

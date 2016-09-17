@@ -842,6 +842,13 @@ class personalia extends MY_Controller {
              'tglterminasi'=>$tglterminasi
         );
 
+          if($idpergerakan==58 || $idpergerakan==120 || $idpergerakan==121 || $idpergerakan==122 || $idpergerakan==127 || $idpergerakan==128 || $idpergerakan==129 || $idpergerakan==106)
+          {
+            $jabatanaVal = $this->input->post('idstrukturjabatan_from');
+          } else {
+            $jabatanaVal = null;
+          }
+
         if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
         {
           if($idpergerakan!=128) //selain terminasi
@@ -850,7 +857,7 @@ class personalia extends MY_Controller {
           } else {
             $tglmasuk = $tglterminasi;
           }
-
+          
           $d = array(
                 "idpergerakanpersonil"=>$idpergerakanpersonil,
                 "idpelamar" => $idpelamar,
@@ -859,7 +866,7 @@ class personalia extends MY_Controller {
                 "idkekaryaan"  => $idkekaryaan == null ? null : $idkekaryaan,
                 "tglmasuk" => $tglmasuk,
                 "tglberakhir" => $tglberakhir,
-                "idstrukturjabatan" => $idstrukturjabatan == null ? null : $idstrukturjabatan,
+                "idstrukturjabatan" => $idstrukturjabatan == null ?  $jabatanaVal : $idstrukturjabatan,
                 "idpelamaratasan" => $this->input->post('idpelamaratasan') =='' ? null : $this->input->post('idpelamaratasan'),
                 "statuspergerakan" =>$statuspergerakan
           );
