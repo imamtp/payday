@@ -83,7 +83,7 @@ var formTanggalLibur = Ext.create('Ext.form.Panel', {
 });
 var wTanggalLibur = Ext.create('widget.window', {
     id: 'windowPopupTanggalLibur',
-    title: 'Form Pola Kerja',
+    title: 'Form Tanggal Libur',
     header: {
         titlePosition: 2,
         titleAlign: 'center'

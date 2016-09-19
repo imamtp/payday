@@ -83,7 +83,7 @@ var formLevel_ModulOrg = Ext.create('Ext.form.Panel', {
 });
 var wLevel_ModulOrg = Ext.create('widget.window', {
     id: 'windowPopupLevel_ModulOrg',
-    title: 'Form Produk',
+    title: 'Form Level Jabatan',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
