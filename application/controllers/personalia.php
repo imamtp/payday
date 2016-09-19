@@ -849,6 +849,11 @@ class personalia extends MY_Controller {
             $jabatanaVal = null;
           }
 
+          if($this->input->post('namapergerakan')=='MUTASI')
+          {
+            $jabatanaVal = $this->input->post('idstrukturjabatan_from');
+          }
+
         if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
         {
           if($idpergerakan!=128) //selain terminasi
@@ -857,7 +862,7 @@ class personalia extends MY_Controller {
           } else {
             $tglmasuk = $tglterminasi;
           }
-          
+
           $d = array(
                 "idpergerakanpersonil"=>$idpergerakanpersonil,
                 "idpelamar" => $idpelamar,

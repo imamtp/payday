@@ -105,6 +105,20 @@ Ext.define('GridPersonilList', {
                         }
                     }
 
+                    if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='MUTASI')
+                    {
+                        idjabatan_fPergerakanP.setValue(selectedRecord.get('idjabatan'));
+                        namajabatan_fPergerakanP.setValue(selectedRecord.get('namajabatan'));
+                        namajabatan_fPergerakanP.setReadOnly(true);
+                        levelnameJabatan_fPergerakanP.setValue(selectedRecord.get('levelnamejabatan'));
+                        idlevelindividu_fPergerakanP.setValue(selectedRecord.get('idlevelindividu'));
+                        levelnameindividu_fPergerakanP.setValue(selectedRecord.get('levelnameindividu'));
+                        levelnameindividu_fPergerakanP.setReadOnly(true);
+
+                        comboxkekaryaan_fPergerakanP.setValue(selectedRecord.get('kekaryaanname'));
+                        comboxkekaryaan_fPergerakanP.setReadOnly(true);
+                    }
+
                     if(Ext.getCmp('comboxpergerakan_fPergerakanP').getValue()=='LULUS PERCOBAAN')
                     {
                         if(selectedRecord.get('kekaryaanname')!=='PERCOBAAN')
