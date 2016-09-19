@@ -23,7 +23,7 @@ class m_personil4pergerakan extends CI_Model {
     {
         //field yang perlu dicek didatabase apakah sudah ada apa belum
         $f = array(
-          'kodebudgelokasi'=>'Kode  budge lokasi'
+          'kodebudgelokasi'=>'Kode budget lokasi'
         );
         return false;
     }
@@ -61,7 +61,15 @@ class m_personil4pergerakan extends CI_Model {
                     LEFT JOIN pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
                     LEFT JOIN strukturjabatan bb ON aaa.idstrukturjabatan = bb.idstrukturjabatan
                     LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
-                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi";
+                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi
+                    LEFT  JOIN
+                    (
+                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
+                        FROM pekerjaan
+                        WHERE statuspergerakan='Disetujui'
+                        GROUP BY idpelamar
+                    ) as xxx ON a.idpelamar = xxx.idpelamar
+                    LEFT join pekerjaan pek ON xxx.idpekerjaan = pek.idpekerjaan";
         return $query;
     }
 
@@ -80,7 +88,7 @@ class m_personil4pergerakan extends CI_Model {
             $werjob = null;
          }
 
-         return "a.display is null ".$this->m_data->whereCompany('a',false)."".$wer." and (statuscalon!='Diajukan' OR statuscalon is null) and ('".gmdate('Y-m-d')."' between aa.tglmasuk and aa.tglberakhir)";
+         return "a.display is null ".$this->m_data->whereCompany('a',false)."".$wer." and (statuscalon!='Diajukan' OR statuscalon is null) and ('".gmdate('Y-m-d')."' between pek.tglmasuk and aa.tglberakhir)";
     }
 
     function orderBy() {

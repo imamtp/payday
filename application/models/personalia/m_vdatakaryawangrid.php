@@ -131,7 +131,7 @@ class m_vdatakaryawangrid extends CI_Model {
 		 // echo $datenow.' ';
          if($aktif=='true')
          {
-            return "a.display is null and (('$datenow' between aa.tglmasuk and aa.tglberakhir) OR ('$datenow' between aaa.tglmasuk and aaa.tglberakhir) OR ('$datenow' <= term.tglmasuk)) $wer";
+            return "a.display is null and (('$datenow' between aa.tglmasuk and aa.tglberakhir) OR ('$datenow' between pek.tglmasuk and aa.tglberakhir) OR ('$datenow' <= term.tglmasuk)) $wer";
          } else {
             // $wer = str_replace("WHERE TRUE AND", "WHERE TRUE", $wer);
             // return "$wer";

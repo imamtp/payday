@@ -855,7 +855,7 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                         var form = Ext.getCmp('formPergerakanPersonel').getForm();
                         if (form.isValid()) {
                             form.submit({
-                                url: SITE_URL + 'personalia/saveProsesPergerakan',
+                                url: SITE_URL + 'personalia/saveProsesPergerakan2',
                                 params: {
                                     statuspergerakan: 'Disetujui'
                                 },
