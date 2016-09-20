@@ -308,7 +308,7 @@ Ext.define('GridUpahPergerakan', {
                 //         }
                 // },
                 {
-                    text: 'Penyesuaian',
+                    text: 'Penyesuaian Upah',
                     iconCls: 'edit-icon',
                     handler: function() {
 
@@ -386,6 +386,34 @@ Ext.define('GridUpahPergerakan', {
 
 
                         
+
+                    }
+                },
+                
+                {
+                    text: 'Selesai Penyesuaian Upah',
+                    iconCls: 'edit-icon',
+                    handler: function() {
+
+                        var grid = Ext.ComponentQuery.query('GridUpahPergerakan')[0];
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0)
+                        {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            Ext.Ajax.request({
+                                url: SITE_URL + 'kompensasi/penyesuaian_done',
+                                method: 'POST',
+                                params: {
+                                    idpelamar: selectedRecord.data.idpelamar
+                                },
+                                success: function(form, action) {
+                                    // var d = Ext.decode(form.responseText);
+                                    storeGridUpahPergerakan.load();
+                                }
+                            });
+                        }
 
                     }
                 },

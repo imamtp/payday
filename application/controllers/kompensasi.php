@@ -387,19 +387,25 @@ class kompensasi extends MY_Controller {
                 $this->db->insert('upahkaryawan',$d);
             }
 
-            if($this->input->post('penyesuaian')!='')
-            {
-                //cek kalo ada karyawan di penyesuaian dengan status 0/karyawan baru berarti penyesuaian karyawan baru dihapus/sudah disesuaikan diubah ke status=1
-                $q = $this->db->get_where('penyesuaian',array('idpelamar'=>$idpelamar,'tipe'=>$this->input->post('penyesuaian'),'status'=>0,'idpekerjaan'=>$idpekerjaan));
-                if($q->num_rows()>0)
-                {
-                    $this->db->where(array('idpelamar'=>$idpelamar,'tipe'=>$this->input->post('penyesuaian'),'status'=>0,'idpekerjaan'=>$idpekerjaan));
-                    $this->db->update('penyesuaian',array('status'=>1));
-                }
-            }
+            // if($this->input->post('penyesuaian')!='')
+            // {
+            //     //cek kalo ada karyawan di penyesuaian dengan status 0/karyawan baru berarti penyesuaian karyawan baru dihapus/sudah disesuaikan diubah ke status=1
+            //     $q = $this->db->get_where('penyesuaian',array('idpelamar'=>$idpelamar,'tipe'=>$this->input->post('penyesuaian'),'status'=>0,'idpekerjaan'=>$idpekerjaan));
+            //     if($q->num_rows()>0)
+            //     {
+            //         $this->db->where(array('idpelamar'=>$idpelamar,'tipe'=>$this->input->post('penyesuaian'),'status'=>0,'idpekerjaan'=>$idpekerjaan));
+            //         $this->db->update('penyesuaian',array('status'=>1));
+            //     }
+            // }
         }
 
         
+    }
+
+    function penyesuaian_done()
+    {
+        $this->db->where(array('idpelamar'=>$this->input->post('idpelamar')));
+        $this->db->update('penyesuaian',array('status'=>1));
     }
 
     function insertPengurangUpahPegawai()

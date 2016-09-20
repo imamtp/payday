@@ -171,7 +171,7 @@ Ext.define('TabItemKaryawan', {
         {
           xtype:'TabPengupahan',
           id:'TabPengupahan',
-            listeners: {
+          listeners: {
                 activate: function() {
                     Ext.getCmp('TabPengupahan').setActiveTab(0);
                     

@@ -25,7 +25,7 @@ Ext.define('TabPengupahan', {
                 });
             });
         }
-    },
+    },  
     items: [
       {
         xtype:'GridUpahTetap',
