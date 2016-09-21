@@ -89,6 +89,13 @@ class m_strukturjabatan extends CI_Model {
         {
             $werdate .= " AND ('".$y."-".date('m')."-".date('d')."' between a.startdate and a.enddate)";
         }
+
+        if($pergerakan=='MUTASI')
+        {
+            //Validasi di mutasi dimana hanya bisa pindah ke jabatan yang se level dan level individu yang selevel belum bekerja, 
+            $werPergerakan.= " AND e.idlevel = ".$this->input->post('idleveljabatan')."";
+        }
+
         // return "a.display is null and now() between a.startdate and a.enddate ". $this->m_data->whereCompany()."";
         return "a.display is null $werdate ". $this->m_data->whereCompany()." ".$werPergerakan;
     }
