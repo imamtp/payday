@@ -835,6 +835,22 @@ class Backend extends MY_Controller {
                 } else {
                     $obj->status = $obj->kekaryaanname;
                 }
+
+                if ($table == 'VDataKaryawangrid')
+                {
+                    //ambil status kekaryawanan terakhir yang aktif
+                    $sqlLastKekaryawanan = $this->db->query("select kekaryaanname from 
+                                                                pekerjaan a
+                                                                join kekaryaan b ON a.idkekaryaan = b.idkekaryaan
+                                                                where a.idpelamar = ".$obj->idpelamar." and a.statuspergerakan = 'Disetujui'
+                                                                and '".date('Y-m-d')."' between a.tglmasuk and a.tglberakhir");
+                    if($sqlLastKekaryawanan->num_rows()>0)
+                    {
+                        $rLastKekaryawanan = $sqlLastKekaryawanan->row();
+                        $obj->status = $rLastKekaryawanan->kekaryaanname;
+                    }
+                    $sqlLastKekaryawanan->free_result();
+                }
             }
 
             if ($table == 'Pengguna') {
@@ -866,6 +882,12 @@ class Backend extends MY_Controller {
                 if ($obj->idpergerakan == 128) {
                     $obj->kekaryaanname = 'TERMINASI';
                 }
+
+                if($obj->idpergerakan != 128)
+                {
+
+                }
+
                 $no++;
             }
 
