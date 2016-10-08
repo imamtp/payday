@@ -2044,6 +2044,11 @@ class kompensasi extends MY_Controller {
             // echo '</pre>';            
     }
 
+    function eksportxls2()
+    {
+
+    }
+
     function eksportxls($sd,$nd,$idcompany,$idorg=null,$idjab=null)
     {
         $data['fontsize'] = 12;
@@ -2058,7 +2063,7 @@ class kompensasi extends MY_Controller {
         $this->load->model('kompensasi/m_riwayatgaji');
 
         $sql = $this->m_riwayatgaji->query()." WHERE ".$this->m_riwayatgaji->whereQuery($sd,$nd,$idcompany,$idorg,$idjab);
-        // echo $sql;
+        // echo $sql; die;
         //komponen UT
         $qut = $this->db->query("select idkomponenupah,namakomponen
                                     from komponenupah
@@ -2092,7 +2097,7 @@ class kompensasi extends MY_Controller {
         // echo $sql;
         $data['data'] = $this->db->query($sql);
 
-        $html = $this->load->view('report/penggajian', $data,true);
+        $html = $this->load->view('report/penggajian2', $data,true);
         $filename = "gaji_".$data['companyname']."_".$sd."_".$nd.".xls";
         header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
         header("Content-type:   application/x-msexcel; charset=utf-8");
