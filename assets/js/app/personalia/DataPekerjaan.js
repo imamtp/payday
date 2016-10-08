@@ -297,7 +297,7 @@ var wPekerjaan2 = Ext.create('widget.window', {
 
 Ext.define('GridDataPekerjaanModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpelamar','ni','nik','namalengkap','tgllahir','namajabatan','namalokasi','tglmasuk','tglberakhir','kekaryaanname'],
+    fields: ['idpekerjaan','idpelamar','ni','nik','namalengkap','tgllahir','namajabatan','namalokasi','tglmasuk','tglberakhir','kekaryaanname'],
     idProperty: 'id'
 });
 
@@ -368,6 +368,7 @@ Ext.define('GridDataPekerjaan', {
     store: storeGridDataPekerjaan,
     loadMask: true,
     columns: [
+        {header: 'idpekerjaan', dataIndex: 'idpekerjaan', hidden: true},
         {header: 'idpelamar', dataIndex: 'idpelamar', hidden: true},
         // {header: 'NI', dataIndex: 'ni', minWidth: 150},
         {header: 'NIK', dataIndex: 'nik', minWidth: 150},
@@ -842,7 +843,7 @@ Ext.define('GridDataPekerjaan', {
                             formPekerjaan2.getForm().load({
                                 url: SITE_URL + 'backend/loadFormData/Pekerjaan/1/personalia',
                                 params: {
-                                    extraparams: 'a.idpelamar:' + selectedRecord.data.idpelamar
+                                    extraparams: 'a.idpekerjaan:' + selectedRecord.data.idpekerjaan
                                 },
                                 success: function(form, action) {
                                     var d = Ext.decode(action.response.responseText);

@@ -1167,10 +1167,14 @@ class kompensasi extends MY_Controller {
             } else {
                 $totalUTTTahun = 0;
             }
-            // echo $totalUTT;
+            // echo $penghasilanTT;
             $data[$i]['totalUTTTahun'] = $totalUTTTahun;
-            $obj->totalUTT += $data[$i]['totalUTTTahun'];
-            $penghasilanTT+=$obj->totalUTT;
+            // $obj->totalUTT += $data[$i]['totalUTTTahun'];
+            // echo $obj->totalUTT;
+            // $penghasilanTT+=$obj->totalUTT;
+            $penghasilanTT+=$data[$i]['totalUTTTahun'];
+            $obj->totalUTT = $penghasilanTT;
+            // echo $penghasilanTT;
 
             ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1448,6 +1452,8 @@ class kompensasi extends MY_Controller {
             $data[$i]['benefitEmp'] = $benefitEmp;
             $obj->benefitCmp = $benefitCmp;
             $obj->benefitEmp = $benefitEmp;
+
+            // echo $obj->benefitEmp.' '.$obj->benefitCmp.' ';
             
            
 
@@ -1877,7 +1883,7 @@ class kompensasi extends MY_Controller {
                         //exit;
                         //end get thp before
 
-            if(intval($enddateArr[1]) == 12)
+            if(intval($enddateArr[1]) == 182)
             {
                 //desember
                 // unset($obj->biayajabatan);
@@ -1906,11 +1912,15 @@ class kompensasi extends MY_Controller {
                 $data[$i]['tunjanganpajak'] = $obj->pphsebulan;
                 $obj->tunjanganpajak = $obj->pphsebulan;
 
-                $totalpendapatan = $data[$i]['totalUT']+$data[$i]['totalUTT']+$obj->totallembur+$obj->benefitCmp+$obj->pphsebulan;
+                // $totalpendapatan = $data[$i]['totalUT']+$data[$i]['totalUTT']+$obj->totallembur+$obj->benefitCmp+$obj->pphsebulan;
+                $totalpendapatan = $data[$i]['totalUT']+$penghasilanTT+$obj->totallembur+$obj->benefitCmp+$obj->pphsebulan;
                 $data[$i]['totalpendapatan'] = $totalpendapatan;
                 $obj->totalpendapatan = $data[$i]['totalpendapatan'];
 
+                // echo $obj->benefitCmp;
+                echo $data[$i]['totalUT']+$penghasilanTT+$obj->benefitEmp+$obj->benefitCmp;
                 // $data[$i]['takehomepay'] = round(($obj->totalpendapatan-($benefitCmp+$benefitEmp)-$obj->pphsebulan+$obj->totalUTT));
+                // echo round(($obj->totalpendapatan-($benefitCmp+$benefitEmp)-$obj->pphsebulan));
                 // $data[$i]['takehomepay'] = $obj->totalpendapatan;
                 // $data[$i]['takehomepay'] = $data[$i]['takehomepay']-$benefitCmp+$benefitEmp;
                 // $x = $obj->pphsebulan;

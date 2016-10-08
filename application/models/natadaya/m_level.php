@@ -60,12 +60,12 @@ class m_level extends CI_Model {
 
             if($pergerakan=='PROMOSI')
             {
-                $werlevel = " and a.urutan > ".$ql->urutan."";
+                $werlevel = " and a.urutan >= ".$ql->urutan."";
             }
 
             if($pergerakan=='DEMOSI')
             {
-                $werlevel = " and a.urutan < ".$ql->urutan."";
+                $werlevel = " and a.urutan <= ".$ql->urutan."";
             }
         }
 

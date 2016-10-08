@@ -759,12 +759,16 @@ class Backend extends MY_Controller {
                 $obj->startdate = backdate2($obj->startdate);
             }
 
-            if ($table == 'VDataKaryawan' || $table == 'VSuratLembur' || $table == 'datapekerjaan' || $table == 'PengajuanIzin' || $table=='pergerakanpersonil') {
+            if ($table == 'VDataKaryawan' || $table == 'VSuratLembur' || $table == 'PengajuanIzin') {
                 
                 if($table=='pergerakanpersonil')
                 {
                     // $d = $this->m_pekerjaan->getLastPekerjaanPergerakan($obj->idpergerakanpersonil);
-                    $d = $this->m_pekerjaan->getLastPekerjaan($obj->idpelamar,false,$obj->idpergerakanpersonil);
+                    // $d = $this->m_pekerjaan->getLastPekerjaan($obj->idpelamar,false,$obj->idpergerakanpersonil);
+                    // if($obj->idpergerakanpersonil==332)
+                    // {
+                    //     echo $this->db->last_query();
+                    // }
                 } else if($table=='datapekerjaan')
                 {
                     // $d = $this->m_pekerjaan->getLastPekerjaanPergerakan($obj->idpergerakanpersonil);
@@ -843,7 +847,10 @@ class Backend extends MY_Controller {
                                                                 pekerjaan a
                                                                 join kekaryaan b ON a.idkekaryaan = b.idkekaryaan
                                                                 where a.idpelamar = ".$obj->idpelamar." and a.statuspergerakan = 'Disetujui'
-                                                                and '".date('Y-m-d')."' between a.tglmasuk and a.tglberakhir");
+                                                                and '".date('Y-m-d')."' between a.tglmasuk and a.tglberakhir
+                                                                order by idpekerjaan desc 
+                                                                limit 1");
+                    // echo $this->db->last_query();
                     if($sqlLastKekaryawanan->num_rows()>0)
                     {
                         $rLastKekaryawanan = $sqlLastKekaryawanan->row();
@@ -868,15 +875,57 @@ class Backend extends MY_Controller {
             }
 
             if ($table == 'Pekerjaan') {
-                if ($no == 1) {
-                    if ($obj->idpergerakan == 128) {
-                        $obj->status = 'Nonaktif';
-                    } else {
-                        $obj->status = 'Aktif';
-                    }
+                // $obj->status = 'Nonaktif';
+                // echo $obj->idpekerjaan.' ';
+
+                // if ($no == 1) {
+                //     if ($obj->idpergerakan == 128) {
+                //         $obj->status = 'Nonaktif';
+                //     } else {
+
+
+                //         $obj->status = 'Aktif';
+                //     }
                   
+                // } else {
+                //     $obj->status = 'Nonaktif';
+                // }
+
+                if ($obj->idpergerakan == 128) {
+                        $obj->status = 'Nonaktif';
                 } else {
-                    $obj->status = 'Nonaktif';
+                    $sqlLastKekaryawanan = $this->db->query("select idpekerjaan from 
+                                                                pekerjaan a
+                                                                where a.idpekerjaan = ".$obj->idpekerjaan." and a.statuspergerakan = 'Disetujui'
+                                                                and '".date('Y-m-d')."' between a.tglmasuk and a.tglberakhir");
+                    // echo $this->db->last_query().' '; 
+                    // exit;
+
+                    if($sqlLastKekaryawanan->num_rows()>0)
+                    {
+                        //cek dulu apakah ada data pekerjaan lain yang ada pada range tanggal itu, jika ada, ambil paling atas
+                        $qzc = $this->db->query("select a.idpekerjaan from 
+                                                    pekerjaan a
+                                                    where  a.statuspergerakan = 'Disetujui'
+                                                    and ('".date('Y-m-d')."' between a.tglmasuk and a.tglberakhir) 
+                                                    and idpelamar = ".$obj->idpelamar." 
+                                                    order by idpekerjaan desc
+                                                    limit 1");
+                        if($qzc->num_rows()>0)
+                        {
+                            $rqzc = $qzc->row();
+                            if($rqzc->idpekerjaan==$obj->idpekerjaan)
+                            {
+                                $obj->status = 'Aktif';
+                            } else {
+                                $obj->status = 'Nonaktif';
+                            }
+                        }
+                        
+                    } else {
+                        $obj->status = 'Nonaktif';
+                    }
+                    $sqlLastKekaryawanan->free_result();
                 }
 
                 if ($obj->idpergerakan == 128) {
@@ -2057,5 +2106,6 @@ class Backend extends MY_Controller {
     {
         echo "Today is " . date("Y/m/d") . "<br>";
     }
+
 
 }

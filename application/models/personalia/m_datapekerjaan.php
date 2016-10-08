@@ -16,7 +16,7 @@ class m_datapekerjaan extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,bbb.idpergerakan,aa.idpergerakanpersonil";
+        return "aa.idpekerjaan,a.idpelamar,a.ni,nik,a.namalengkap,a.tgllahir,aa.idstrukturjabatan,aa.idpekerjaan,c.namajabatan,e.namaorg,e.kodeorg,d.namalokasi,k.statuscalon,a.display,a.idcompany,l.namalengkap as namaatasan,m.companyname,i.levelname as levelnamejabatan,j.levelname as levelnameindividu,v.kekaryaanname as kekaryaanname,aa.tglmasuk,aa.tglberakhir,cc.namajabatan as namajabatanatasan,ee.namaorg as namaorgatasan,l.namalengkap as namaatasan,bbb.idpergerakan,aa.idpergerakanpersonil";
     }
 
     function fieldCek()
@@ -35,7 +35,7 @@ class m_datapekerjaan extends CI_Model {
                     (
                         SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
-                        WHERE statuspergerakan='Disetujui'
+                        WHERE statuspergerakan='Disetujui' AND '".date('Y-m-d')."' between tglmasuk and tglberakhir
                         GROUP BY idpelamar
                     ) as x ON a.idpelamar = x.idpelamar
                     LEFT join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
@@ -62,7 +62,23 @@ class m_datapekerjaan extends CI_Model {
                     LEFT JOIN pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
                     LEFT JOIN strukturjabatan bb ON aaa.idstrukturjabatan = bb.idstrukturjabatan
                     LEFT JOIN jabatan cc ON bb.idjabatan = cc.idjabatan
-                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi";
+                    LEFT JOIN organisasi ee ON bb.idorganisasi = ee.idorganisasi
+                    LEFT  JOIN
+                    (
+                        SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
+                        FROM pekerjaan
+                        WHERE statuspergerakan='Disetujui'
+                        GROUP BY idpelamar
+                    ) as xxx ON a.idpelamar = xxx.idpelamar
+                    left join pekerjaan pek ON xxx.idpekerjaan = pek.idpekerjaan
+                    LEFT  JOIN
+                    (
+                        SELECT a.idpelamar,a.tglmasuk
+                        FROM pekerjaan a
+                        LEFT join pergerakanpersonil b ON a.idpergerakanpersonil = b.idpergerakanpersonil
+                        WHERE b.statuspergerakan='Disetujui' and b.idpergerakan=128  
+                        GROUP BY a.idpelamar,a.tglmasuk
+                    ) as term ON a.idpelamar = term.idpelamar";
 
         return $query;
     }
@@ -106,7 +122,7 @@ class m_datapekerjaan extends CI_Model {
 		 
          if($aktif=='true')
          {
-			 return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir) $wer";
+			 return "a.display is null and (('$datenow' between aa.tglmasuk and aa.tglberakhir)  OR ('$datenow' between pek.tglmasuk and aa.tglberakhir)  OR ('$datenow' <= term.tglmasuk)) $wer";
             // return "a.display is null and ('$datenow' between aa.tglmasuk and aa.tglberakhir OR '$datenow' between aaa.tglmasuk and aaa.tglberakhir) $wer";
          } else {
             // $wer = str_replace("WHERE TRUE AND", "WHERE TRUE", $wer);
