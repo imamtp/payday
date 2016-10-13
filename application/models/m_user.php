@@ -110,7 +110,12 @@ class m_user extends CI_Model {
                     $r = $qdeposit->row();
 
                      //cek apakah sudah waktunya didebet di bulan berikutnya (1 bulan). tgl awal diambil dari debthistory, kalo kosong ambil dari tanggal aktif
-                    $qdh = $this->db->get_where('debthistory',array('user_id'=>$r->user_id));
+                    // $qdh = $this->db->get_where('debthistory',array('user_id'=>$r->user_id));
+                    $qdh = $this->db->query("SELECT tanggal
+                                                FROM debthistory
+                                                WHERE user_id =  ".$r->user_id."
+                                                order by tanggal desc limit 1");
+                   
                     if($qdh->num_rows()>0)
                     {
                         $rqdh = $qdh->row();
@@ -122,8 +127,10 @@ class m_user extends CI_Model {
                     $this->db->select('price');
                     $qproduk = $this->db->get_where('product',array('productid'=>$r->productid,'display'=>null))->row();
 
+                     $dt = new DateTime();
+
                     $dateDebt = endCycle($startdate, 1);
-                    // echo $dateDebt.'=='.gmdate('Y-m-d');
+                    // echo $dateDebt.'=='.$dt->format('Y-m-d');
                     // exit;
 
                     if($qproduk->price>0)
@@ -131,24 +138,30 @@ class m_user extends CI_Model {
                         $qdep = $this->db->get_where('debthistory',array('user_id'=>$r->user_id));
                         if($qdep->num_rows<=0)
                         {
+                             // echo $this->db->last_query().' '.$startdate;
+                            // exit;
                             $rdep = $qdep->row();
                             if($r->balance>=$qproduk->price)
                             {
                                 //saldo yg dimiliki lebih besar daripada harga produk lakukan debet
                                 $newbalance = $r->balance-$qproduk->price;
-                                $this->db->where('user_id',$r->user_id);
-                                $this->db->update('adminsuper',array('balance'=>$newbalance));
 
-                                //save history
-                                $dhist = array(
-                                        "user_id" => $r->user_id,
-                                        "productid" => $r->productid,
-                                        "oldbalance" => $r->balance,
-                                        "newbalance" => $newbalance,
-                                        "tanggal" => gmdate('Y-m-d'),
-                                        "datein" => $this->tanggalWaktu()
-                                    );
-                                $this->db->insert('debthistory',$dhist);
+                                if($newbalance>0)
+                                {
+                                    $this->db->where('user_id',$r->user_id);
+                                    $this->db->update('adminsuper',array('balance'=>$newbalance));
+
+                                    //save history
+                                    $dhist = array(
+                                            "user_id" => $r->user_id,
+                                            "productid" => $r->productid,
+                                            "oldbalance" => $r->balance,
+                                            "newbalance" => $newbalance,
+                                            "tanggal" => $dt->format('Y-m-d'),
+                                            "datein" => $this->tanggalWaktu()
+                                        );
+                                    $this->db->insert('debthistory',$dhist);
+                                }
                             }
                             $firsttime = true;
                         } else {
@@ -158,22 +171,27 @@ class m_user extends CI_Model {
 
                     if(!$firsttime)
                     {
-                        if($dateDebt==gmdate('Y-m-d') || $dateDebt<=gmdate('Y-m-d'))
+                       
+                        if($dateDebt==$dt->format('Y-m-d') || $dateDebt<=$dt->format('Y-m-d'))
                         {
                             $newbalance = $r->balance-$qproduk->price;
-                            $this->db->where('user_id',$r->user_id);
-                            $this->db->update('adminsuper',array('balance'=>$newbalance));
 
-                            //save history
-                            $dhist = array(
-                                "user_id" => $r->user_id,
-                                "productid" => $r->productid,
-                                "oldbalance" => $r->balance,
-                                "newbalance" => $newbalance,
-                                "tanggal" => gmdate('Y-m-d'),
-                                "datein" => $this->tanggalWaktu()
-                            );
-                            $this->db->insert('debthistory',$dhist);
+                            if($newbalance>0)
+                            {
+                                $this->db->where('user_id',$r->user_id);
+                                $this->db->update('adminsuper',array('balance'=>$newbalance));
+
+                                //save history
+                                $dhist = array(
+                                    "user_id" => $r->user_id,
+                                    "productid" => $r->productid,
+                                    "oldbalance" => $r->balance,
+                                    "newbalance" => $newbalance,
+                                    "tanggal" => $dt->format('Y-m-d'),
+                                    "datein" => $this->tanggalWaktu()
+                                );
+                                $this->db->insert('debthistory',$dhist);
+                            }
                         }
                     }
                 }

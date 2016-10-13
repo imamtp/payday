@@ -185,7 +185,7 @@ function endCycle($d1, $months)
     $newDate = $date->add(add_months($months, $date));
 
         // goes back 1 day from date, remove if you want same day of month
-    $newDate->sub(new DateInterval('P1D')); 
+    // $newDate->sub(new DateInterval('P1D')); 
 
         //formats final date to Y-m-d form
     $dateReturned = $newDate->format('Y-m-d'); 

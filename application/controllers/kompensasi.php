@@ -688,6 +688,8 @@ class kompensasi extends MY_Controller {
                                                 from pekerjaan a
                                                 join pergerakanpersonil b ON a.idpergerakanpersonil = b.idpergerakanpersonil
                                                 where a.idpelamar = ".$rpeg->idpelamar." and b.idpergerakan=128 and b.statuspergerakan='Disetujui'")->row();
+
+
             if($qterminate->tglberakhir!=null)
             { 
                
@@ -737,6 +739,35 @@ class kompensasi extends MY_Controller {
                     echo 'tglJabatan end not found';
                     exit;
                 }
+
+                  //hitung hari proporsional
+                    //deteksi apakah periode penggajian dalam bulan yang sama dengan tanggal masuk karyawan
+                 $qDetectTglMasuk = $this->db->query("select
+                                                            a.tglmasuk
+                                                        from
+                                                            pekerjaan a
+                                                        join pergerakanpersonil b ON a .idpergerakanpersonil = b.idpergerakanpersonil
+                                                        where
+                                                            a .idpelamar = ".$rpeg->idpelamar."
+                                                        and b.idpergerakan <> 128
+                                                        and b.statuspergerakan = 'Disetujui' 
+                                                        and (a.tglmasuk > '".$startdate."' and a.tglmasuk < '".$enddate."')
+                                                        order by a.idpekerjaan desc
+                                                        limit 1");
+                 if($qDetectTglMasuk->num_rows()>0)
+                 {
+                    $rDetectTglMasuk = $qDetectTglMasuk->row();
+                    $date1 = new DateTime($rDetectTglMasuk->tglmasuk);
+                    // echo $rDetectTglMasuk->tglmasuk;
+                 } else {
+                    $date1 = new DateTime($startdate);
+                 }
+                 $date2 = new DateTime($enddate);
+
+                 // echo $this->db->last_query(); 
+                 // echo $rDetectTglMasuk->tglmasuk.'-'.$enddate;                
+                 $proporsionalDays = $date2->diff($date1)->format("%a")+1;
+                 // echo $proporsionalDays;
             }
             $data[$i]['tglakhirjabatan'] = $tglakhirjabatan;
             $obj->tglakhirjabatan = $tglakhirjabatan;
@@ -841,6 +872,7 @@ class kompensasi extends MY_Controller {
 
                 if(isset($proporsionalDays))
                 {
+                    // echo $proporsionalDays;
                     //proprate
                     $prorata = $rUT->nilai/$numdayswork;
                     $totalUT+=$prorata*$proporsionalDays;
@@ -972,7 +1004,17 @@ class kompensasi extends MY_Controller {
                                 'idupahkaryawan'=>$rUT->idupahkaryawan,
                                 'nilai'=>$nilai
                             );
-                        $this->db->insert('upahhistory',$dupahhistory);
+
+                        $wer = array('idpayroll'=>$idpayroll, 'idupahkaryawan'=>$rUT->idupahkaryawan, 'idpelamar'=>$rpeg->idpelamar);
+                        $cek = $this->db->get_where('upahhistory',$wer);
+                        if($cek->num_rows()>0)
+                        {
+                            $this->db->where($wer);
+                            $this->db->update('upahhistory',$dupahhistory);
+                        } else {
+                             $this->db->insert('upahhistory',$dupahhistory);     
+                        }
+                       
                     }
                 }
             } else {

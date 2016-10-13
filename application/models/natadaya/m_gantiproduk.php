@@ -114,13 +114,14 @@ class m_gantiproduk extends CI_Model {
         $this->db->update('adminsuper',array('productid'=>$productidnew,'balance'=>$newbalance));
 
          //save history
+        $dt = new DateTime();
         $dhist = array(
-                "user_id" => $this->session->userdata('userid'),
+                "user_id" => $qsa->user_id,
                 "productid" => $productidnew,
                 "oldbalance" => $qsa->balance,
                 "newbalance" => $newbalance,
-                "tanggal" => gmdate('Y-m-d'),
-                "datein" => $this->tanggalWaktu()
+                "tanggal" => $dt->format('Y-m-d'),
+                "datein" => $dt->format('Y-m-d H:i:s')
             );
         $this->db->insert('debthistory',$dhist);
 

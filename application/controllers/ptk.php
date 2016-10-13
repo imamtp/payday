@@ -226,7 +226,7 @@ class ptk extends MY_Controller {
              $qlok = $this->db->get_where('lokasi_org',array('idlokasiorg'=>$idlokasiorg))->row();
 
             //cek dulu
-            $qcek = $this->db->get_where('perencanaantk',array('display'=>null,'nobulan'=>"$nobulan",'idjabatan'=>$idjabatan,'idlokasiorg'=>$idlokasiorg,'tahun'=>$this->input->post('tahun')));
+            $qcek = $this->db->get_where('perencanaantk',array('display'=>null,'nobulan'=>"$nobulan",'idjabatan'=>$idjabatan,'idlokasiorg'=>$idlokasiorg,'tahun'=>$this->input->post('tahun'),'status'=>'saved'));
             // echo $this->db->last_query().' ';
             if($qcek->num_rows()>0)
             {

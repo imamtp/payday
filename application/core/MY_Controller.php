@@ -21,6 +21,8 @@ class MY_Controller extends CI_Controller{
         // $this->load->model('journal/m_journal');
         // $this->load->model('purchase/m_purchase');
         $this->load->helper('common');
+
+        $dt = new DateTime();
         
         $this->smarty->template_dir = DOCUMENTROOT.'/kopi/assets/template/templates/';
         $this->smarty->compile_dir = DOCUMENTROOT.'/kopi/assets/template/templates_c/';
@@ -81,44 +83,72 @@ class MY_Controller extends CI_Controller{
                 $balance = $r->balance == null ? 0 : $r->balance;
 
                 //cek apakah sudah waktunya didebet di bulan berikutnya (1 bulan). tgl awal diambil dari debthistory, kalo kosong ambil dari tanggal aktif
-                $qdh = $this->db->get_where('debthistory',array('user_id'=>$r->user_id));
-                if($qdh->num_rows()>0)
-                {
-                    $rqdh = $qdh->row();
-                    $startdate = $rqdh->tanggal;
-                } else {
-                    //belum pernah didebet
+                // $qdh = $this->db->get_where('debthistory',array('user_id'=>$r->user_id));
+                // if($qdh->num_rows()>0)
+                // {
+                //     $rqdh = $qdh->row();
+                //     $startdate = $rqdh->tanggal;
+                // } else {
+                //     //belum pernah didebet
 
-                    $product = $this->db->get_where('product',array('productid'=>$r->productid))->row();
-                    if($product->price>0)
-                    {
-                        $qdep = $this->db->get_where('deposit',array('idsuperadmin'=>$r->idsuperadmin));
-                        if($qdep->num_rows<=0)
-                        {
-                            //belum pernah deposit
-                            $outofbalance='true';
-                        }
+                //     $product = $this->db->get_where('product',array('productid'=>$r->productid))->row();
+                //     if($product->price>0)
+                //     {
+                //         $qdep = $this->db->get_where('deposit',array('idsuperadmin'=>$r->idsuperadmin));
+                //         if($qdep->num_rows<=0)
+                //         {
+                //             //belum pernah deposit
+                //             $outofbalance='true';
+                //         }
                         
-                    }
-                    $startdate = $r->startdate;
-                }
+                //     }
+                //     $startdate = $r->startdate;
+                // }
 
-                $dateDebt = endCycle($startdate, 1); //tgl penagihan berikutnya
-                // echo $dateDebt.'=='.gmdate('Y-m-d');
-                // exit;
+                 //tgl penagihan berikutnya
+                 // echo $dateDebt.'=='.gmdate('Y-m-d');
+                // // exit;
 
-                if($dateDebt==gmdate('Y-m-d') || $dateDebt<=gmdate('Y-m-d'))
+                // if($dateDebt==$dt->format('Y-m-d') || $dateDebt<=$dt->format('Y-m-d'))
+                // {
+                //     $this->db->select('price');
+                //     $qproduk = $this->db->get_where('product',array('productid'=>$r->productid,'display'=>null))->row();
+
+                //     if($balance<$qproduk->price)
+                //     {
+                //         $outofbalance='true';
+                //     }
+                // }
+
+               //get last debit 
+                $qLstDbt = $this->db->query("SELECT tanggal
+                                        FROM debthistory
+                                        WHERE user_id =  ".$r->user_id."
+                                        order by tanggal desc limit 1");
+                if($qLstDbt->num_rows()>0)
                 {
-                    $this->db->select('price');
-                    $qproduk = $this->db->get_where('product',array('productid'=>$r->productid,'display'=>null))->row();
+                    $rqLstDbt = $qLstDbt->row();
 
-                    if($balance<$qproduk->price)
+                    $dateDebt = endCycle($rqLstDbt->tanggal, 1);
+
+                    $dateNow = new DateTime($dt->format('Y-m-d'));
+                    $sd2 = new DateTime($rqLstDbt->tanggal);
+                    $dateDebtObj = new DateTime($dateDebt);
+
+                    // echo $dt->format('Y-m-d').' >= '.$rqLstDbt->tanggal.' && '.$dt->format('Y-m-d').'<='.$dateDebt;
+
+                    if($dateNow >= $sd2 && $dateNow<$dateDebtObj)
                     {
+                        //tanggal sekarang sama atau lebih dari tanggal deposit - aman
+                    } else {
                         $outofbalance='true';
                     }
+                } else {
+
                 }
 
                
+
             }
         }
         $this->smarty->assign('outofbalance',  $outofbalance);
