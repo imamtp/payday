@@ -25,7 +25,7 @@ Ext.define('comboJamKerja', {
     triggerAction: 'all',
     displayField: 'namajamkerja',
     valueField: 'idjamkerjaharian',
-    name: 'namajamkerja',
+    name: 'idjamkerjaharian',
     store: storeJamKerja
 })
 

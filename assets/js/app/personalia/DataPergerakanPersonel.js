@@ -295,6 +295,8 @@ Ext.define('GridDataPergerakanPersonel', {
                                 if(d.success)
                                 {
                                    wPergerakanPersonel.show();
+                                   insertNoRef('nopergerakan','nopergerakan_fPergerakanP','PP');
+                                   
                                     Ext.getCmp('formPergerakanPersonel').getForm().reset();
                                     Ext.getCmp('statusformPergerakanPersonel').setValue('input');
                                     levelStore.load();
@@ -320,13 +322,15 @@ Ext.define('GridDataPergerakanPersonel', {
                                     Ext.getCmp('tglmasuk_fPergerakanP').setReadOnly(false);
                                     Ext.getCmp('tglberakhir_fPergerakanP').setReadOnly(false);
 
-                                    insertNoRef('nopergerakan','nopergerakan_fPergerakanP','PP');
+                                    
 
                                     Ext.getCmp('BtnDisetujuiPergerakan').setDisabled(false);
                                     Ext.getCmp('BtnDiajukanPergerakan').setDisabled(false);
                                     // Ext.getCmp('btnDetailBawahanPergerakan').setDisabled(false);    
 
                                     Ext.getCmp('TabItemPergerakanPersonil').setActiveTab(0);
+
+
                                 } else {
                                      Ext.Msg.alert("Info", d.message);
                                 }

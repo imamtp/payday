@@ -363,7 +363,7 @@ class Backend extends MY_Controller {
                 $this->db->delete('dasarkomponenupah');
 
                 foreach ($configupah as $u) {
-                    $upah = $this->m_data->getID('komponenupah', 'namakomponen', 'idkomponenupah', $u);
+                    $upah = $this->m_data->getID('komponenupah', 'namakomponen', 'idkomponenupah', $u,true);
                     $this->db->insert('dasarkomponenupah', array('idkomponenupah' => $d['idkomponenupah'], 'iddasarkomponenupah' => $upah));
                 }
             }

@@ -471,7 +471,7 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                     listeners: {
                         render: function(component) {
                             component.getEl().on('click', function(event, el) {
-                                // insertNoRef('nopergerakan','nopergerakan_fPergerakanP','PP');
+                                insertNoRef('nopergerakan','nopergerakan_fPergerakanP','PP');
                             });
                         }
                     }

@@ -16,7 +16,7 @@ class m_riwayatgaji extends CI_Model {
     }
 
     function selectField() {
-        return "idpayroll,a.idpelamar,bulan,tahun,tglgaji,a.startdate,masapajaksetahun,a.enddate,b.namalengkap,a.punyanpwp,durasi,hitungpajak,tglgajipertama,masakerja,a.tglmasuk,nilaiptkp,kodeptkp,totalut,totalutt,upahlemburPajak,upahlemburNoPajak,upahlemburTambahPajak,upahlemburKurangPajak,totallembur,benefitCmpBruto,benefitCmpNet,benefitEmpBruto,benefitEmpNet,numdayswork,nilaiPotongan,totalpendapatan,penerimaanbruto,tunjanganpajak,a.biayajabatan,penerimaannet,netosetahun,pkpsetahun,pph5tahun,pph15tahun,pph25tahun,pph35tahun,pphsettahun,pphsebulan,takehomepay,b.namalengkap,benefitcmp,benefitemp,upload,pajakterminasi,pajakjantonov,pajakterminasi,pajakterbayar,pajakterutangdes,pajaktotalbayarsetahun,selisihpph,c.nik,d.companycode,f.kodeorg,g.namajabatan,prevtakehomepay";
+        return "a.idpayroll,a.idpelamar,bulan,tahun,tglgaji,a.startdate,masapajaksetahun,a.enddate,b.namalengkap,a.punyanpwp,durasi,hitungpajak,tglgajipertama,masakerja,a.tglmasuk,nilaiptkp,kodeptkp,totalut,h.totalutt,upahlemburPajak,upahlemburNoPajak,upahlemburTambahPajak,upahlemburKurangPajak,totallembur,benefitCmpBruto,benefitCmpNet,benefitEmpBruto,benefitEmpNet,numdayswork,nilaiPotongan,totalpendapatan,penerimaanbruto,tunjanganpajak,a.biayajabatan,penerimaannet,netosetahun,pkpsetahun,pph5tahun,pph15tahun,pph25tahun,pph35tahun,pphsettahun,pphsebulan,takehomepay,b.namalengkap,benefitcmp,benefitemp,upload,pajakterminasi,pajakjantonov,pajakterminasi,pajakterbayar,pajakterutangdes,pajaktotalbayarsetahun,selisihpph,c.nik,d.companycode,f.kodeorg,g.namajabatan,prevtakehomepay";
     }
     
     function fieldCek()
@@ -53,7 +53,10 @@ class m_riwayatgaji extends CI_Model {
                         GROUP BY idpelamar
                     ) as xx ON a.idpelamar = xx.idpelamar
                     left join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
-                    left join strukturjabatan bb ON aa.idstrukturjabatan = bb.idstrukturjabatan";
+                    left join strukturjabatan bb ON aa.idstrukturjabatan = bb.idstrukturjabatan
+                    left join (select idpayroll,idpelamar,sum(nilai) as totalutt from upahhistory
+                                where jenisupah = 'tidaktetap'
+                                GROUP BY idpayroll,idpelamar) h ON a.idpayroll = h.idpayroll and a.idpelamar = h.idpelamar";
 
         return $query;
     }

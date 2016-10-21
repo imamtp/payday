@@ -836,9 +836,9 @@ class personalia extends MY_Controller {
              'idpergerakan' =>$idpergerakan,
              'periodekekaryaan' => $this->input->post('periodekekaryaan'),
              'jumlahbulankekaryaan' => $this->input->post('jumlahbulankekaryaan'),
-             'catatanpenyesuaian'=>$this->input->post('catatanpenyesuaian'),
+             'catatanpenyesuaian'=>$this->input->post('catatanpenyesuaian') == '' ? null : $this->input->post('catatanpenyesuaian'),
              'startdatenewpay'=>$startdatenewpay,
-             'alasanterminasi'=>$this->input->post('alasanterminasi'),
+             'alasanterminasi'=>$this->input->post('alasanterminasi') == '' ? null : $this->input->post('alasanterminasi'),
              'tglterminasi'=>$tglterminasi
         );
 

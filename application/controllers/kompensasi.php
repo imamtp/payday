@@ -1090,7 +1090,7 @@ class kompensasi extends MY_Controller {
                                         where display is null and tanggal='".intval($startdateArr[2])."' and nobulan='".$startdateArr[1]."') c ON b.idkomponenupah = c.idkomponenupah
                                         where b.jeniskomponen='Upah Tidak Tetap' and b.jangkawaktu='Tahunan' and a.idpelamar=".$rpeg->idpelamar." and 
                                         a.display is null and (now() BETWEEN b.startdate and b.enddate)");
-//            echo $this->db->last_query().'<br>';
+           // echo $this->db->last_query().'<br>';
 //            exit;
             $utTTahunPenambahPajak=0;
             $utTTahunPengurangPajak=0;
@@ -1102,7 +1102,7 @@ class kompensasi extends MY_Controller {
                      // $this->upahtt->tes();
                     // $this->utt();
                     $nilaiV = $this->m_configdasarupahtt->nilaiuut($rUTTTahun->idkomponenupah,$rpeg->idpelamar);
-
+                    // echo $nilaiV;
                     $nilai += $nilaiV;
                     // echo '('.$nilaiV.'/'.$numdayswork.')* '.$obj->kehadiran.':'.$nilai;
                     // exit;
@@ -1761,11 +1761,17 @@ class kompensasi extends MY_Controller {
 
                         $tunjanganpajak = $data[$i]['pphsebulan'];
                         
-//                        echo $data[$i]['totalpendapatan'].'-('.$benefitCmp.'+'.$benefitEmp.')-'.$data[$i]['pphsebulan'].'+'.$obj->totalUTT;
-//                        exit;
+                       // echo $data[$i]['totalpendapatan'].'-('.$benefitCmp.'+'.$benefitEmp.')-'.$data[$i]['pphsebulan'].'+'.$obj->totalUTT;
+                       // exit;
 //                        11863433-(381600+180000)-1006833+10000000
                                        // $data[$i]['takehomepay'] = round(($data[$i]['totalpendapatan']-$data[$i]['pphsebulan'])-($benefitCmp+$benefitEmp+$data[$i]['tunjanganpajak']+$nilaiPotongan));
-                        $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT);
+                        $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT;
+                        // echo $data[$i]['takehomepay'];
+                        // exit;
+                        if (strpos($data[$i]['takehomepay'], '.') !== false) {
+                             $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT);
+                        }
+                        
                         $obj->takehomepay = $data[$i]['takehomepay'];
 
                         if($obj->idpelamar==150)
@@ -1794,6 +1800,7 @@ class kompensasi extends MY_Controller {
 
                             $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$obj->pphsebulan +$obj->totalUTT);
                             $obj->takehomepay = $data[$i]['takehomepay'];
+
                             //$obj->pajakterutangdes = $obj->tunjanganpajak;
                         }
 
@@ -1877,7 +1884,6 @@ class kompensasi extends MY_Controller {
                 // exit;
                 $data[$i]['takehomepay'] = $PrevPay;
                 $obj->takehomepay = $data[$i]['takehomepay'];
-                // echo $data[$i]['takehomepay'].' ';
             }
             // echo '('.$data[$i]['takehomepay'].'/'.$numdayswork.')*'.$proporsionalDays;
             

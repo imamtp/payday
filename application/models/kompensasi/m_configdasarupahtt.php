@@ -65,6 +65,7 @@ class m_configdasarupahtt extends CI_Model {
     public function nilaiuut($idkomponenupah,$idpelamar)
     {
         $q = $this->db->get_where('komponenupah',array('idkomponenupah'=>$idkomponenupah));
+        // echo $this->db->last_query();
         if($q->num_rows()>0)
         {
             $r = $q->row();
@@ -108,23 +109,24 @@ class m_configdasarupahtt extends CI_Model {
                    // echo 'persentase<br>';
 
                         $dasarup = $this->db->get_where('dasarkomponenupah',array('idkomponenupah'=>$idkomponenupah));
-                        //echo $this->db->last_query();
+                        // echo $this->db->last_query();
                         $nilai=0;
                         foreach ($dasarup->result() as $rdasarup) {
 
                             $qkomponenupah = $this->db->get_where('komponenupah',array('idkomponenupah'=>$rdasarup->iddasarkomponenupah,'display'=>null));
-                            //echo $this->db->last_query();
+                            // echo $this->db->last_query();
                             if($qkomponenupah->num_rows()>0)
                             {
                                 $rqkomponenupah = $qkomponenupah->row();
                                 if($rqkomponenupah->jeniskomponen=='Upah Tetap')
                                 {
                                     $qq = $this->db->get_where('upahkaryawan',array('idpelamar'=>$idpelamar,'idkomponenupah'=>$rqkomponenupah->idkomponenupah));
+                                    // echo $this->db->last_query();
                                     if($qq->num_rows()>0)
                                     {
                                         $rr = $qq->row();
                                         $nilai+=$rr->nilai*($r->persen/100);
-                                        //echo $rr->nilai."*"."(".$r->persen."/"."100)".'<br>';
+                                        // echo $rr->nilai."*"."(".$r->persen."/"."100)".'<br>';
                                     } else {
                                         $nilai+=0;
                                     }

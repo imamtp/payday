@@ -50,7 +50,7 @@ class m_configupahttbulan extends CI_Model {
         $data = array(
             "idkomponenupah" => $id,
             "idcompany"  => $this->input->post('idcompany'),
-            "idconfigdasarupahtt"  => $this->m_data->getID('configdasarupahtt', 'dasarupahtt', 'idconfigdasarupahtt', $this->input->post('dasarupahtt')),
+            "idconfigdasarupahtt"  => $this->m_data->getID('configdasarupahtt', 'dasarupahtt', 'idconfigdasarupahtt', $this->input->post('dasarupahtt'),true),
             "namakomponen"  => $this->input->post('namakomponen'),
             "kodekomponen"  => $this->input->post('kodekomponen'),
             "kenapajak"  => $this->input->post('kenapajak'),
