@@ -436,7 +436,13 @@ class sistem extends MY_Controller {
         {
             $r = $q->row();
 
-            $idcompanyparent = $this->session->userdata('idcompanyparent');
+            if(intval($this->session->userdata('group_id'))==2)
+            {
+                $idcompanyparent = $this->session->userdata('idcompany');
+            } else {
+                $idcompanyparent = $this->session->userdata('idcompanyparent');
+            }
+            
             $this->db->select('productid');
             $qprod = $this->db->get_where('adminsuper',array('idcompany'=>$idcompanyparent,'display'=>null))->row();
 

@@ -1442,6 +1442,7 @@ class kompensasi extends MY_Controller {
                                             from pengurangupahkaryawan a
                                             join pengurangupah b ON a.idpengurangupah = b.idpengurangupah
                                             where (now() BETWEEN b.startdate and b.enddate) and a.idpelamar=".$rpeg->idpelamar."");
+            // echo $this->db->last_query();
 
             $potonganBruto = 0;
             $potonganNet = 0;
@@ -1889,6 +1890,7 @@ class kompensasi extends MY_Controller {
             
             // $data[$i]['takehomepay'] = ($data[$i]['takehomepay']/$numdayswork)*$proporsionalDays;
             $obj->takehomepay = $data[$i]['takehomepay'];
+            // $obj->takehomepay = $obj->totalUT-$data[$i]['nilaiPotongan']-$benefitEmp;
 
             if($commit=='true')
             {

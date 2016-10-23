@@ -24,6 +24,7 @@ class m_user extends CI_Model {
                 $qcv = $this->db->query("select user_id
                                             from sys_user
                                             where (now() BETWEEN startdate and enddate) and user_id=".$r->user_id."");
+                // echo $this->db->last_query();
                 if($qcv->num_rows()<=0)
                 {
                     return array('success' => false, 'msg' => 'Login Gagal<br>Status : User Expired');
