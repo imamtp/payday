@@ -41,29 +41,32 @@ class m_level extends CI_Model {
         $idlevelindividu = $this->input->post('idlevelindividu');
         $werlevel = null;
 
-        if($pergerakan!=null)
+        if($idlevelindividu!=null)
         {
-            $ql = $this->db->query("select urutan from level where idlevel = $idlevelindividu")->row();
-        }
+            if($pergerakan!=null)
+            {
+                $ql = $this->db->query("select urutan from level where idlevel = $idlevelindividu")->row();
+            }
 
-        if($pergerakan=='PENINGKATAN LEVEL INDIVIDU')
-        {            
-            $werlevel = " and a.urutan > ".$ql->urutan."";
-        }
+            if($pergerakan=='PENINGKATAN LEVEL INDIVIDU')
+            {            
+                $werlevel = " and a.urutan > ".$ql->urutan."";
+            }
 
-        if($pergerakan=='PENURUNAN LEVEL INDIVIDU')
-        {
-            $werlevel = " and a.urutan < ".$ql->urutan."";
-        }
+            if($pergerakan=='PENURUNAN LEVEL INDIVIDU')
+            {
+                $werlevel = " and a.urutan < ".$ql->urutan."";
+            }
 
-        if($pergerakan=='PROMOSI')
-        {
-            $werlevel = " and a.urutan > ".$ql->urutan."";
-        }
+            if($pergerakan=='PROMOSI')
+            {
+                $werlevel = " and a.urutan > ".$ql->urutan."";
+            }
 
-        if($pergerakan=='DEMOSI')
-        {
-            $werlevel = " and a.urutan < ".$ql->urutan."";
+            if($pergerakan=='DEMOSI')
+            {
+                $werlevel = " and a.urutan < ".$ql->urutan."";
+            }
         }
 
 

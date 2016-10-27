@@ -358,7 +358,7 @@ Ext.define('GridPengguna', {
                                                 Ext.getCmp('statusformPengguna').setValue('edit');
                                                 sys_groupStore.load();
 
-                                                if(group_id!=1)
+                                                if(group_id*1!==1 && group_id*1!==2)
                                                 {
                                                     Ext.getCmp('usercode_fPengguna').setReadOnly(true);
                                                     //Ext.getCmp('comboxsys_group_fPengguna').setReadOnly(true);

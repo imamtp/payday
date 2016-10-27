@@ -1625,7 +1625,9 @@ class kompensasi extends MY_Controller {
                         $penghasilannet = $data[$i]['penerimaanbruto']-($benefitEmp+$data[$i]['biayajabatan'])-($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
                         
                         // echo                         
-                        $totalpendapatan =  $data[$i]['totalUT']+$data[$i]['totalUTT']+$obj->totallembur+$obj->benefitCmp+ $data[$i]['tunjanganpajak'];
+                        $totalpendapatan =  $data[$i]['totalUT']+$obj->totalUTT+$obj->totallembur+$obj->benefitCmp+ $data[$i]['tunjanganpajak'];
+                        // echo $data[$i]['totalUT'].'+'.$data[$i]['totalUTT'].'+'.$obj->totallembur.'+'.$obj->benefitCmp.'+'.$data[$i]['tunjanganpajak'];
+                        // exit;
                         // echo $data[$i]['tunjanganpajak'].'=';
 
                         // echo '(totalpendapatan:'.$data[$i]['totalUT'].'+'.$data[$i]['totalUTT'].'+'.$data[$i]['upahlemburNoPajak'].'+'.$benefitCmpBruto.'+'.$benefitCmpNet.'+'.$tunjanganpajak.'='.$totalpendapatan.') ';
@@ -1766,11 +1768,30 @@ class kompensasi extends MY_Controller {
                        // exit;
 //                        11863433-(381600+180000)-1006833+10000000
                                        // $data[$i]['takehomepay'] = round(($data[$i]['totalpendapatan']-$data[$i]['pphsebulan'])-($benefitCmp+$benefitEmp+$data[$i]['tunjanganpajak']+$nilaiPotongan));
-                        $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT;
+                       if($obj->idpelamar==227)
+                        {
+                            // echo $obj->totalUTT.' ';
+                        }
+                       // if($obj->totalUTT>1)
+                       // {
+                        //kalo ada isinya, ga usah ditambahin lagi, karena sudah ditambahkan sebelumnya
+                         $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan'];
+                       // } else {
+                         // $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT;
+                       // }
+                       
+                          //24-8-16
+                        // $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan'];
+                       
+
                         // echo $data[$i]['takehomepay'];
                         // exit;
                         if (strpos($data[$i]['takehomepay'], '.') !== false) {
+                             //24-8-16
                              $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT);
+
+                            //24-8-16
+                            // $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']);
                         }
                         
                         $obj->takehomepay = $data[$i]['takehomepay'];

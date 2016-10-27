@@ -456,9 +456,18 @@ Ext.define('GridRekapKehadiran', {
                     iconCls: 'page_excel',
                     listeners: {
                         click: function(component) {
-                            window.location = SITE_URL+"kehadiran/rekap/" + Ext.getCmp('companyname_filterRekapKehadiran').getValue()+'/'+
+                            if(Ext.getCmp('companyname_filterRekapKehadiran').getValue()===null)
+                            {
+                                Ext.Msg.alert("Info", 'Perusahaan belum dipilih');
+                            } else if (Ext.getCmp('startdate_rekapkehadiran').getValue() === null && Ext.getCmp('enddate_rekapkehadiran').getValue() === null)
+                            {
+                                Ext.Msg.alert("Info", 'Tentukan tanggal mulai dan akhir periode kehadiran');
+                            } else {
+                                window.location = SITE_URL+"kehadiran/rekap/" + Ext.getCmp('companyname_filterRekapKehadiran').getValue()+'/'+
                                        Ext.getCmp('namajabatan_filterRekapKehadiran').getValue()+'/'+Ext.getCmp('namaorg_filterRekapKehadiran').getValue() + '/'+ 
                                        Ext.getCmp('startdate_rekapkehadiran').getSubmitValue() + '/' + Ext.getCmp('enddate_rekapkehadiran').getSubmitValue()+'/true/null/null';
+                            }
+                            
                         }
                     }
                 },{

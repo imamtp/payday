@@ -89,7 +89,7 @@ class m_lembur extends CI_Model {
                     $idformulalembur = $rr->idformulalembur;
                     // echo $idformulalembur.' ';
                     // echo 'waktu:'.$rr->mulailembur_jam.':'.$rr->mulailembur_menit.':00'.','.$rr->akhirlembur_jam.':'.$rr->akhirlembur_menit.':00<br>';
-                    // $sumthetime = getTimeDiff($rr->mulailembur_jam.':'.$rr->mulailembur_menit.':00',$rr->akhirlembur_jam.':'.$rr->akhirlembur_menit.':00');
+                    $sumthetime = getTimeDiff($rr->mulailembur_jam.':'.$rr->mulailembur_menit.':00',$rr->akhirlembur_jam.':'.$rr->akhirlembur_menit.':00');
                     // echo 'sumthetime:'.$sumthetime.' '.intval($rr->durasi_istirahat);                   
 
                     //hitung upah
@@ -137,7 +137,7 @@ class m_lembur extends CI_Model {
                                 'hariraya'=>$hariraya,
                                 'totallembur'=>$upahlemburPajak+$upahlemburNoPajak
                         );
-                        $this->db->insert('lemburhistory',$dlemburhistory);
+                        // $this->db->insert('lemburhistory',$dlemburhistory);
                     }
 
                     

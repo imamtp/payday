@@ -51,20 +51,25 @@ class m_strukturjabatan extends CI_Model {
         $idleveljabatan = $this->input->post('idleveljabatan');
         $werPergerakan = null;
 
-        if($pergerakan!=null)
+        if($idleveljabatan!=null)
         {
-            $ql = $this->db->query("select urutan from level where idlevel = $idleveljabatan")->row();
+            if($pergerakan!=null)
+            {
+                $ql = $this->db->query("select urutan from level where idlevel = $idleveljabatan")->row();
+            }
+
+            if($pergerakan=='PROMOSI')
+            {
+               $werPergerakan = " and e.urutan > ".$ql->urutan."";
+            }
+
+            if($pergerakan=='DEMOSI')
+            {
+               $werPergerakan = " and e.urutan < ".$ql->urutan."";
+            }
         }
 
-        if($pergerakan=='PROMOSI')
-        {
-           $werPergerakan = " and e.urutan > ".$ql->urutan."";
-        }
-
-        if($pergerakan=='DEMOSI')
-        {
-           $werPergerakan = " and e.urutan < ".$ql->urutan."";
-        }
+        
         //END PERGERAKAN
 
         if($startdate!='' && $enddate!='')
