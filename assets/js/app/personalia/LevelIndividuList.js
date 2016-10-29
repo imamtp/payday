@@ -110,7 +110,7 @@ Ext.define('GridLevelIndividuList', {
 
 var wGridLevelIndividuListPopup = Ext.create('widget.window', {
     id: 'wGridLevelIndividuListPopup',
-    title: 'Pilih Perusahaan',
+    title: 'Pilih Level Individu',
     header: {
         titlePosition: 2,
         titleAlign: 'center'
