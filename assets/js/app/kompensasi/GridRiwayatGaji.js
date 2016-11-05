@@ -59,7 +59,7 @@ var smGridRiwayatGaji = Ext.create('Ext.selection.CheckboxModel', {
 });
 Ext.define('GridRiwayatGaji', {
     // renderTo:'mytabpanel',
-//    multiSelect: true,
+   multiSelect: true,
 //    selModel: smGridRiwayatGaji,
     title: 'Riwayat Pengupahan Karyawan',
     // sm: new Ext.grid.RowSelectionModel({singleSelect: true}),
