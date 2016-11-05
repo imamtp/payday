@@ -2044,9 +2044,43 @@ class kompensasi extends MY_Controller {
             // echo '</pre>';            
     }
 
-    function eksportxls2()
+    function eksportcsv($sd,$nd,$idcompany,$idorg=null,$idjab=null)
     {
+        $tgl = explode('-', $sd);
 
+        $fn = 'csv_espt_'.$sd.'_sd_'.$nd;
+        // output headers so that the file is downloaded rather than displayed
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename='.$fn.'.csv');
+
+        // create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');
+
+        // output the column headings
+        fputcsv($output, array('Masa Pajak;Tahun Pajak;Pembetulan;NPWP;Nama;Kode Pajak;Jumlah Bruto;Jumlah PPh;Kode Negara'));
+
+        // fetch the data
+        $rows = $this->db->query("select a.bulan,a.tahun,penerimaanbruto,pphsebulan,b.namalengkap,b.nonpwp
+                                    from payrolldata a
+                                    join pelamar b ON a.idpelamar = b.idpelamar
+                                    where a.startdate between '".backdate2_reverse($sd)."' and '".backdate2_reverse($nd)."'");
+        $rows = $rows->result_array();
+
+        // loop over the rows, outputting them
+        $data = array();
+        foreach ($rows as $key => $value) {
+            // 21-100-01
+            $data = array(intval($tgl[1]).';'.$tgl[2].';'.'0'.';'.$value['nonpwp'].';'.$value['namalengkap'].';'.'21-100-01'.';'.$value['penerimaanbruto'].';'.$value['pphsebulan'].';');
+            fputcsv($output, $data);
+        }
+        
+
+        // foreach ($rows as $key => $row) {
+          
+        // }
+
+         // fputcsv($output, $row);
+        // while ($row = mysql_fetch_assoc($rows)) 
     }
 
     function eksportxls($sd,$nd,$idcompany,$idorg=null,$idjab=null)

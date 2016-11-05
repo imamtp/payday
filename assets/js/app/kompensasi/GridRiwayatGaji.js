@@ -514,6 +514,49 @@ Ext.define('GridRiwayatGaji', {
                         }
                     }
                 },
+                {
+                    xtype: 'button',
+                    text: 'Export e-SPT PPh21',
+                    iconCls: 'page_excel',
+                    listeners: {
+                        click: function(component) {
+                            var cp = Ext.getCmp('companyname_filterRiwayatGaji').getValue();
+                            var sd = Ext.getCmp('startdate_RiwayatGaji').getSubmitValue();
+                            var nd = Ext.getCmp('enddate_RiwayatGaji').getSubmitValue();
+
+                            if(cp==null)
+                            {
+                                Ext.Msg.alert("Info", 'Tentukan Perusahaan Terlebih Dahulu');                                
+                            } else if(sd=='')
+                                {
+                                    Ext.Msg.alert("Info", 'Tentukan Periode Awal Pengupahan Terlebih Dahulu');
+                                } else if(nd=='')
+                                    {
+                                        Ext.Msg.alert("Info", 'Tentukan Periode Akhir Pengupahan Terlebih Dahulu');
+                                    } else {
+                                            Ext.Ajax.request({
+                                                url: SITE_URL + 'sistem/cekakses',
+                                                method: 'POST',
+                                                params: {
+                                                    roleid: 167
+                                                },
+                                                success: function(form, action) {
+                                                    var d = Ext.decode(form.responseText);
+                                                    if(d.success)
+                                                    {
+                                                        window.location = SITE_URL+"kompensasi/eksportcsv/" + sd +'/'+nd+'/'+ cp;
+                                                    } else {
+                                                         Ext.Msg.alert("Info", d.message);
+                                                    }
+                                                },
+                                                failure: function(form, action) {
+                                                    Ext.Msg.alert("Load failed",Ext.decode(action.responseText));
+                                                }
+                                            });
+                                    }
+                        }
+                    }
+                },
                 '->',
                 'Pencarian Nama Karyawan: ', ' ',
                 {
