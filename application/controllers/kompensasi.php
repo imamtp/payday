@@ -2063,7 +2063,7 @@ class kompensasi extends MY_Controller {
         $rows = $this->db->query("select a.bulan,a.tahun,penerimaanbruto,pphsebulan,b.namalengkap,b.nonpwp
                                     from payrolldata a
                                     join pelamar b ON a.idpelamar = b.idpelamar
-                                    where a.startdate between '".backdate2_reverse($sd)."' and '".backdate2_reverse($nd)."'");
+                                    where b.idcompany = $idcompany and b.display is null and (a.startdate between '".backdate2_reverse($sd)."' and '".backdate2_reverse($nd)."')");
         $rows = $rows->result_array();
 
         // loop over the rows, outputting them
