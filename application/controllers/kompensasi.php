@@ -1260,6 +1260,8 @@ class kompensasi extends MY_Controller {
                             $totalKomponen = $this->countKomponenValue($rbenefit->komponenupahbenefitcmp,$rpeg->idpelamar);
 
                             $nilaiBenefit = $totalKomponen/$rbenefit->pembagibenefitcmp;
+                            $nilaiBenefit = $this->max_plafon_benefit($rb->idbenefit,$nilaiBenefit,'company');
+
                             if($rbenefit->kenapajakcmp=='YA')
                             {                                 
                                 if($rbenefit->fungsipajakcmp=='Penambah')
@@ -1283,6 +1285,7 @@ class kompensasi extends MY_Controller {
                           else if($rbenefit->jenisnilaibenefitcmp=='Nilai Tetap')
                             {
                                 $nilaiBenefit = $rbenefit->angkatetapbenefitcmp;
+                                $nilaiBenefit = $this->max_plafon_benefit($rb->idbenefit,$nilaiBenefit,'company');
 
                                 if($rbenefit->kenapajakcmp=='YA')
                                 {
@@ -1311,6 +1314,7 @@ class kompensasi extends MY_Controller {
                                         // echo $totalKomponen.'*'.$rbenefit->persenbenefitcmp;
                                         // exit;
                                         $nilaiBenefit = $totalKomponen*($rbenefit->persenbenefitcmp/100);
+                                        $nilaiBenefit = $this->max_plafon_benefit($rb->idbenefit,$nilaiBenefit,'company');
 
                                         if($rbenefit->kenapajakcmp=='YA')
                                         {
@@ -1360,6 +1364,9 @@ class kompensasi extends MY_Controller {
                             $totalKomponen = $this->countKomponenValue($rbenefit->komponenupahbenefitemp,$rpeg->idpelamar);
 
                             $nilaiBenefit = $totalKomponen/$rbenefit->pembagibenefitemp;
+
+                            $nilaiBenefit = $this->max_plafon_benefit($rb->idbenefit,$nilaiBenefit,'employee');
+
                             if($rbenefit->kenapajakemp=='YA')
                             {
                                  if($rbenefit->fungsipajakcmp=='Penambah')
@@ -1379,6 +1386,8 @@ class kompensasi extends MY_Controller {
                           else if($rbenefit->jenisnilaibenefitemp=='Nilai Tetap')
                             {
                                 $nilaiBenefit = $rbenefit->angkatetapbenefitemp;
+
+                                $nilaiBenefit = $this->max_plafon_benefit($rb->idbenefit,$nilaiBenefit,'employee');
 
                                 if($rbenefit->kenapajakemp=='YA')
                                 {
@@ -1404,6 +1413,8 @@ class kompensasi extends MY_Controller {
                                         $totalKomponen = $this->countKomponenValue($rbenefit->komponenupahbenefitemp,$rpeg->idpelamar);
                                         // echo $totalKomponen.'*'.$rbenefit->persenbenefitemp;
                                         $nilaiBenefit = $totalKomponen*($rbenefit->persenbenefitemp/100);
+                                         // echo $nilaibenefit;
+                                        $nilaiBenefit = $this->max_plafon_benefit($rb->idbenefit,$nilaiBenefit,'employee');
 
                                         if($rbenefit->kenapajakemp=='YA')
                                         {
@@ -5297,6 +5308,44 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
    function tesitunglembur()
    {
         // $totallembur = 's';
+   }
+
+   function max_plafon_benefit($idbenefit,$amount,$type)
+   {
+        $q = $this->db->get_where('komponenbenefit',array('idbenefit'=>$idbenefit))->row();
+        
+        if($type=='employee')
+        {
+
+            if($q->maxplafonemp!=null && intval($q->maxplafonemp) != 0)
+            {
+               // echo $amount.'>'.$q->maxplafonemp;
+
+                if($amount>$q->maxplafonemp)
+                {
+
+                    return $q->maxplafonemp;
+                } else {
+                    return $amount;
+                }
+            } else {
+                return $amount;
+            }
+        } else {    
+            //company
+            if($q->maxplafoncmp!=null && intval($q->maxplafoncmp) != 0)
+            {
+                if($amount>$q->maxplafoncmp)
+                {
+                    return $q->maxplafoncmp;
+                } else {
+                    return $amount;
+                }
+            } else {
+                return $amount;
+            }
+        }
+
    }
 
 }

@@ -16,7 +16,7 @@ class m_configbenefit extends CI_Model {
     }
 
     function selectField() {
-        return "idbenefit,a.idcompany,b.companyname,nip,kodebenefit,namabenefit,a.startdate,a.enddate,a.display,a.userin,a.usermod,a.datein,a.datemod,jenisnilaibenefitcmp,pembagibenefitcmp,angkatetapbenefitcmp,persenbenefitcmp,kenapajakcmp,fungsipajakcmp,hitungpajakcmp,ditanggungperusahaan,jenisnilaibenefitemp,pembagibenefitemp,angkatetapbenefitemp,persenbenefitemp,kenapajakemp,fungsipajakemp,hitungpajakemp,ditanggungkaryawan";
+        return "idbenefit,a.idcompany,b.companyname,nip,kodebenefit,namabenefit,a.startdate,a.enddate,a.display,a.userin,a.usermod,a.datein,a.datemod,jenisnilaibenefitcmp,pembagibenefitcmp,angkatetapbenefitcmp,persenbenefitcmp,kenapajakcmp,fungsipajakcmp,hitungpajakcmp,ditanggungperusahaan,jenisnilaibenefitemp,pembagibenefitemp,angkatetapbenefitemp,persenbenefitemp,kenapajakemp,fungsipajakemp,hitungpajakemp,ditanggungkaryawan,maxplafoncmp,maxplafonemp";
     }
     
     function fieldCek()
@@ -56,6 +56,8 @@ class m_configbenefit extends CI_Model {
             // "idconfigdasarupahtt"  => $this->m_data->getID('configdasarupahtt', 'dasarupahtt', 'idconfigdasarupahtt', $this->input->post('dasarupahtt')),
             "namabenefit"  => $this->input->post('namabenefit'),
             "kodebenefit"  => $this->input->post('kodebenefit'),
+            "maxplafoncmp"  => $this->input->post('maxplafoncmp'),
+            "maxplafonemp"  => $this->input->post('maxplafonemp')
             // "kenapajak"  => $this->input->post('kenapajak'),
             // "fungsipajak"  => $this->input->post('fungsipajak'),
             // "hitungpajak"  => $this->input->post('hitungpajak'),

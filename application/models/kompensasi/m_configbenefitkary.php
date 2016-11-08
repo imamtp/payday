@@ -16,7 +16,7 @@ class m_configbenefitkary extends CI_Model {
     }
 
     function selectField() {
-        return "idbenefit,a.idcompany,b.companyname,nip,kodebenefit,namabenefit,a.startdate,a.enddate,a.display,a.userin,a.usermod,a.datein,a.datemod,jenisnilaibenefitcmp,pembagibenefitcmp,angkatetapbenefitcmp,persenbenefitcmp,kenapajakcmp,fungsipajakcmp,hitungpajakcmp,ditanggungperusahaan,jenisnilaibenefitemp,pembagibenefitemp,angkatetapbenefitemp,persenbenefitemp,kenapajakemp,fungsipajakemp,hitungpajakemp,ditanggungkaryawan";
+        return "idbenefit,a.idcompany,b.companyname,nip,kodebenefit,namabenefit,a.startdate,a.enddate,a.display,a.userin,a.usermod,a.datein,a.datemod,jenisnilaibenefitcmp,pembagibenefitcmp,angkatetapbenefitcmp,persenbenefitcmp,kenapajakcmp,fungsipajakcmp,hitungpajakcmp,ditanggungperusahaan,jenisnilaibenefitemp,pembagibenefitemp,angkatetapbenefitemp,persenbenefitemp,kenapajakemp,fungsipajakemp,hitungpajakemp,ditanggungkaryawan,maxplafoncmp,maxplafonemp";
     }
     
     function fieldCek()

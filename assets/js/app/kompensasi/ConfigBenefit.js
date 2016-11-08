@@ -216,6 +216,40 @@ var formConfigBenefit = Ext.create('Ext.form.Panel', {
                                             name:'hitungpajakcmp',
                                             id:'hitungpajakcmp'
                                             // allowBlank: false
+                                        },
+                                         {
+                                            xtype:'comboxYaTidak',
+                                            allowBlank: false,
+                                            fieldLabel: 'Maksimum Plafon',
+                                            id:'maxplafoncmp_cmb',
+                                            name:'maxplafoncmp_cmb',
+                                            listeners: {
+                                                select: {
+                                                    fn: function(combo, value) {
+                                                        if(combo.getValue()=='YA')
+                                                        {
+                                                           Ext.getCmp('maxplafoncmp').setDisabled(false);
+                                                        } else {
+                                                          Ext.getCmp('maxplafoncmp').setDisabled(true);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            xtype:'numberfield',
+                                            name:'maxplafoncmp',
+                                            id:'maxplafoncmp',
+                                            disabled:true,
+                                            fieldLabel:'Jumlah Max Plafon',
+                                            hideTrigger:true
+                                            // listeners: {
+                                            //     'render': function(c) {
+                                            //         c.getEl().on('keyup', function() {
+                                            //             this.setRawValue(renderNomor(this.getValue()));
+                                            //         }, c);
+                                            //     }
+                                            // }
                                         }
                                     ]
                             }
@@ -327,6 +361,40 @@ var formConfigBenefit = Ext.create('Ext.form.Panel', {
                                             name:'hitungpajakemp',
                                             id:'hitungpajakemp'
                                             // allowBlank: false
+                                        },
+                                         {
+                                            xtype:'comboxYaTidak',
+                                            allowBlank: false,
+                                            fieldLabel: 'Maksimum Plafon',
+                                            id:'maxplafonemp_cmb',
+                                            name:'maxplafonemp_cmb',
+                                            listeners: {
+                                                select: {
+                                                    fn: function(combo, value) {
+                                                        if(combo.getValue()=='YA')
+                                                        {
+                                                           Ext.getCmp('maxplafonemp').setDisabled(false);
+                                                        } else {
+                                                          Ext.getCmp('maxplafonemp').setDisabled(true);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            xtype:'numberfield',
+                                            name:'maxplafonemp',
+                                            id:'maxplafonemp',
+                                            disabled:true,
+                                            fieldLabel:'Jumlah Max Plafon',
+                                            hideTrigger:true
+                                            // listeners: {
+                                            //     'render': function(c) {
+                                            //         c.getEl().on('keyup', function() {
+                                            //             this.setRawValue(renderNomor(this.getValue()));
+                                            //         }, c);
+                                            //     }
+                                            // }
                                         }
                                     ]
                             }]
@@ -565,6 +633,24 @@ Ext.define('GridConfigBenefit', {
                                                             Ext.Msg.alert("Load failed", action.result.errorMessage);
                                                         }
                                                     });
+
+                                                    if(d.data.maxplafoncmp=='' || d.data.maxplafoncmp=='0.00')
+                                                    {
+                                                        Ext.getCmp('maxplafoncmp_cmb').setValue('TIDAK');     
+                                                        Ext.getCmp('maxplafoncmp').setDisabled(true); 
+                                                    } else {
+                                                        Ext.getCmp('maxplafoncmp_cmb').setValue('YA');
+                                                        Ext.getCmp('maxplafoncmp').setDisabled(false);
+                                                    }
+
+                                                    if(d.data.maxplafonemp=='' || d.data.maxplafonemp=='0.00')
+                                                    {
+                                                        Ext.getCmp('maxplafonemp_cmb').setValue('TIDAK');     
+                                                        Ext.getCmp('maxplafonemp').setDisabled(true); 
+                                                    } else {
+                                                        Ext.getCmp('maxplafonemp_cmb').setValue('YA');
+                                                        Ext.getCmp('maxplafonemp').setDisabled(false);
+                                                    }
                                                 },
                                                 failure: function(form, action) {
                                                     Ext.Msg.alert("Load failed", action.result.errorMessage);
