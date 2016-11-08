@@ -16,7 +16,7 @@ class m_jabatan extends CI_Model {
     }
 
     function selectField() {
-        return "a.idjabatan,a.idlevel,a.idcompany,a.kodejabatan,a.namajabatan,a.deskripsi,a.startdate,a.enddate,a.status,a.userin,a.datein,b.levelname,c.companycode,c.companyname";
+        return "a.idjabatan,a.idlevel,a.idcompany,a.kodejabatan,a.namajabatan,a.startdate,a.enddate,a.status,a.userin,a.datein,b.levelname,c.companycode,c.companyname,a.deskripsi";
     }
     
     function fieldCek()

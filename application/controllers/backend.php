@@ -116,9 +116,9 @@ class Backend extends MY_Controller {
                     $vas = explode(" as ", $vas);
                     if (count($vas) > 1) {
                         //pake alias
-                        $json .="$vas[1]: \"" . $r->$vas[1] . "\",";
+                        $json .="$vas[1]: \"" . rtrim($r->$vas[1]) . "\",";
                     } else {
-                        $json .="$v[1]: \"" . $r->$v[1] . "\",";
+                        $json .="$v[1]: \"" . rtrim($r->$v[1]) . "\",";
                     }
                     //                    $json .="$v[1]: \"" . $r->$v[1] . "\",";
                 } else {
@@ -126,7 +126,7 @@ class Backend extends MY_Controller {
                     $vas = explode(" as ", $value);
                     if (count($vas) > 1) {
                         //pake alias
-                        $json .="$vas[1]: \"" . $r->$vas[1] . "\",";
+                        $json .="$vas[1]: \"" . rtrim($r->$vas[1]) . "\",";
                     } else {
                         if ($value == 'conversionmonth' || $value == 'lastmonthfinanceyear') {
                             if ($r->$value != 0) {
@@ -135,7 +135,7 @@ class Backend extends MY_Controller {
                                 $json .="$value: \"" . null . "\",";
                             }
                         } else {
-                            $json .="$value: \"" . $r->$value . "\",";
+                            $json .="$value: \"" . rtrim($r->$value) . "\",";
                         }
                     }
                 }
@@ -174,6 +174,8 @@ class Backend extends MY_Controller {
 
 
             $json .="}}";
+
+            $json = str_replace(',}}', '}}', $json);
         } else {
             $json = json_encode(array('success' => false, 'message' => 'Data tidak detemukan'));
         }
