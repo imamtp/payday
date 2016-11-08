@@ -527,6 +527,7 @@ class kompensasi extends MY_Controller {
         //getweekdays
         // $numdayswork = $this->get_weekdays($startdate,$enddate);
         $numdayswork = countDaysMonth($startdate,$enddate)->days+1; //dihitung total dengan weekend
+        // $numdayswork = 17;
 
         // echo $startdateArr[0].'-'.$startdateArr[1].'-01';
         $numfulldayswork = $this->get_weekdays($startdateArr[0].'-'.$startdateArr[1].'-01',$enddate);
@@ -855,6 +856,7 @@ class kompensasi extends MY_Controller {
             $utPengurangPajak=0;
             $totalUT=0;
             foreach ($qUT->result() as $rUT) {
+
                 $data[$i]['upahtetap']['item'][] = array(
                                                     'namakomponen'=>$rUT->namakomponen,
                                                     'nilai'=>$rUT->nilai,
@@ -862,16 +864,34 @@ class kompensasi extends MY_Controller {
                                                     'fungsipajak'=>$rUT->fungsipajak
                                                 );
 
+                
+
+                if(isset($proporsionalDays))
+                {
+                    // echo $proporsionalDays;
+                    //proprate
+                    // $prorata = $rUT->nilai/$numdayswork;
+                    // $totalUT+=$prorata*$proporsionalDays;
+                    $nilaiUT = round(($rUT->nilai/$numdayswork)*$proporsionalDays,2);
+                    $totalUT+=$nilaiUT;
+                    // echo round(($rUT->nilai/$numdayswork)*$proporsionalDays,2).' ';
+                    // echo '('.$rUT->nilai.'/'.$numdayswork.'*'.$proporsionalDays.') ';
+                } else {
+                    $nilaiUT = $rUT->nilai;
+                    $totalUT+=$nilaiUT;
+                }
+
+
                 if($rUT->kenapajak=='YA')
                 {
                     if($rUT->fungsipajak=='Penambah')
                     {
-                        $utPenambahPajak+=$rUT->nilai;
-                        $penghasilanbruto += $rUT->nilai;
+                        $utPenambahPajak+=$nilaiUT;
+                        $penghasilanbruto += $nilaiUT;
                     } else if($rUT->fungsipajak=='Pengurang')
                         {
                             //pengurang
-                            $utPengurangPajak+=$rUT->nilai;
+                            $utPengurangPajak+=$nilaiUT;
                         } else {
                             //netral
                             // $utPengurangPajak+=$rUT->nilai;
@@ -882,18 +902,7 @@ class kompensasi extends MY_Controller {
                 } else {
                     // $penghasilannet += $rUT->nilai;
                 }
-
-                if(isset($proporsionalDays))
-                {
-                    // echo $proporsionalDays;
-                    //proprate
-                    $prorata = $rUT->nilai/$numdayswork;
-                    $totalUT+=$prorata*$proporsionalDays;
-                } else {
-                    $totalUT+=$rUT->nilai;
-                }
-               
-
+ 
                  //
 
                 if($commit=='true')
@@ -1617,6 +1626,7 @@ class kompensasi extends MY_Controller {
                 // echo '</pre>';
                 // exit;
             } else {
+                // echo $penghasilanbruto;
                 $data[$i]['penerimaanbruto'] = $penghasilanbruto;
                 $data[$i]['tunjanganpajak'] = 0;
             }
