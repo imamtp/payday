@@ -612,7 +612,9 @@ class kompensasi extends MY_Controller {
                 continue;
             }
 
-            $penghasilanbruto = 0; //Penghasilan Bruto hanya memasukkan komponen yang dikategorikan masuk pajak
+            $penghasilanbruto = 0; //Penghasilan Bruto hanya memasukkan komponen yang dikategorikan masuk pajak (total)
+            $penghasilanbrutoT = 0; //penghasilan bruto teratur
+            $penghasilanbrutoTT = 0; //penghasilan bruto tidak tetap
             
             $data[$i]['idpayroll'] = $idpayroll;
             $data[$i]['idpelamar'] = $rpeg->idpelamar;
@@ -888,6 +890,7 @@ class kompensasi extends MY_Controller {
                     {
                         $utPenambahPajak+=$nilaiUT;
                         $penghasilanbruto += $nilaiUT;
+                        $penghasilanbrutoT += $nilaiUT;
                     } else if($rUT->fungsipajak=='Pengurang')
                         {
                             //pengurang
@@ -959,6 +962,7 @@ class kompensasi extends MY_Controller {
                         {
                             $utTPenambahPajak+=$nilai;
                             $penghasilanbruto+=$nilai;
+                            $penghasilanbrutoTT+=$nilai;
                         } else if($rUTT->fungsipajak=='Pengurang')
                         {
                             $utTPengurangPajak+=$nilai;
@@ -998,6 +1002,7 @@ class kompensasi extends MY_Controller {
                                     {
                                         $utTPenambahPajak+=$nilai;
                                         $penghasilanbruto+=$nilai;
+                                        $penghasilanbrutoTT+$nilai;
                                     } else if($rUTT_upload->fungsipajak=='Pengurang')
                                     {
                                         $utTPengurangPajak+=$nilai;
@@ -1067,6 +1072,7 @@ class kompensasi extends MY_Controller {
                                 {
                                     $utTPenambahPajak+=$nilai;
                                     $penghasilanbruto+=$nilai;
+                                    $penghasilanbrutoTT+=$nilai;
                                 } else if($rUTT_upload->fungsipajak=='Pengurang')
                                 {
                                     $utTPengurangPajak+=$nilai;
@@ -1145,6 +1151,7 @@ class kompensasi extends MY_Controller {
                             {
                                 $utTTahunPenambahPajak+=$nilai;
                                 $penghasilanbruto+=$nilai;
+                                $penghasilanbrutoTT+=$nilai;
                             } else if($rUTTTahun->fungsipajak=='Pengurang')
                             {
                                 $utTTahunPengurangPajak+=$nilai;
@@ -1268,6 +1275,7 @@ class kompensasi extends MY_Controller {
                                 {
                                     // $benefitCmpBruto += $nilaiBenefit;  
                                     $penghasilanbruto+= $nilaiBenefit;     
+                                    $penghasilanbrutoT+= $nilaiBenefit;
                                 } else if($rbenefit->fungsipajakcmp=='Pengurang')
                                     {
                                         $benefitPengurangPajak += $nilaiBenefit;  
@@ -1296,7 +1304,8 @@ class kompensasi extends MY_Controller {
                                     if($rbenefit->fungsipajakcmp=='Penambah')
                                     {
                                         // $benefitCmpBruto += $nilaiBenefit;  
-                                        $penghasilanbruto+= $nilaiBenefit;     
+                                        $penghasilanbruto+= $nilaiBenefit;    
+                                        $penghasilanbrutoT+= $nilaiBenefit; 
                                     } else if($rbenefit->fungsipajakcmp=='Pengurang')
                                         {
                                             $benefitPengurangPajak += $nilaiBenefit;  
@@ -1321,7 +1330,8 @@ class kompensasi extends MY_Controller {
                                             if($rbenefit->fungsipajakcmp=='Penambah')
                                             {
                                                 // $benefitCmpBruto += $nilaiBenefit;  
-                                                $penghasilanbruto+= $nilaiBenefit;     
+                                                $penghasilanbruto+= $nilaiBenefit;    
+                                                $penghasilanbrutoT+= $nilaiBenefit; 
                                             } else if($rbenefit->fungsipajakcmp=='Pengurang')
                                                 {
                                                     $benefitPengurangPajak += $nilaiBenefit;  
@@ -1371,7 +1381,8 @@ class kompensasi extends MY_Controller {
                             {
                                  if($rbenefit->fungsipajakcmp=='Penambah')
                                     {
-                                        $penghasilanbruto+= $nilaiBenefit;     
+                                        $penghasilanbruto+= $nilaiBenefit;    
+                                        $penghasilanbrutoT+= $nilaiBenefit; 
                                     } else if($rbenefit->fungsipajakcmp=='Pengurang')
                                         {
                                             $benefitPengurangPajak += $nilaiBenefit;  
@@ -1397,6 +1408,7 @@ class kompensasi extends MY_Controller {
                                    if($rbenefit->fungsipajakcmp=='Penambah')
                                     {
                                         $penghasilanbruto+= $nilaiBenefit;     
+                                        $penghasilanbrutoT+= $nilaiBenefit;
                                     } else if($rbenefit->fungsipajakcmp=='Pengurang')
                                         {
                                             $benefitPengurangPajak += $nilaiBenefit;  
@@ -1408,6 +1420,7 @@ class kompensasi extends MY_Controller {
                                 $benefitEmp += $nilaiBenefit;
                             } else if($rbenefit->jenisnilaibenefitemp=='Persentase')
                                 {
+                                    // var_dump($rbenefit);
                                         // $k = explode(',', $rbenefit->komponenupahbenefitemp);
 
                                         $totalKomponen = $this->countKomponenValue($rbenefit->komponenupahbenefitemp,$rpeg->idpelamar);
@@ -1419,15 +1432,17 @@ class kompensasi extends MY_Controller {
                                         if($rbenefit->kenapajakemp=='YA')
                                         {
                                             // $benefitEmpBruto += $nilaiBenefit;
-                                            // echo $penghasilanbruto.' += '.$nilaiBenefit.'<br>'; 
+                                            // echo $penghasilanbruto.' += '.$nilaiBenefit.' '.$rbenefit->fungsipajakemp.' <br>'; 
                                             // $penghasilanbruto+=$benefitEmpBruto;
 
-                                            if($rbenefit->fungsipajakcmp=='Penambah')
+                                            if($rbenefit->fungsipajakemp=='Penambah')
                                             {
                                                 $penghasilanbruto+= $nilaiBenefit;     
-                                            } else if($rbenefit->fungsipajakcmp=='Pengurang')
+                                                $penghasilanbrutoT+= $nilaiBenefit;
+                                            } else if($rbenefit->fungsipajakemp=='Pengurang')
                                                 {
                                                     $benefitPengurangPajak += $nilaiBenefit;  
+                                                    // echo $benefitPengurangPajak.' ';
                                                 } else {
                                                         //netral
                                                     }      
@@ -1596,7 +1611,7 @@ class kompensasi extends MY_Controller {
             // $totalpendapatan =  $data[$i]['totalUT']+$data[$i]['totalUTT']+$obj->totallembur+$obj->benefitCmp;
             // $data[$i]['totalpendapatan'] = $totalpendapatan;
             // $obj->totalpendapatan = $totalpendapatan;
-//            echo $penghasilanbruto;
+           // echo $penghasilanbruto;
 
             $ntahun = $data[$i]['masakerja'] <=12 ? $data[$i]['masakerja'] : 12;
 
@@ -1641,10 +1656,27 @@ class kompensasi extends MY_Controller {
                 $data[$i]['penerimaanbruto'] = $penghasilanbruto;
                 $data[$i]['tunjanganpajak'] = 0;
             }
+
+            $obj->penghasilanbrutoT = $penghasilanbrutoT;
+            $obj->penghasilanbrutoTT = $penghasilanbrutoTT;
             $obj->penerimaanbruto =  $data[$i]['penerimaanbruto'];
             $obj->tunjanganpajak = $data[$i]['tunjanganpajak'];
 
             // $biayajabatan = ceil($data[$i]['penerimaanbruto']*0.05);
+            $obj->biayajabatanT = $penghasilanbrutoT*0.05;
+            
+            if(500000<=$obj->biayajabatanT)
+            {
+                $obj->biayajabatanTT = 0;
+            } else if((($obj->totalUTT*0.05)+$obj->biayajabatanT) > 500000)
+                {
+                    $obj->biayajabatanTT = 500000-$obj->biayajabatanT;
+                } else {
+                        $obj->biayajabatanTT = $obj->totalUTT*0.05;
+                }   
+
+            // $obj->biayajabatanTT = $penghasilanbrutoTT*0.05; //biaya jabatan tidak teratur
+
             $biayajabatan = $data[$i]['penerimaanbruto']*0.05;
 
                         $data[$i]['numdayswork'] = $numdayswork;
@@ -1663,9 +1695,16 @@ class kompensasi extends MY_Controller {
                         $obj->biayajabatan = $data[$i]['biayajabatan'];
                         // echo 'biayajabatan:'+$obj->biayajabatan;
                         // exit;
+                        $totalPengurangPajak = ($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
 
-                        $penghasilannet = $data[$i]['penerimaanbruto']-($benefitEmp+$data[$i]['biayajabatan'])-($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
-                        
+                        // echo $penghasilanbrutoT.'-'.$obj->biayajabatanT.'-'.$totalPengurangPajak;
+                        $obj->penerimaannetT = $penghasilanbrutoT-$obj->biayajabatanT-$totalPengurangPajak; //neto sebulan teratur
+                        $obj->penerimaannetTT = $penghasilanTT-$obj->biayajabatanTT; //neto sebulan tidak teratur
+                        // $obj->penghasilannetTT = 
+                        $penghasilannet = $data[$i]['penerimaanbruto']-($data[$i]['biayajabatan'])-$totalPengurangPajak;
+                         // $penghasilannet = $pengha-($data[$i]['biayajabatan'])-($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
+                        // echo $benefitPengurangPajak;
+
                         // echo $obj->totalUTT;                        
                         $totalpendapatan =  $data[$i]['totalUT']+$obj->totalUTT+$obj->totallembur+$obj->benefitCmp+ $data[$i]['tunjanganpajak'];
                         // echo $data[$i]['totalUT'].'+'.$data[$i]['totalUTT'].'+'.$obj->totallembur.'+'.$obj->benefitCmp.'+'.$data[$i]['tunjanganpajak'];
@@ -1682,14 +1721,19 @@ class kompensasi extends MY_Controller {
 
                         // $data[$i]['penerimaanbruto'] = $penghasilanbruto;
                         
-
-                        $data[$i]['penerimaannet'] = $penghasilannet-$penghasilanTT;
+                        // echo $penghasilannet.'-'.$penghasilanTT;
+                        // $data[$i]['penerimaannet'] = $penghasilannet-$penghasilanTT;
+                        $data[$i]['penerimaannet'] = $penghasilannet;
                         $obj->penerimaannet = $data[$i]['penerimaannet'];
                         
-                        $obj->penerimaannetTT = $penghasilanTT;
+                        // $obj->penerimaannetTT = $penghasilanTT;
 //                        echo '('.$penghasilannet.'*'.$data[$i]['masapajaksetahun'].')+'.$penghasilanTT;
 //                        $data[$i]['netosetahun'] = ($penghasilannet*$data[$i]['masapajaksetahun'])+$penghasilanTT;
-                        $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun'])+$penghasilanTT;
+                        // $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun'])+$penghasilanTT;
+                        // echo $data[$i]['masapajaksetahun'];
+                        // $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun']);
+                        // echo $obj->penerimaannetT.'*'.$data[$i]['masapajaksetahun'].'+'.$obj->penerimaannetTT;
+                        $data[$i]['netosetahun'] = ($obj->penerimaannetT*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT;
                         $obj->netosetahun = $data[$i]['netosetahun'];
                         
                         // echo  $netsetahun.'<'.$nilaiptkp;
@@ -1698,7 +1742,9 @@ class kompensasi extends MY_Controller {
                         {
                             $pkpsetahun = 0;
                         } else {  
-                            $pkpsetahun = round(($data[$i]['netosetahun']-$nilaiptkp),-3);  
+                            // echo $data[$i]['netosetahun']-$nilaiptkp.' - '.round(($data[$i]['netosetahun']-$nilaiptkp),-3,PHP_ROUND_HALF_DOWN);
+                            // $pkpsetahun = substr(round(($data[$i]['netosetahun']-$nilaiptkp),-4), 0, -3) . '000';
+                            $pkpsetahun = substr(($data[$i]['netosetahun']-$nilaiptkp), 0, -3) . '000';
                             // $pkpsetahun = ceil($data[$i]['netosetahun']-$nilaiptkp);
                             // $pkpsetahun = substr_replace($pkpsetahun, '000', -3);
                         }
@@ -1707,7 +1753,17 @@ class kompensasi extends MY_Controller {
                         $data[$i]['pkpsetahun'] = $pkpsetahun;
                         $obj->pkpsetahun = $data[$i]['pkpsetahun'];
                         
-                        $obj->pkpsetahunteratur =  $obj->pkpsetahun-$penghasilanTT;
+                        // $obj->pkpsetahunteratur =  $obj->pkpsetahun-$penghasilanTT;
+                        $num = intval(substr(($obj->pkpsetahun-$obj->penerimaannetTT), -3));
+                        if($num>=500)
+                        {
+                            $plus = 1000;
+                        } else {
+                            $plus = 0;
+                        }
+
+                        $obj->pkpsetahunteratur = substr(($obj->pkpsetahun-$obj->penerimaannetTT), 0, -3) . '000';
+                        $obj->pkpsetahunteratur +=$plus;
              
                         ///////////// pph5%tahun
                         $pph5tahun = $pkpsetahun <= 50000000 ? $pkpsetahun*0.05 : 50000000*0.05;
@@ -1773,34 +1829,41 @@ class kompensasi extends MY_Controller {
 //                        $obj->pphsebulan = $data[$i]['pphsebulan'];
                         
                         $obj->pphsebulanteratur = $this->pphteratur($obj->pkpsetahunteratur,$data,$i,$obj->masapajaksetahun);
-                        $obj->pphsettahunteratur =  round($obj->pphsebulanteratur*$obj->masapajaksetahun,-2);
+                        $obj->pphsettahunteratur =  round($obj->pphsebulanteratur*$obj->masapajaksetahun,-1);
                        // echo $pphsetsebulan .' ';
 // echo $obj->pphsettahun-$obj->pphsettahunteratur;
-                        if($obj->pphsettahun>$obj->pphsettahunteratur)
-                        {
-                            $obj->pphsebulantakteratur = $obj->pphsettahunteratur-$obj->pphsettahunteratur;
-                        } else {
-                            $obj->pphsebulantakteratur = $obj->pphsettahun-$obj->pphsettahun;
-                        }
+                        // if($obj->pphsettahun>$obj->pphsettahunteratur)
+                        // {
+                        //     $obj->pphsebulantakteratur = $obj->pphsettahunteratur-$obj->pphsettahunteratur;
+                        // } else {
+                        //     $obj->pphsebulantakteratur = $obj->pphsettahun-$obj->pphsettahun;
+                        // }
                         // echo $obj->pphsebulantakteratur;
+                        // if($data[$i]['punyanpwp']==1)
+                        // {
+                            $obj->pphsebulantakteratur = $obj->pphsettahun - $obj->pphsettahunteratur;
+                        // }
                         
                         $data[$i]['pphsebulan'] = $obj->pphsebulanteratur+$obj->pphsebulantakteratur;
                         $obj->pphsebulan = $data[$i]['pphsebulan']<0 ? 0 :  $data[$i]['pphsebulan'];
                                 
                         if($data[$i]['masapajaksetahun']<12)
                         {
-                            $getTglTerminasiArr = explode('-', $this->getTglTerminasi($rpeg->idpelamar));
+                            // $getTglTerminasiArr = explode('-', $this->getTglTerminasi($rpeg->idpelamar));
                             // echo intval($startdateArr[0]).' == '.$getTglTerminasiArr;
-                            if(intval($startdateArr[0]) == intval($getTglTerminasiArr[0]))
-                            {
-                                $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
-                            } else {
-                                $obj->pphterminasi = 0;
-                            }
-                            
+                            // if(intval($startdateArr[0]) == intval($getTglTerminasiArr[0]))
+                            // {
+                            //     $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
+                            // } else {
+                            //     $obj->pphterminasi = 0;
+                            // }
+                            // $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
+                            $obj->pphterminasi = $obj->pphsebulanteratur+$obj->pphsebulantakteratur;
                         } else {
                             $obj->pphterminasi = 0;
                         }
+
+                       
 
                         $data[$i]['tunjanganpajaknew'] = $data[$i]['pphsebulan'];
 
@@ -1846,7 +1909,7 @@ class kompensasi extends MY_Controller {
                             // exit;
                         }
 
-                        $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],$data[$i]['pphsebulan'],$enddateArr[0]);
+                        $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
                         $obj->pajakterbayar = $obj->pajakjantonov-$obj->pphterminasi;
                         $obj->pajakterutangdes = $obj->pphsettahun-$obj->pajakterbayar;
 
@@ -1872,7 +1935,8 @@ class kompensasi extends MY_Controller {
                         if($data[$i]['masapajaksetahun']<12 && $obj->pphterminasi>0)
                         {
                             // echo $obj->pphsebulan.'+'.$obj->pphterminasi;
-                            $obj->selisihpph = abs($obj->pphsebulan)+$obj->pphterminasi;
+                            // $obj->selisihpph = abs($obj->pphsebulan)+$obj->pphterminasi;
+                            $obj->selisihpph = $obj->pphterminasi-$obj->pajakterutangdes;
                         } else {
                             $obj->selisihpph = 0;
                         }
