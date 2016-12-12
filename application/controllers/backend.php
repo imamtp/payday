@@ -1017,9 +1017,58 @@ class Backend extends MY_Controller {
 
         $query = $this->db->query($this->datamodel->query() . " $w");
 
-        $results = $query->num_rows();
-        echo '{success:true,numrow:' . $query->num_rows() . ',results:' . $results .
-        ',rows:' . json_encode($arr) . '}';
+        if($table=='riwayatgaji')
+        {
+            //ambil summary buat ditaro di footer
+            $sql = "select sum(totalut) as footerUT,sum(a.totalutt) as footerUTT,sum(a.totallembur) as footerLembur,
+                    sum(benefitCmpBruto+benefitCmpNet) as footerBenefitCmp,sum(benefitEmpBruto+benefitEmpNet) as footerBenefitEmp,
+                    sum(nilaiPotongan) as footerPotongan,sum(totalpendapatan) as footerPendapatan,sum(penerimaanbruto) as footerBruto,
+                    sum(tunjanganpajak) as footerPajak, sum(takehomepay) as footerTHP, sum(pphsebulan) as footerPPH
+                    from payrolldata a
+                    join pelamar b ON a.idpelamar = b.idpelamar    
+                    left join (select idpayroll,idpelamar,sum(nilai) as totalutt from upahhistory
+                        where jenisupah = 'tidaktetap'
+                        GROUP BY idpayroll,idpelamar) h ON a.idpayroll = h.idpayroll and a.idpelamar = h.idpelamar  
+                    WHERE TRUE AND b.idcompany = ".$this->input->post('idcompany')." AND ((a.startdate>='".backdate2_reverse($this->input->post('startdate'))."' and a.enddate<='".backdate2_reverse($this->input->post('enddate'))."'))";
+            $rSummary = $this->db->query($sql);
+
+            if($rSummary->num_rows()>0)
+            {
+                $rSummary = $rSummary->row();
+
+                     $summary = array(
+                            'footerUT'=>number_format($rSummary->footerut),
+                            'footerUTT'=>number_format($rSummary->footerutt),
+                            'footerLembur'=>number_format($rSummary->footerlembur),
+                            'footerBenefitCmp'=>number_format($rSummary->footerbenefitcmp),
+                            'footerBenefitEmp'=>number_format($rSummary->footerbenefitemp),
+                            'footerPotongan'=>number_format($rSummary->footerpotongan),
+                            'footerPendapatan'=>number_format($rSummary->footerpendapatan),
+                            'footerBruto'=>number_format($rSummary->footerbruto),
+                            'footerPajak'=>number_format($rSummary->footerpajak),
+                            'footerTHP'=>number_format($rSummary->footerthp),
+                            'footerPPH'=>number_format($rSummary->footerpph)
+                        );
+
+
+                $results = $query->num_rows();
+            echo '{success:true,numrow:' . $query->num_rows() . ',results:' . $results .
+            ',rows:' . json_encode($arr) . ',summary:'.json_encode($summary).'}';
+            } else {
+                 $results = $query->num_rows();
+                echo '{success:true,numrow:' . $query->num_rows() . ',results:' . $results .
+                ',rows:' . json_encode($arr) .'}';
+            }
+
+        
+            
+        } else {
+            $results = $query->num_rows();
+            echo '{success:true,numrow:' . $query->num_rows() . ',results:' . $results .
+            ',rows:' . json_encode($arr) .'}';
+        }
+
+        
     }
 
     public function exportxl($table, $tahun, $bulan, $kodebank) {

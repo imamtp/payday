@@ -23,7 +23,13 @@ var storeGridProsesGaji = Ext.create('Ext.data.Store', {
     sorters: [{
             property: 'menu_name',
             direction: 'DESC'
-        }]
+    }],
+    listeners: {
+        load: function(store, records, success) {
+            // console.log(success);
+        }
+    }
+
 });
 
 // storeGridProsesGaji.on('beforeload',function(store, operation,eOpts){
@@ -119,7 +125,7 @@ Ext.define('GridProsesGaji', {
         {header: 'PPH Bulan Ini', dataIndex: 'pphsebulan', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Take Home Pay', dataIndex: 'takehomepay', minWidth: 150, xtype:'numbercolumn',align:'right'}
     ]
-    , dockedItems: [
+    , dockedItems: [      
         {
             xtype: 'toolbar',
             dock: 'top',
@@ -320,7 +326,30 @@ Ext.define('GridProsesGaji', {
                                                                         'enddate': Ext.getCmp('enddate_ProsesGaji').getSubmitValue(),
                                                                       };
                                                                   });
-                                                        storeGridProsesGaji.load();
+                                                        storeGridProsesGaji.load({
+                                                                // params:{'id':d.data.category_id},
+                                                                scope: this,
+                                                                callback: function(records, operation, success) {
+                                                                    var resp = Ext.decode(operation.response.responseText);
+                                                                    // console.log(resp.summary);
+                                                                    var footer = resp.summary;
+                                                                    // console.log(footer);
+                                                                    Ext.getCmp('footerUT').setValue(footer.footerUT);
+                                                                    Ext.getCmp('footerUTT').setValue(footer.footerUTT);
+                                                                    Ext.getCmp('footerLembur').setValue(footer.footerLembur);
+                                                                    Ext.getCmp('footerBenefitCmp').setValue(footer.footerBenefitCmp);
+                                                                    Ext.getCmp('footerBenefitEmp').setValue(footer.footerBenefitEmp);
+                                                                    Ext.getCmp('footerPotongan').setValue(footer.footerPotongan);
+                                                                    Ext.getCmp('footerPendapatan').setValue(footer.footerPendapatan);
+                                                                    Ext.getCmp('footerBruto').setValue(footer.footerBruto);
+                                                                    Ext.getCmp('footerPajak').setValue(footer.footerPajak);
+                                                                    Ext.getCmp('footerTHP').setValue(footer.footerTHP);
+                                                                    Ext.getCmp('footerPPH').setValue(footer.footerPPH);
+                                                                }
+                                                            });
+
+                                                        var jsonData = Ext.encode(Ext.pluck(storeGridProsesGaji, 'data'));
+                                                        console.log(jsonData);
                                                     }
                                             } else {
                                                  Ext.Msg.alert("Info", d.message);
@@ -508,7 +537,120 @@ Ext.define('GridProsesGaji', {
                 }
 
             ]
-        }, {
+        },
+        {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerPPH',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total PPH'
+                },
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerTHP',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Take Home Pay'
+                }
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype:'textfield',
+                    id:'footerPendapatan',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Pendapatan'
+                },
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerBruto',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Pendapatan Bruto'
+                },
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerPajak',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Tunjangan Pajak'
+                }
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype:'textfield',
+                    id:'footerUT',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Upah Tetap'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerUTT',
+                    labelWidth:150,
+                    fieldStyle:'text-align:right;',
+                    readOnly:true,
+                    fieldLabel:'Total Upah TT'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerLembur',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Lembur'
+                }
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [                
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerBenefitCmp',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Benefit Perusahaan'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerBenefitEmp',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Benefit Karyawan'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerPotongan',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Potongan'
+                },
+            ]
+        },
+         {
             xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
             store: storeGridProsesGaji, // same store GridPanel is using
             dock: 'bottom',

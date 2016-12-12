@@ -8,7 +8,7 @@ var storeGridRiwayatGaji = Ext.create('Ext.data.Store', {
     pageSize: 1000,
     model: 'GridRiwayatGajiModel',
     //remoteSort: true,
-    // autoload:true,
+    autoload:false,
     proxy: {
         type: 'ajax',
         url: SITE_URL + 'backend/ext_get_all/riwayatgaji/kompensasi',
@@ -22,7 +22,17 @@ var storeGridRiwayatGaji = Ext.create('Ext.data.Store', {
     sorters: [{
             property: 'menu_name',
             direction: 'DESC'
-        }]
+        }],
+    listeners: {
+        load: {
+            fn: function(store, operation,eOpts){
+                console.log(eOpts);
+            }
+        },
+        exception: function(misc) {
+            alert("Holy cow, we're getting an exception!");
+        }
+    }
 });
 
 storeGridRiwayatGaji.on('beforeload',function(store, operation,eOpts){
@@ -34,6 +44,28 @@ storeGridRiwayatGaji.on('beforeload',function(store, operation,eOpts){
                     'enddate': Ext.getCmp('enddate_RiwayatGaji').getSubmitValue(),
                   };
               });
+
+// storeGridRiwayatGaji.on('load',function(store, operation,eOpts){
+// console.log(store);
+                // if(!operation)
+                //     {
+                //         var resp = Ext.decode(operation.response.responseText);
+                //         // console.log(resp.summary);
+                //         var footerRiwayat = resp.summary;
+                //         console.log(footerRiwayat);
+                //     }
+                //     Ext.getCmp('footerRiwayatUT').setValue(footerRiwayat.footerRiwayatUT);
+                //     Ext.getCmp('footerRiwayatUTT').setValue(footerRiwayat.footerRiwayatUTT);
+                //     Ext.getCmp('footerRiwayatLembur').setValue(footerRiwayat.footerRiwayatLembur);
+                //     Ext.getCmp('footerRiwayatBenefitCmp').setValue(footerRiwayat.footerRiwayatBenefitCmp);
+                //     Ext.getCmp('footerRiwayatBenefitEmp').setValue(footerRiwayat.footerRiwayatBenefitEmp);
+                //     Ext.getCmp('footerRiwayatPotongan').setValue(footerRiwayat.footerRiwayatPotongan);
+                //     Ext.getCmp('footerRiwayatPendapatan').setValue(footerRiwayat.footerRiwayatPendapatan);
+                //     Ext.getCmp('footerRiwayatBruto').setValue(footerRiwayat.footerRiwayatBruto);
+                //     Ext.getCmp('footerRiwayatPajak').setValue(footerRiwayat.footerRiwayatPajak);
+                //     Ext.getCmp('footerRiwayatTHP').setValue(footerRiwayat.footerRiwayatTHP);
+                //     Ext.getCmp('footerRiwayatPPH').setValue(footerRiwayat.footerRiwayatPPH);
+              // });
 
 Ext.define('MY.searchGridRiwayatGaji', {
     extend: 'Ext.ux.form.SearchField',
@@ -310,7 +342,27 @@ Ext.define('GridRiwayatGaji', {
                                                             'enddate': Ext.getCmp('enddate_RiwayatGaji').getSubmitValue(),
                                                           };
                                                       });
-                                            storeGridRiwayatGaji.load();
+                                            storeGridRiwayatGaji.load({
+                                                                // params:{'id':d.data.category_id},
+                                                                scope: this,
+                                                                callback: function(records, operation, success) {
+                                                                    var resp = Ext.decode(operation.response.responseText);
+                                                                    // console.log(resp.summary);
+                                                                    var footerRiwayat = resp.summary;
+                                                                    // console.log(footer);
+                                                                        Ext.getCmp('footerRiwayatUT').setValue(footerRiwayat.footerUT);
+                                                                        Ext.getCmp('footerRiwayatUTT').setValue(footerRiwayat.footerUTT);
+                                                                        Ext.getCmp('footerRiwayatLembur').setValue(footerRiwayat.footerLembur);
+                                                                        Ext.getCmp('footerRiwayatBenefitCmp').setValue(footerRiwayat.footerBenefitCmp);
+                                                                        Ext.getCmp('footerRiwayatBenefitEmp').setValue(footerRiwayat.footerBenefitEmp);
+                                                                        Ext.getCmp('footerRiwayatPotongan').setValue(footerRiwayat.footerPotongan);
+                                                                        Ext.getCmp('footerRiwayatPendapatan').setValue(footerRiwayat.footerPendapatan);
+                                                                        Ext.getCmp('footerRiwayatBruto').setValue(footerRiwayat.footerBruto);
+                                                                        Ext.getCmp('footerRiwayatPajak').setValue(footerRiwayat.footerPajak);
+                                                                        Ext.getCmp('footerRiwayatTHP').setValue(footerRiwayat.footerTHP);
+                                                                        Ext.getCmp('footerRiwayatPPH').setValue(footerRiwayat.footerPPH);
+                                                                }
+                                                            });
                                         }
                                     
                                 }
@@ -564,6 +616,118 @@ Ext.define('GridRiwayatGaji', {
                     text: 'Left Button'
                 }
 
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerRiwayatPPH',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total PPH'
+                },
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerRiwayatTHP',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Take Home Pay'
+                }
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype:'textfield',
+                    id:'footerRiwayatPendapatan',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Pendapatan'
+                },
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerRiwayatBruto',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Pendapatan Bruto'
+                },
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerRiwayatPajak',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Tunjangan Pajak'
+                }
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [
+                {
+                    xtype:'textfield',
+                    id:'footerRiwayatUT',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Upah Tetap'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerRiwayatUTT',
+                    labelWidth:150,
+                    fieldStyle:'text-align:right;',
+                    readOnly:true,
+                    fieldLabel:'Total Upah TT'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerRiwayatLembur',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Lembur'
+                }
+            ]
+        },
+          {
+            xtype: 'toolbar',
+            dock: 'bottom',
+            items: [                
+                {
+                    xtype:'textfield',
+                    fieldStyle:'text-align:right;',
+                    id:'footerRiwayatBenefitCmp',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Benefit Perusahaan'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerRiwayatBenefitEmp',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Benefit Karyawan'
+                },
+                {
+                    xtype:'textfield',
+                    id:'footerRiwayatPotongan',
+                    fieldStyle:'text-align:right;',
+                    labelWidth:150,
+                    readOnly:true,
+                    fieldLabel:'Total Potongan'
+                },
             ]
         }, {
             xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',

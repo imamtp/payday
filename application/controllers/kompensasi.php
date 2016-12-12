@@ -15,6 +15,25 @@ class kompensasi extends MY_Controller {
         return substr(number_format($num, $precision+1, '.', ''), 0, -1);
     }
 
+    function cek_terminasi($startdate,$enddate,$terminate_date)
+    {
+        $paymentDate=date('Y-m-d', strtotime($terminate_date));
+        //echo $paymentDate; // echos today! 
+        $contractDateBegin = date('Y-m-d', strtotime($startdate));
+        $contractDateEnd = date('Y-m-d', strtotime($enddate));
+
+        // echo '('.$paymentDate.' > '.$contractDateBegin.') && ('.$paymentDate.' < '.$contractDateEnd.')';
+
+        if (($paymentDate >= $contractDateBegin) && ($paymentDate <= $contractDateEnd))
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+    }
+
     function getdasarkomponenupah()
     {
         $idkomponenupah = $this->input->post('idkomponenupah');
@@ -467,6 +486,19 @@ class kompensasi extends MY_Controller {
     function penggajian($idcompany=null,$startdate=null,$enddate=null)
     {
         $this->load->model('kompensasi/m_komponenupah');
+
+        $footerUT = 0;
+        $footerUTT = 0;
+        $footerLembur = 0;
+        $footerBenefitCmp = 0;
+        $footerBenefitEmp = 0;
+        $footerPotongan = 0;
+        $footerPendapatan = 0;
+        $footerBruto = 0;
+        $footerPajak = 0;
+        $footerTHP = 0;
+        $footerPPH = 0;
+
 
         $commit = $this->input->post('option') == 'save' ? 'true' : null;
 
@@ -2014,13 +2046,22 @@ class kompensasi extends MY_Controller {
                 
                 // echo $obj->totalpendapatan.'-'.($benefitCmp+$benefitEmp).'-'.$obj->pphsebulan.'+'.$obj->totalUTT.' ===';
                 // exit;
-                $data[$i]['takehomepay'] = $PrevPay;
-                $obj->takehomepay = $data[$i]['takehomepay'];
+                // $data[$i]['takehomepay'] = $PrevPay;
+                // $obj->takehomepay = $data[$i]['takehomepay'];
             }
             // echo '('.$data[$i]['takehomepay'].'/'.$numdayswork.')*'.$proporsionalDays;
             
             // $data[$i]['takehomepay'] = ($data[$i]['takehomepay']/$numdayswork)*$proporsionalDays;
-            $obj->takehomepay = $data[$i]['takehomepay'];
+            if($this->cek_terminasi($startdate,$enddate,$obj->tglakhirjabatan))
+            {
+                // $obj->takehomepay = 0; //kalo udah terminate, THP dibuat 0
+                $data[$i]['takehomepay'] = 0;
+                $obj->takehomepay = 0;
+            } else {
+                $obj->takehomepay = $data[$i]['takehomepay'];
+            }
+
+            
             // $obj->takehomepay = $obj->totalUT-$data[$i]['nilaiPotongan']-$benefitEmp;
 
             if($commit=='true')
@@ -2082,6 +2123,18 @@ class kompensasi extends MY_Controller {
                 $this->db->insert('payrolldata',$datapayroll);
             }
 
+            $footerUT+=$data[$i]['totalUT'];
+            $footerUTT+=$data[$i]['totalUTT'];
+            $footerLembur+=$data[$i]['totallembur'];
+            $footerBenefitCmp+=$data[$i]['benefitCmpBruto']+$data[$i]['benefitCmpNet'];
+            $footerBenefitEmp+=$data[$i]['benefitEmpBruto']+$data[$i]['benefitEmpNet'];
+            $footerPotongan+=$data[$i]['nilaiPotongan'];
+            $footerPendapatan+=$data[$i]['totalpendapatan'];
+            $footerBruto+=$data[$i]['penerimaanbruto'];
+            $footerPajak+=$data[$i]['tunjanganpajak'];
+            $footerTHP+=$data[$i]['takehomepay'];
+            $footerPPH+=$data[$i]['pphsebulan'];
+
             //   if(intval($enddateArr[1]) == 12)
             // {
             //     //desember
@@ -2111,6 +2164,23 @@ class kompensasi extends MY_Controller {
             $i++;
         }
 // print_r($arrJson);
+
+        $summary = array(
+            'footerUT'=>number_format($footerUT),
+            'footerUTT'=>number_format($footerUTT),
+            'footerLembur'=>number_format($footerLembur),
+            'footerBenefitCmp'=>number_format($footerBenefitCmp),
+            'footerBenefitEmp'=>number_format($footerBenefitEmp),
+            'footerPotongan'=>number_format($footerPotongan),
+            'footerPendapatan'=>number_format($footerPendapatan),
+            'footerBruto'=>number_format($footerBruto),
+            'footerPajak'=>number_format($footerPajak),
+            'footerTHP'=>number_format($footerTHP),
+            'footerPPH'=>number_format($footerPPH)
+        );
+
+        // $arrJson['summary'] = $summary;
+
         if($commit=='true')
         {
 
@@ -2122,7 +2192,7 @@ class kompensasi extends MY_Controller {
                 echo json_encode(array('success' => true, 'message' => 'Sukses menyimpan data perhitungan upah'));
             }
         } else {
-            echo '{success:true,numrow:' . $i . ',results:' . $i .',rows:' . json_encode($arrJson) . '}';
+            echo '{success:true,numrow:' . $i . ',results:' . $i .',rows:' . json_encode($arrJson) . ',summary:'.json_encode($summary).'}';
         }
             // echo '<pre>';
             // print_r($data);
