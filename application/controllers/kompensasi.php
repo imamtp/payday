@@ -134,7 +134,9 @@ class kompensasi extends MY_Controller {
                         $obj->pphsettahun = $data[$i]['pphsettahun'];
 
                         // $pphsetsebulan = $data[$i]['pphsettahun']/$data[$i]['masapajaksetahun'];
-                        $pphsetsebulan = $data[$i]['pphsettahun'] <=0 ? 0 : round($data[$i]['pphsettahun']/$masapajaksetahun);
+                        $pphsetsebulan = $data[$i]['pphsettahun'] <=0 ? 0 : ceil($data[$i]['pphsettahun']/$masapajaksetahun);
+                        // echo $pphsetsebulan.' ';
+                        // echo ceil($data[$i]['pphsettahun']/$masapajaksetahun);
 
                         $data[$i]['pphsebulan'] = $pphsetsebulan<0 ? 0 : $pphsetsebulan;
                         $obj->pphsebulan = $data[$i]['pphsebulan'];
@@ -1692,6 +1694,51 @@ class kompensasi extends MY_Controller {
             $obj->penghasilanbrutoT = $penghasilanbrutoT;
             $obj->penghasilanbrutoTT = $penghasilanbrutoTT;
             $obj->penerimaanbruto =  $data[$i]['penerimaanbruto'];
+
+// echo $utPengurangPajak.','.$utTPengurangPajak;
+            $tot_pengurang_pajak = ceil($utPengurangPajak)+ceil($utTPengurangPajak)+ceil($data[$i]['upahlemburKurangPajak'])+ceil($benefitPengurangPajak);
+            // echo ceil($utPengurangPajak).','.ceil($utTPengurangPajak).','.ceil($data[$i]['upahlemburKurangPajak']).','.ceil($benefitPengurangPajak);
+
+              //akumulasi
+            $obj->akum_bruto = $this->akum_bruto($obj->idpelamar,$obj->penerimaanbruto);
+            $obj->akum_utt = $this->akum_uttm($obj->idpelamar,$obj->totalUTT,$startdateArr[2].'-01-01',$startdateArr[2].'-'.$startdateArr[1].'-01');
+            $obj->akum_tunjpajak = $this->akum_tunjpajak($obj->idpelamar,$data[$i]['tunjanganpajak']);
+            $obj->akum_benefit_kary = $this->akum_benefit_kary($obj->idpelamar,$tot_pengurang_pajak);
+            // echo $obj->akum_benefit_kary;
+            $obj->bruto_th = (($obj->penerimaanbruto-$data[$i]['tunjanganpajak'])   * ($obj->masapajaksetahun-intval($startdateArr[1]))) +  $obj->akum_bruto + $obj->akum_utt + ( $data[$i]['tunjanganpajak'] * ($obj->masapajaksetahun-intval($startdateArr[1])) + $obj->akum_tunjpajak);
+            // echo  '(('.$obj->penerimaanbruto.'-'.$data[$i]['tunjanganpajak'].')   * ('.$obj->masapajaksetahun.'-'.intval($startdateArr[1]).')) +  '.$obj->akum_bruto.' + '.$obj->akum_utt.' + ( '.$data[$i]['tunjanganpajak'].' * ('.$obj->masapajaksetahun.'-'.intval($startdateArr[1]).') + '.$obj->akum_tunjpajak.')';
+          // echo intval($startdateArr[1]);
+            //end akumulasi
+
+            // =IFERROR(IF((BV4*5%)/S4>500000,500000*S4,BV4*5%),0)
+            //BIJAB/BIPEN
+            $bv = ($obj->bruto_th*(5/100)) > 0 ? ($obj->bruto_th*(5/100))/$obj->masapajaksetahun : 0;
+            if($bv>500000)
+            {
+                $obj->bijab = 500000*$obj->masapajaksetahun;
+            } else {
+                $obj->bijab = $obj->bruto_th*(5/100);
+            }
+            // echo $bijab;
+            //end BIJAB/BIPEN
+
+            //UPAH PENGURANG PAJAK
+            // =(AX4*(J4-Q4))+BT4
+            $obj->upj = ($tot_pengurang_pajak*($obj->masapajaksetahun-intval($startdateArr[1])))+$obj->akum_benefit_kary;
+            // echo $obj->upj;
+            //end UPAH PENGURANG PAJAK
+
+            //PH KENA PAJAK
+            // =IF(ROUND(BV4-BW4-BX4-BY4,-3)<0,0,ROUND(BV4-BW4-BX4-BY4,-3))
+            $ph_kena_pajak = round($obj->bruto_th-$obj->bijab-$obj->upj-$obj->nilaiptkp,-3);
+            $obj->ph_kena_pajak = $ph_kena_pajak < 0 ? 0 : $ph_kena_pajak;
+            //EN PH KENA PAJAK
+
+            //pph21 cell CA:CF)
+            $obj->pph_setahun2 = $this->pph_setahun($obj->ph_kena_pajak,$data[$i]['punyanpwp']);
+            // echo $pph_setahun;
+            //end //pph21 cell CA:CF)
+
             $obj->tunjanganpajak = $data[$i]['tunjanganpajak'];
 
             // $biayajabatan = ceil($data[$i]['penerimaanbruto']*0.05);
@@ -1732,6 +1779,8 @@ class kompensasi extends MY_Controller {
                         // echo $penghasilanbrutoT.'-'.$obj->biayajabatanT.'-'.$totalPengurangPajak;
                         $obj->penerimaannetT = $penghasilanbrutoT-$obj->biayajabatanT-$totalPengurangPajak; //neto sebulan teratur
                         $obj->penerimaannetTT = $penghasilanTT-$obj->biayajabatanTT; //neto sebulan tidak teratur
+                        // $obj->penerimaannetTT = $obj->biayajabatanTT; //tanpa penghasilan bulanan tidak teratur
+
                         // $obj->penghasilannetTT = 
                         $penghasilannet = $data[$i]['penerimaanbruto']-($data[$i]['biayajabatan'])-$totalPengurangPajak;
                          // $penghasilannet = $pengha-($data[$i]['biayajabatan'])-($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
@@ -1765,7 +1814,10 @@ class kompensasi extends MY_Controller {
                         // echo $data[$i]['masapajaksetahun'];
                         // $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun']);
                         // echo $obj->penerimaannetT.'*'.$data[$i]['masapajaksetahun'].'+'.$obj->penerimaannetTT;
-                        $data[$i]['netosetahun'] = ($obj->penerimaannetT*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT;
+                        // $data[$i]['netosetahun'] = ($obj->penerimaannetT*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT;
+                        // $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT;//update
+                        // echo $obj->penerimaannet;
+                        $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun']); //tanpa upah bulanan tidak teratur
                         $obj->netosetahun = $data[$i]['netosetahun'];
                         
                         // echo  $netsetahun.'<'.$nilaiptkp;
@@ -1786,7 +1838,8 @@ class kompensasi extends MY_Controller {
                         $obj->pkpsetahun = $data[$i]['pkpsetahun'];
                         
                         // $obj->pkpsetahunteratur =  $obj->pkpsetahun-$penghasilanTT;
-                        $num = intval(substr(($obj->pkpsetahun-$obj->penerimaannetTT), -3));
+                        // $num = intval(substr(($obj->pkpsetahun-$obj->penerimaannetTT), -3));
+                        $num = intval(substr(($obj->pkpsetahun), -3));
                         if($num>=500)
                         {
                             $plus = 1000;
@@ -1794,7 +1847,7 @@ class kompensasi extends MY_Controller {
                             $plus = 0;
                         }
 
-                        $obj->pkpsetahunteratur = substr(($obj->pkpsetahun-$obj->penerimaannetTT), 0, -3) . '000';
+                        $obj->pkpsetahunteratur = substr(($obj->pkpsetahun), 0, -3) . '000';
                         $obj->pkpsetahunteratur +=$plus;
              
                         ///////////// pph5%tahun
@@ -1853,15 +1906,21 @@ class kompensasi extends MY_Controller {
 
                         $data[$i]['pphsettahun'] = $data[$i]['pph5%tahun']+$data[$i]['pph10%tahun']+$data[$i]['pph15%tahun']+$data[$i]['pph25%tahun']+$data[$i]['pph30%tahun']+$data[$i]['pph35%tahun'];
                         $obj->pphsettahun = $data[$i]['pphsettahun'];
+                        // echo $obj->pphsettahun;
 
                         // $pphsetsebulan = $data[$i]['pphsettahun']/$data[$i]['masapajaksetahun'];
-                        $pphsetsebulan = $data[$i]['pphsettahun'] <=0 ? 0 : round($data[$i]['pphsettahun']/$obj->masapajaksetahun);
+                        $pphsetsebulan = $data[$i]['pphsettahun'] <=0 ? 0 : ceil($data[$i]['pphsettahun']/$obj->masapajaksetahun);
+                        // echo ceil($data[$i]['pphsettahun']/$obj->masapajaksetahun);
 
 //                        $data[$i]['pphsebulan'] = $pphsetsebulan<0 ? 0 : $pphsetsebulan;
 //                        $obj->pphsebulan = $data[$i]['pphsebulan'];
                         
                         $obj->pphsebulanteratur = $this->pphteratur($obj->pkpsetahunteratur,$data,$i,$obj->masapajaksetahun);
-                        $obj->pphsettahunteratur =  round($obj->pphsebulanteratur*$obj->masapajaksetahun,-1);
+// echo $obj->pphsebulanteratur;
+
+                        // $obj->pphsettahunteratur =  round($obj->pphsebulanteratur*$obj->masapajaksetahun,-1);
+                        // echo $obj->pphsebulanteratur.'*'.$obj->masapajaksetahun;
+                        $obj->pphsettahunteratur =  $obj->pphsettahun;
                        // echo $pphsetsebulan .' ';
 // echo $obj->pphsettahun-$obj->pphsettahunteratur;
                         // if($obj->pphsettahun>$obj->pphsettahunteratur)
@@ -1900,6 +1959,13 @@ class kompensasi extends MY_Controller {
                         $data[$i]['tunjanganpajaknew'] = $data[$i]['pphsebulan'];
 
                         $tunjanganpajak = $data[$i]['pphsebulan'];
+
+                        if($data[$i]['masapajaksetahun']==12)
+                        { 
+                           //kalo udah bulan desember, ambil pajaknya dari pajakterutang bulan november
+                            $obj->pphsebulan = $this->pajakterutangdes($obj->idpelamar,$startdateArr[0]);
+                            $data[$i]['pphsebulan'] = $obj->pphsebulan;
+                        }
                         
                        // echo $data[$i]['totalpendapatan'].'-('.$benefitCmp.'+'.$benefitEmp.')-'.$data[$i]['pphsebulan'].'+'.$obj->totalUTT;
                        // exit;
@@ -1941,9 +2007,19 @@ class kompensasi extends MY_Controller {
                             // exit;
                         }
 
-                        $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
+                        // if(intval($bulanGaji)>=11)
+                        // {
+                        //     $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0])+$data[$i]['pphsebulan'];
+                        // } else {
+                        //     $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
+                        // }
+                         $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
+
                         $obj->pajakterbayar = $obj->pajakjantonov-$obj->pphterminasi;
-                        $obj->pajakterutangdes = $obj->pphsettahun-$obj->pajakterbayar;
+                        // $obj->pajakterutangdes = $obj->pphsettahun-$obj->pajakterbayar;
+                        $obj->pajakterutangdes = $obj->pph_setahun2-$obj->pajakterbayar;
+                        // echo $obj->pphsettahun."+".$obj->pph_setahun2;
+                        
 
                         if($data[$i]['masapajaksetahun']<12 && diffInMonths($qtglmasuk->tglmasuk,$obj->tglakhirjabatan)<12)
                         {
@@ -1961,7 +2037,7 @@ class kompensasi extends MY_Controller {
                             $obj->takehomepay = $data[$i]['takehomepay'];
 
                             //$obj->pajakterutangdes = $obj->tunjanganpajak;
-                        }
+                        } 
 
                         //selisih pph
                         if($data[$i]['masapajaksetahun']<12 && $obj->pphterminasi>0)
@@ -2035,7 +2111,7 @@ class kompensasi extends MY_Controller {
                 $obj->totalpendapatan = $data[$i]['totalpendapatan'];
 
                 // echo $obj->benefitCmp;
-                echo $data[$i]['totalUT']+$penghasilanTT+$obj->benefitEmp+$obj->benefitCmp;
+                // echo $data[$i]['totalUT']+$penghasilanTT+$obj->benefitEmp+$obj->benefitCmp;
                 // $data[$i]['takehomepay'] = round(($obj->totalpendapatan-($benefitCmp+$benefitEmp)-$obj->pphsebulan+$obj->totalUTT));
                 // echo round(($obj->totalpendapatan-($benefitCmp+$benefitEmp)-$obj->pphsebulan));
                 // $data[$i]['takehomepay'] = $obj->totalpendapatan;
@@ -3498,6 +3574,9 @@ class kompensasi extends MY_Controller {
                 $data[$i]['tunjanganpajak'] = 0;
             }
             $obj->penerimaanbruto =  $data[$i]['penerimaanbruto'];
+
+
+
             $obj->tunjanganpajak = $data[$i]['tunjanganpajak'];
 
             $biayajabatan = $data[$i]['penerimaanbruto']*0.05;
@@ -5481,5 +5560,127 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
 
    }
+
+   function akum_bruto($idpelamar,$bruto)
+   {
+        $q = $this->db->query("select sum(penerimaanbruto) from 
+            payrolldata
+            where idpelamar  = $idpelamar");
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            return $r->sum+$bruto;
+        } else {
+            return 0;
+        }
+   }
+
+   function akum_uttm($idpelamar,$utt,$startdate,$enddate)
+   {
+    //akumulasi upah tidak tetap tahunan
+        // $q = $this->db->query("select sum(totalutt) from 
+        //     payrolldata
+        //     where idpelamar  = $idpelamar");
+        // if($q->num_rows()>0)
+        // {
+        //     $r = $q->row();
+        //     return $r->sum;
+        // } else {
+        //     return 0;
+        // }
+    $sql = "select sum(a.nilai)
+            from upahhistory a
+            join payroll b ON a.idpayroll = b.idpayroll
+            join upahkaryawan c ON a.idupahkaryawan = a.idupahkaryawan
+            where a.idpelamar  = $idpelamar and jenisupah = 'tidaktetap' 
+            AND c.idkomponenupah IN (select idkomponenupah
+                        from komponenupah
+                        where jeniskomponen = 'Upah Tidak Tetap' and jangkawaktu = 'Tahunan')
+            AND (b.startdate between '$startdate' and '$enddate')";
+
+        $q = $this->db->query($sql);
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            return $r->sum == null ? 0 : $r->sum;
+        } else {
+            return 0;
+        }
+   }
+
+   function akum_tunjpajak($idpelamar,$pajak)
+   {
+     $q = $this->db->query("select sum(tunjanganpajak) from 
+            payrolldata
+            where idpelamar  = $idpelamar");
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            return $r->sum+$pajak;
+        } else {
+            return 0;
+        }
+   }
+
+   function akum_benefit_kary($idpelamar,$benf)
+   {
+     $q = $this->db->query("select sum(benefitemp) from 
+            payrolldata
+            where idpelamar  = $idpelamar");
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            return $r->sum+$benf;
+        } else {
+            return 0;
+        }
+   }
+
+   function pph_setahun($pkpsetahun,$punyanpwp)
+    {
+  /*       =IF(
+    BZ8<50000001,
+    BZ8*5%,
+        IF(
+            BZ8<250000001,
+            2500000+((BZ8-50000000)*15%),
+            IF(
+                BZ8<500000001,
+                2500000+30000000+((BZ8-250000000)*25%),
+                2500000+30000000+62500000+((BZ8-500000000)*30%)
+            )
+        )
+    )
+    */
+
+    if($pkpsetahun<50000001)
+    {
+        $pph = $pkpsetahun*0.05;
+    } else if($pkpsetahun>50000001 && $pkpsetahun<250000001)
+        {
+            $pph = 2500000+(($pkpsetahun-50000000)*0.15);
+        } else if($pkpsetahun>250000001 && $pkpsetahun<500000001)
+            {
+               $pph = 2500000+30000000+(($pkpsetahun-250000000)*0.25);    
+            } else {
+                    $pph = 2500000+30000000+62500000+(($pkpsetahun-500000000)*0.30);
+            }
+
+            return $punyanpwp == 1 ? $pph : $pph*(120/100);
+    }
+
+    function pajakterutangdes($idpelamar,$tahun)
+    {
+        $q = $this->db->query("select pajakterutangdes from 
+            payrolldata
+            where idpelamar = $idpelamar and tahun = '$tahun' and bulan = '11'");
+        if($q->num_rows()>0)
+        {
+            $r = $q->row();
+            return $r->pajakterutangdes;
+        } else {
+            return 0;
+        }
+    }
 
 }
