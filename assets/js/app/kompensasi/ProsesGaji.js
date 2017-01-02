@@ -374,6 +374,9 @@ Ext.define('GridProsesGaji', {
                                         Ext.getCmp('startdate_ProsesGaji').setValue(null);
                                         Ext.getCmp('enddate_ProsesGaji').setValue(null);
                                         storeGridProsesGaji.reload();
+
+                                        Ext.getCmp('footerPPH').hide();
+                                        Ext.getCmp('footerTHP').hide();
                                     }
                             }
                 ]
@@ -529,7 +532,50 @@ Ext.define('GridProsesGaji', {
                         }
                     }
                 },
-                 '->',
+                '->',
+                {
+                        text: 'Show Summary',
+                        hidden:true,
+                        id:'showSummary',
+                        // iconCls: 'refresh',
+                        handler: function() {
+                            Ext.getCmp('hideSummary').show();
+                            Ext.getCmp('showSummary').hide();
+
+                            Ext.getCmp('footerBenefitCmp').show();
+                            Ext.getCmp('footerBenefitEmp').show();
+                            Ext.getCmp('footerPotongan').show();
+                            Ext.getCmp('footerLembur').show();
+                            Ext.getCmp('footerUTT').show();
+                            Ext.getCmp('footerUT').show();
+                            Ext.getCmp('footerPajak').show();
+                            Ext.getCmp('footerBruto').show();
+                            Ext.getCmp('footerPendapatan').show();
+                            Ext.getCmp('footerPPH').show();
+                            Ext.getCmp('footerTHP').show();
+                        }
+                },
+                {
+                        text: 'Hide Summary',
+                        id:'hideSummary',
+                        // iconCls: 'refresh',
+                        handler: function() {
+                            Ext.getCmp('showSummary').show();
+                            Ext.getCmp('hideSummary').hide();
+
+                            Ext.getCmp('footerBenefitCmp').hide();
+                            Ext.getCmp('footerBenefitEmp').hide();
+                            Ext.getCmp('footerPotongan').hide();
+                            Ext.getCmp('footerLembur').hide();
+                            Ext.getCmp('footerUTT').hide();
+                            Ext.getCmp('footerUT').hide();
+                            Ext.getCmp('footerPajak').hide();
+                            Ext.getCmp('footerBruto').hide();
+                            Ext.getCmp('footerPendapatan').hide();
+                            Ext.getCmp('footerPPH').hide();
+                            Ext.getCmp('footerTHP').hide();
+                        }
+                },'-',
                 'Pencarian Nama Karyawan: ', ' ',
                 {
                     xtype: 'searchGridProsesGaji',
