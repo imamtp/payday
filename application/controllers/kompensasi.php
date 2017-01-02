@@ -1960,7 +1960,7 @@ class kompensasi extends MY_Controller {
 
                         $tunjanganpajak = $data[$i]['pphsebulan'];
 
-                        if($data[$i]['masapajaksetahun']==12)
+                        if(intval($startdateArr[1])==12)
                         { 
                            //kalo udah bulan desember, ambil pajaknya dari pajakterutang bulan november
                             $obj->pphsebulan = $this->pajakterutangdes($obj->idpelamar,$startdateArr[0]);
