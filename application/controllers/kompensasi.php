@@ -17,21 +17,33 @@ class kompensasi extends MY_Controller {
 
     function cek_terminasi($startdate,$enddate,$terminate_date)
     {
+        // echo $startdate.','.$enddate;
         $paymentDate=date('Y-m-d', strtotime($terminate_date));
         //echo $paymentDate; // echos today! 
+        // echo $terminate_date;
         $contractDateBegin = date('Y-m-d', strtotime($startdate));
         $contractDateEnd = date('Y-m-d', strtotime($enddate));
+        // echo $contractDateEnd;
 
         // echo '('.$paymentDate.' > '.$contractDateBegin.') && ('.$paymentDate.' < '.$contractDateEnd.')';
+        // echo ' <= x'.$contractDateEnd;
 
-        if (($paymentDate >= $contractDateBegin) && ($paymentDate <= $contractDateEnd))
+        if($contractDateEnd<=$terminate_date)
         {
-          return true;
+            //tanggal akhir penggajian lebih kecil atau sama dengan tgl terminasi
+            return false;
+        } else {
+            //kalo sudah lewat terminasi date jgn muncukan thp
+            return true;
         }
-        else
-        {
-          return false;
-        }
+        // if (($paymentDate >= $contractDateBegin) && ($paymentDate <= $contractDateEnd))
+        // {
+        //   return true;
+        // }
+        // else
+        // {
+        //   return false;
+        // }
     }
 
     function getdasarkomponenupah()
@@ -465,6 +477,8 @@ class kompensasi extends MY_Controller {
             // exit;
         }
 
+        // echo $this->db->last_query();
+
         if($q->total==null)
         {
             return round($pphsebulan);
@@ -630,8 +644,19 @@ class kompensasi extends MY_Controller {
 
             $obj->startdate = $startdate;
             $obj->enddate = $enddate;
+
+            //cek tanggal masuk pegawai > dari tanggal periode awal gaji
+            if($startdate<=$rpeg->tglmasuk)
+            {
+                //belum waktunya
+                continue;
+            }
+            // if($)
+
             // var_dump($obj);
-//echo $rpeg->namalengkap.' '; 
+//echo $rpeg->namalengkap.' ';
+
+ // echo $obj->idpelamar.' '; 
             //cek udah digaji apa belum
             $qcek = $this->db->query("select idpelamar from payrolldata
                                         where idpelamar = $obj->idpelamar 
@@ -641,10 +666,11 @@ class kompensasi extends MY_Controller {
             {
                 // if($obj->idpelamar==166)
                 // {
-                //     echo $this->db->last_query();
+                    // echo $this->db->last_query();
                 // }
                 continue;
             }
+           
 
             $penghasilanbruto = 0; //Penghasilan Bruto hanya memasukkan komponen yang dikategorikan masuk pajak (total)
             $penghasilanbrutoT = 0; //penghasilan bruto teratur
@@ -725,6 +751,7 @@ class kompensasi extends MY_Controller {
             $obj->nilaiptkp = $nilaiptkp;
             $data[$i]['kodeptkp'] = $qptkp->kodeptkp;
             $obj->kodeptkp = $qptkp->kodeptkp;
+
 
              //query tgl akhir kerja
             $qterminate = $this->db->query("select max(a.tglmasuk) as tglberakhir
@@ -811,6 +838,7 @@ class kompensasi extends MY_Controller {
                     // echo $rDetectTglMasuk->tglmasuk;
                  } else {
                     $date1 = new DateTime($startdate);
+                    // echo $date1;
                  }
                  $date2 = new DateTime($enddate);
 
@@ -866,7 +894,13 @@ class kompensasi extends MY_Controller {
                 } else {
                     if(intval($startdateArr[1])>1)
                     {
+                         // echo $qtglmasuk->tglmasuk;
                         $data[$i]['masapajaksetahun'] = diffInMonths($qtglmasuk->tglmasuk,$tglakhirjabatan)-intval($startdateArr[1]);
+
+                        if($data[$i]['masapajaksetahun']>=12)
+                        {
+                            $data[$i]['masapajaksetahun'] = 12;
+                        } 
                     } else {
                         $data[$i]['masapajaksetahun'] = 12;
                     }
@@ -875,6 +909,7 @@ class kompensasi extends MY_Controller {
                 }
                
             } else {
+
                 $data[$i]['masapajaksetahun'] = diffInMonths($qtglmasuk->tglmasuk,$akhirtahun) > 12 ? 12 : diffInMonths($qtglmasuk->tglmasuk,$akhirtahun);
             }
             // echo $data[$i]['masapajaksetahun'].' ';
@@ -1819,24 +1854,35 @@ class kompensasi extends MY_Controller {
                         // echo $obj->penerimaannet;
                         $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun']); //tanpa upah bulanan tidak teratur
                         $obj->netosetahun = $data[$i]['netosetahun'];
-                        
+                        // echo $obj->netosetahun ;
                         // echo  $netsetahun.'<'.$nilaiptkp;
 
-                        if($data[$i]['netosetahun']<=$nilaiptkp)
+                        if($obj->netosetahun<=$nilaiptkp)
                         {
                             $pkpsetahun = 0;
                         } else {  
                             // echo $data[$i]['netosetahun']-$nilaiptkp.' - '.round(($data[$i]['netosetahun']-$nilaiptkp),-3,PHP_ROUND_HALF_DOWN);
                             // $pkpsetahun = substr(round(($data[$i]['netosetahun']-$nilaiptkp),-4), 0, -3) . '000';
-                            $pkpsetahun = substr(($data[$i]['netosetahun']-$nilaiptkp), 0, -3) . '000';
+                            // $pkpsetahun = substr(($obj->netosetahun-$nilaiptkp), 0, -3) . '000';
                             // $pkpsetahun = ceil($data[$i]['netosetahun']-$nilaiptkp);
                             // $pkpsetahun = substr_replace($pkpsetahun, '000', -3);
-                        }
+                            // echo $obj->netosetahun-$nilaiptkp;
+                            $pkpsetahun = round(($obj->netosetahun-$nilaiptkp),3);
 
+                            if($pkpsetahun>10000000)
+                            {
+                                $pkpsetArr = explode(',', number_format($pkpsetahun));
+                                $pkpsetahun = $pkpsetArr[0].$pkpsetArr[1].'000';
+                            } else {
+
+                            }
+                            
+                            // print_r($pkpsetArr);
+                        }
 
                         $data[$i]['pkpsetahun'] = $pkpsetahun;
                         $obj->pkpsetahun = $data[$i]['pkpsetahun'];
-                        
+                        // echo ' '.$obj->pkpsetahun;
                         // $obj->pkpsetahunteratur =  $obj->pkpsetahun-$penghasilanTT;
                         // $num = intval(substr(($obj->pkpsetahun-$obj->penerimaannetTT), -3));
                         $num = intval(substr(($obj->pkpsetahun), -3));
@@ -2014,10 +2060,11 @@ class kompensasi extends MY_Controller {
                         //     $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
                         // }
                          $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
-
+                         // echo $obj->pajakjantonov;
                         $obj->pajakterbayar = $obj->pajakjantonov-$obj->pphterminasi;
                         // $obj->pajakterutangdes = $obj->pphsettahun-$obj->pajakterbayar;
                         $obj->pajakterutangdes = $obj->pph_setahun2-$obj->pajakterbayar;
+                        // echo $obj->pphsettahun.'-'.$obj->pajakterbayar;
                         // echo $obj->pphsettahun."+".$obj->pph_setahun2;
                         
 
@@ -5681,6 +5728,23 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         } else {
             return 0;
         }
+    }
+
+    function tanggal_masuk($idpelamar,$startdate,$enddate)
+    {
+        $qDetectTglMasuk = $this->db->query("select
+                                                a.tglmasuk
+                                            from
+                                                pekerjaan a
+                                            join pergerakanpersonil b ON a .idpergerakanpersonil = b.idpergerakanpersonil
+                                            where
+                                                a .idpelamar = ".$rpeg->idpelamar."
+                                            and b.idpergerakan <> 128
+                                            and b.statuspergerakan = 'Disetujui' 
+                                            and (a.tglmasuk > '".$startdate."' and a.tglmasuk < '".$enddate."')
+                                            order by a.idpekerjaan desc
+                                            limit 1")->row();
+        return $qDetectTglMasuk->tglmasuk;
     }
 
 }
