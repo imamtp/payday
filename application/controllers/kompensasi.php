@@ -604,7 +604,7 @@ class kompensasi extends MY_Controller {
                     (
                         SELECT MAX(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
-                        WHERE statuspergerakan='Disetujui'
+                        WHERE statuspergerakan='Disetujui' and display is null
                         GROUP BY idpelamar
                     ) as x ON a.idpelamar = x.idpelamar
                     join pekerjaan aa ON x.idpekerjaan = aa.idpekerjaan
@@ -615,7 +615,7 @@ class kompensasi extends MY_Controller {
                     (
                         SELECT MIN(idpekerjaan) as idpekerjaan, idpelamar
                         FROM pekerjaan
-                        WHERE statuspergerakan='Disetujui'
+                        WHERE statuspergerakan='Disetujui' and display is null
                         GROUP BY idpelamar
                     ) as xx ON a.idpelamar = xx.idpelamar
                     join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
@@ -693,6 +693,7 @@ class kompensasi extends MY_Controller {
                                     join organisasi d ON c.idorganisasi = d.idorganisasi
                                     join jabatan e ON c.idjabatan = e.idjabatan
                                     where a.idpelamar = ".$rpeg->idpelamar." and b.idpergerakan!=128 and b.statuspergerakan='Disetujui' 
+                                    and a.display is null
                                     group by d.kodeorg,e.namajabatan")->row();
 
                 $obj->kodeorg = $qJabatanSebelumnya->kodeorg;
@@ -734,7 +735,7 @@ class kompensasi extends MY_Controller {
             //end first payroll
 
             //itung jumlah periode kerja
-            $qtglmasuk = $this->db->query("select min(tglmasuk) as tglmasuk from pekerjaan where idpelamar=".$rpeg->idpelamar." ORDER BY tglmasuk limit 1")->row();
+            $qtglmasuk = $this->db->query("select min(tglmasuk) as tglmasuk from pekerjaan where idpelamar=".$rpeg->idpelamar."  and display is null ORDER BY tglmasuk limit 1")->row();
            
             $data[$i]['masakerja'] = diffInMonths($rpeg->tglmasuk,$startdate);
             $obj->masakerja = $data[$i]['masakerja'];
@@ -757,7 +758,7 @@ class kompensasi extends MY_Controller {
             $qterminate = $this->db->query("select max(a.tglmasuk) as tglberakhir
                                                 from pekerjaan a
                                                 join pergerakanpersonil b ON a.idpergerakanpersonil = b.idpergerakanpersonil
-                                                where a.idpelamar = ".$rpeg->idpelamar." and b.idpergerakan=128 and b.statuspergerakan='Disetujui'")->row();
+                                                where a.idpelamar = ".$rpeg->idpelamar." and b.idpergerakan=128 and b.statuspergerakan='Disetujui' and a.display is null")->row();
 
 
             if($qterminate->tglberakhir!=null)
@@ -780,6 +781,7 @@ class kompensasi extends MY_Controller {
                                                         and b.idpergerakan <> 128
                                                         and b.statuspergerakan = 'Disetujui' 
                                                         and (a.tglmasuk > '".$startdate."' and a.tglmasuk < '".$enddate."')
+                                                         and a.display is null
                                                         order by a.idpekerjaan desc
                                                         limit 1");
                  if($qDetectTglMasuk->num_rows()>0)
@@ -806,12 +808,13 @@ class kompensasi extends MY_Controller {
                  $qterminate = $this->db->query("select max(a.tglberakhir) as tglberakhir
                                                 from pekerjaan a
                                                 join pergerakanpersonil b ON a.idpergerakanpersonil = b.idpergerakanpersonil
-                                                where a.idpelamar = ".$rpeg->idpelamar." and b.statuspergerakan='Disetujui'");
+                                                where a.idpelamar = ".$rpeg->idpelamar." and b.statuspergerakan='Disetujui' and a.display is null");
                 if($qterminate->num_rows()>0)
                 {
                      $rterminate = $qterminate->row();
                      $tglakhirjabatan = $rterminate->tglberakhir;
                      $tglakhirjabatanArr = explode('-', $tglakhirjabatan);
+                     // echo $tglakhirjabatan;
                 } else {
                     echo 'tglJabatan end not found';
                     exit;
@@ -829,6 +832,7 @@ class kompensasi extends MY_Controller {
                                                         and b.idpergerakan <> 128
                                                         and b.statuspergerakan = 'Disetujui' 
                                                         and (a.tglmasuk > '".$startdate."' and a.tglmasuk < '".$enddate."')
+                                                         and a.display is null
                                                         order by a.idpekerjaan desc
                                                         limit 1");
                  if($qDetectTglMasuk->num_rows()>0)
@@ -849,6 +853,8 @@ class kompensasi extends MY_Controller {
             }
             $data[$i]['tglakhirjabatan'] = $tglakhirjabatan;
             $obj->tglakhirjabatan = $tglakhirjabatan;
+            // echo $obj->tglakhirjabatan;
+          
             //end query tgl akhir kerja
 
             //cek udah terminate apa belum
@@ -890,13 +896,13 @@ class kompensasi extends MY_Controller {
                 if (intval($tglakhirjabatanArr[1])==intval($startdateArr[1])) {  
                     //bulan yang sama
                      $data[$i]['masapajaksetahun'] = intval($tglakhirjabatanArr[1])-intval($tglMasukArr[1])+1;
-                     
+                    
                 } else {
                     if(intval($startdateArr[1])>1)
                     {
                          // echo $qtglmasuk->tglmasuk;
                         $data[$i]['masapajaksetahun'] = diffInMonths($qtglmasuk->tglmasuk,$tglakhirjabatan)-intval($startdateArr[1]);
-
+                        // echo $qtglmasuk->tglmasuk.','.$tglakhirjabatan.'  -   '.diffInMonths($qtglmasuk->tglmasuk,$tglakhirjabatan);
                         if($data[$i]['masapajaksetahun']>=12)
                         {
                             $data[$i]['masapajaksetahun'] = 12;
@@ -907,10 +913,9 @@ class kompensasi extends MY_Controller {
                    
                     // 
                 }
-               
             } else {
-
                 $data[$i]['masapajaksetahun'] = diffInMonths($qtglmasuk->tglmasuk,$akhirtahun) > 12 ? 12 : diffInMonths($qtglmasuk->tglmasuk,$akhirtahun);
+                // $data[$i]['masapajaksetahun'] = diffInMonths($qtglmasuk->tglmasuk,$tglakhirjabatan) > 12 ? 12 : diffInMonths($qtglmasuk->tglmasuk,$akhirtahun);
             }
             // echo $data[$i]['masapajaksetahun'].' ';
             
@@ -1740,7 +1745,10 @@ class kompensasi extends MY_Controller {
             $obj->akum_tunjpajak = $this->akum_tunjpajak($obj->idpelamar,$data[$i]['tunjanganpajak']);
             $obj->akum_benefit_kary = $this->akum_benefit_kary($obj->idpelamar,$tot_pengurang_pajak);
             // echo $obj->akum_benefit_kary;
-            $obj->bruto_th = (($obj->penerimaanbruto-$data[$i]['tunjanganpajak'])   * ($obj->masapajaksetahun-intval($startdateArr[1]))) +  $obj->akum_bruto + $obj->akum_utt + ( $data[$i]['tunjanganpajak'] * ($obj->masapajaksetahun-intval($startdateArr[1])) + $obj->akum_tunjpajak);
+            $selisih_sisa_bulan_pajak =   intval($tglakhirjabatanArr[1])-intval($startdateArr[1]);
+            // $obj->bruto_th = (($obj->penerimaanbruto-$data[$i]['tunjanganpajak'])   * ($obj->masapajaksetahun-intval($startdateArr[1]))) +  $obj->akum_bruto + $obj->akum_utt + ( $data[$i]['tunjanganpajak'] * ($obj->masapajaksetahun-intval($startdateArr[1])) + $obj->akum_tunjpajak);
+            // echo $selisih_sisa_bulan_pajak;
+             $obj->bruto_th = (($obj->penerimaanbruto-$data[$i]['tunjanganpajak'])   * $selisih_sisa_bulan_pajak) +  $obj->akum_bruto + $obj->akum_utt + ( $data[$i]['tunjanganpajak'] * ($selisih_sisa_bulan_pajak) + $obj->akum_tunjpajak);
             // echo  '(('.$obj->penerimaanbruto.'-'.$data[$i]['tunjanganpajak'].')   * ('.$obj->masapajaksetahun.'-'.intval($startdateArr[1]).')) +  '.$obj->akum_bruto.' + '.$obj->akum_utt.' + ( '.$data[$i]['tunjanganpajak'].' * ('.$obj->masapajaksetahun.'-'.intval($startdateArr[1]).') + '.$obj->akum_tunjpajak.')';
           // echo intval($startdateArr[1]);
             //end akumulasi
@@ -1748,6 +1756,7 @@ class kompensasi extends MY_Controller {
             // =IFERROR(IF((BV4*5%)/S4>500000,500000*S4,BV4*5%),0)
             //BIJAB/BIPEN
             $bv = ($obj->bruto_th*(5/100)) > 0 ? ($obj->bruto_th*(5/100))/$obj->masapajaksetahun : 0;
+            // echo '('.$obj->bruto_th.'*(5/100)) ---- '.'('.$obj->bruto_th.'*(5/100))/'.$obj->masapajaksetahun;
             if($bv>500000)
             {
                 $obj->bijab = 500000*$obj->masapajaksetahun;
@@ -1759,13 +1768,16 @@ class kompensasi extends MY_Controller {
 
             //UPAH PENGURANG PAJAK
             // =(AX4*(J4-Q4))+BT4
-            $obj->upj = ($tot_pengurang_pajak*($obj->masapajaksetahun-intval($startdateArr[1])))+$obj->akum_benefit_kary;
+            // $obj->upj = ($tot_pengurang_pajak*($obj->masapajaksetahun-intval($startdateArr[1])))+$obj->akum_benefit_kary;
+            $obj->upj = ($tot_pengurang_pajak*($selisih_sisa_bulan_pajak))+$obj->akum_benefit_kary;
+            
             // echo $obj->upj;
             //end UPAH PENGURANG PAJAK
 
             //PH KENA PAJAK
             // =IF(ROUND(BV4-BW4-BX4-BY4,-3)<0,0,ROUND(BV4-BW4-BX4-BY4,-3))
             $ph_kena_pajak = round($obj->bruto_th-$obj->bijab-$obj->upj-$obj->nilaiptkp,-3);
+            // echo $obj->bruto_th.' - '.$obj->bijab.' - '.$tot_pengurang_pajak.'-'.$obj->nilaiptkp;
             $obj->ph_kena_pajak = $ph_kena_pajak < 0 ? 0 : $ph_kena_pajak;
             //EN PH KENA PAJAK
 
@@ -1984,21 +1996,30 @@ class kompensasi extends MY_Controller {
                         $data[$i]['pphsebulan'] = $obj->pphsebulanteratur+$obj->pphsebulantakteratur;
                         $obj->pphsebulan = $data[$i]['pphsebulan']<0 ? 0 :  $data[$i]['pphsebulan'];
                                 
-                        if($data[$i]['masapajaksetahun']<12)
+                        // echo $enddate.'>='.$obj->tglakhirjabatan;
+
+                        if($startdate>=$obj->tglakhirjabatan || $enddate>=$obj->tglakhirjabatan)
                         {
-                            // $getTglTerminasiArr = explode('-', $this->getTglTerminasi($rpeg->idpelamar));
-                            // echo intval($startdateArr[0]).' == '.$getTglTerminasiArr;
-                            // if(intval($startdateArr[0]) == intval($getTglTerminasiArr[0]))
-                            // {
-                            //     $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
-                            // } else {
-                            //     $obj->pphterminasi = 0;
-                            // }
-                            // $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
-                            $obj->pphterminasi = $obj->pphsebulanteratur+$obj->pphsebulantakteratur;
+                          if($data[$i]['masapajaksetahun']<12)
+                            {
+                                // $getTglTerminasiArr = explode('-', $this->getTglTerminasi($rpeg->idpelamar));
+                                // echo intval($startdateArr[0]).' == '.$getTglTerminasiArr;
+                                // if(intval($startdateArr[0]) == intval($getTglTerminasiArr[0]))
+                                // {
+                                //     $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
+                                // } else {
+                                //     $obj->pphterminasi = 0;
+                                // }
+                                // $obj->pphterminasi = $obj->pphsettahun <= 0 ? 0 : round($obj->pphsettahun/$data[$i]['masapajaksetahun']);
+                                $obj->pphterminasi = $obj->pphsebulanteratur+$obj->pphsebulantakteratur;
+                            } else {
+                                $obj->pphterminasi = 0;
+                            }
                         } else {
-                            $obj->pphterminasi = 0;
+                             $obj->pphterminasi = 0;
                         }
+
+                        
 
                        
 
