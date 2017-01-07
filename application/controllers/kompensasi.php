@@ -575,6 +575,7 @@ class kompensasi extends MY_Controller {
         //getweekdays
         // $numdayswork = $this->get_weekdays($startdate,$enddate);
         $numdayswork = countDaysMonth($startdate,$enddate)->days+1; //dihitung total dengan weekend
+        // echo $numdayswork;
         // $numdayswork = 17;
 
         // echo $startdateArr[0].'-'.$startdateArr[1].'-01';
@@ -851,11 +852,15 @@ class kompensasi extends MY_Controller {
                  $proporsionalDays = $date2->diff($date1)->format("%a")+1;
                  // echo $proporsionalDays;
             }
+
+            $tglakhirjabatanArr = explode('-', $tglakhirjabatan);
             $data[$i]['tglakhirjabatan'] = $tglakhirjabatan;
             $obj->tglakhirjabatan = $tglakhirjabatan;
             // echo $obj->tglakhirjabatan;
           
             //end query tgl akhir kerja
+
+
 
             //cek udah terminate apa belum
             $qterminateYet = $this->db->query("select max(a.tglmasuk) as tglberakhir
@@ -896,7 +901,8 @@ class kompensasi extends MY_Controller {
                 if (intval($tglakhirjabatanArr[1])==intval($startdateArr[1])) {  
                     //bulan yang sama
                      $data[$i]['masapajaksetahun'] = intval($tglakhirjabatanArr[1])-intval($tglMasukArr[1])+1;
-                    
+                     
+                     // echo $numdayswork;
                 } else {
                     if(intval($startdateArr[1])>1)
                     {
@@ -944,11 +950,13 @@ class kompensasi extends MY_Controller {
 
                 if(isset($proporsionalDays))
                 {
-                    // echo $proporsionalDays;
+                    // echo $proporsionalDays.' ';
                     //proprate
                     // $prorata = $rUT->nilai/$numdayswork;
                     // $totalUT+=$prorata*$proporsionalDays;
+                    // echo $rUT->nilai.' ';
                     $nilaiUT = round(($rUT->nilai/$numdayswork)*$proporsionalDays,2);
+                    // echo $rUT->namakomponen.':'.$nilaiUT.' ';
                     $totalUT+=$nilaiUT;
                     // echo round(($rUT->nilai/$numdayswork)*$proporsionalDays,2).' ';
                     // echo '('.$rUT->nilai.'/'.$numdayswork.'*'.$proporsionalDays.') ';
@@ -2196,14 +2204,14 @@ class kompensasi extends MY_Controller {
             // echo '('.$data[$i]['takehomepay'].'/'.$numdayswork.')*'.$proporsionalDays;
             
             // $data[$i]['takehomepay'] = ($data[$i]['takehomepay']/$numdayswork)*$proporsionalDays;
-            if($this->cek_terminasi($startdate,$enddate,$obj->tglakhirjabatan))
-            {
+            // if($this->cek_terminasi($startdate,$enddate,$obj->tglakhirjabatan))
+            // {
                 // $obj->takehomepay = 0; //kalo udah terminate, THP dibuat 0
-                $data[$i]['takehomepay'] = 0;
-                $obj->takehomepay = 0;
-            } else {
+            //     $data[$i]['takehomepay'] = 0;
+            //     $obj->takehomepay = 0;
+            // } else {
                 $obj->takehomepay = $data[$i]['takehomepay'];
-            }
+            // }
 
             
             // $obj->takehomepay = $obj->totalUT-$data[$i]['nilaiPotongan']-$benefitEmp;
@@ -5766,6 +5774,11 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
                                             order by a.idpekerjaan desc
                                             limit 1")->row();
         return $qDetectTglMasuk->tglmasuk;
+    }
+
+    function pengali_prorate()
+    {
+        $numdayswork = countDaysMonth($startdate,$obj->tglakhirjabatan)->days+1;
     }
 
 }
