@@ -1014,7 +1014,7 @@ class kompensasi extends MY_Controller {
                                         from upahkaryawan a
                                         join komponenupah b ON a.idkomponenupah = b.idkomponenupah
                                         where b.jeniskomponen='Upah Tidak Tetap' and b.jangkawaktu='Bulanan' and a.idpelamar=".$rpeg->idpelamar." and 
-                                        a.display is null and (now() BETWEEN b.startdate and b.enddate)");
+                                        a.display is null and (b.startdate >= '$startdate' and b.enddate <= '$enddate') ");
            // echo $this->db->last_query().'<br>';
             $utTPenambahPajak=0;
             $utTPengurangPajak=0;
@@ -1742,6 +1742,7 @@ class kompensasi extends MY_Controller {
             $obj->penghasilanbrutoT = $penghasilanbrutoT;
             $obj->penghasilanbrutoTT = $penghasilanbrutoTT;
             $obj->penerimaanbruto =  $data[$i]['penerimaanbruto'];
+            $obj->penerimaanbruto_total = $obj->penerimaanbruto + $data[$i]['totalUTTTahun'];
 
 // echo $utPengurangPajak.','.$utTPengurangPajak;
             $tot_pengurang_pajak = ceil($utPengurangPajak)+ceil($utTPengurangPajak)+ceil($data[$i]['upahlemburKurangPajak'])+ceil($benefitPengurangPajak);
@@ -1843,7 +1844,7 @@ class kompensasi extends MY_Controller {
 
                         // echo $obj->totalUTT;                        
                         $totalpendapatan =  $data[$i]['totalUT']+$obj->totalUTT+$obj->totallembur+$obj->benefitCmp+ $data[$i]['tunjanganpajak'];
-                        // echo $data[$i]['totalUT'].'+'.$data[$i]['totalUTT'].'+'.$obj->totallembur.'+'.$obj->benefitCmp.'+'.$data[$i]['tunjanganpajak'];
+                        // echo $data[$i]['totalUT'].'+'.$data[$i]['totalUTT'].'+'.$obj->totallembur.'+'.$obj->benefitCmp.'+'.$data[$i]['tunjanganpajak'].' - '.number_format($totalpendapatan);
                         // exit;
                         // echo $data[$i]['tunjanganpajak'].'=';
 

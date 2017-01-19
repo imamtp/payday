@@ -16,7 +16,7 @@ class m_riwayatgaji extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpayroll,a.idpelamar,bulan,tahun,tglgaji,a.startdate,masapajaksetahun,a.enddate,b.namalengkap,a.punyanpwp,durasi,hitungpajak,tglgajipertama,masakerja,a.tglmasuk,nilaiptkp,kodeptkp,totalut,h.totalutt,upahlemburPajak,upahlemburNoPajak,upahlemburTambahPajak,upahlemburKurangPajak,totallembur,benefitCmpBruto,benefitCmpNet,benefitEmpBruto,benefitEmpNet,numdayswork,nilaiPotongan,totalpendapatan,penerimaanbruto,tunjanganpajak,a.biayajabatan,penerimaannet,netosetahun,pkpsetahun,pph5tahun,pph15tahun,pph25tahun,pph35tahun,pphsettahun,pphsebulan,takehomepay,b.namalengkap,benefitcmp,benefitemp,upload,pajakterminasi,pajakjantonov,pajakterminasi,pajakterbayar,pajakterutangdes,pajaktotalbayarsetahun,selisihpph,c.nik,d.companycode,f.kodeorg,g.namajabatan,prevtakehomepay";
+        return "a.idpayroll,a.idpelamar,bulan,tahun,tglgaji,a.startdate,masapajaksetahun,a.enddate,b.namalengkap,a.punyanpwp,durasi,hitungpajak,tglgajipertama,masakerja,a.tglmasuk,nilaiptkp,kodeptkp,totalut,a.totalutt,upahlemburPajak,upahlemburNoPajak,upahlemburTambahPajak,upahlemburKurangPajak,totallembur,benefitCmpBruto,benefitCmpNet,benefitEmpBruto,benefitEmpNet,numdayswork,nilaiPotongan,totalpendapatan,penerimaanbruto,tunjanganpajak,a.biayajabatan,penerimaannet,netosetahun,pkpsetahun,pph5tahun,pph15tahun,pph25tahun,pph35tahun,pphsettahun,pphsebulan,takehomepay,b.namalengkap,benefitcmp,benefitemp,upload,pajakterminasi,pajakjantonov,pajakterminasi,pajakterbayar,pajakterutangdes,pajaktotalbayarsetahun,selisihpph,c.nik,d.companycode,f.kodeorg,g.namajabatan,prevtakehomepay";
     }
     
     function fieldCek()
