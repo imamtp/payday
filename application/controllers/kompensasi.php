@@ -465,25 +465,34 @@ class kompensasi extends MY_Controller {
         echo '{success:true,numrow:' . $d['num'] . ',results:' . $d['num'] .',rows:' . json_encode($d['data']) . '}';    
     }
     
-    function pajakjantonov($idpelamar,$pphsebulan,$tahun)
+    function pajakjantonov($idpelamar,$pphsebulan,$tahun,$bulan)
     {
+        $month=11;
+        $year=$tahun;
+        $num = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 
         $q = $this->db->query("SELECT sum(pphsebulan) as total
         from payrolldata
-        where idpelamar = $idpelamar and (startdate between '$tahun-01-01' and '".$tahun.'-11-01'."')")->row();
+        where idpelamar = $idpelamar and (startdate between '$tahun-01-01' and '".$tahun.'-11-'.$num."')")->row();
         if($idpelamar==134)
         {
             // echo $this->db->last_query();
             // exit;
         }
 
-        // echo $this->db->last_query();
-
+        // echo $this->db->last_query();\
         if($q->total==null)
         {
             return round($pphsebulan);
         } else {
-            return round($q->total+$pphsebulan);
+            if(intval($bulan)==12)
+            {
+                //desember
+                return round($q->total);
+            } else {
+                return round($q->total+$pphsebulan);
+            }
+            
         }
     }
     
@@ -1272,6 +1281,7 @@ class kompensasi extends MY_Controller {
             // $penghasilanTT+=$obj->totalUTT;
             $penghasilanTT+=$data[$i]['totalUTTTahun'];
             $obj->totalUTT = $penghasilanTT;
+            $obj->totalUTTTahun = $totalUTTTahun;
             // echo $penghasilanTT;
 
             ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1750,7 +1760,8 @@ class kompensasi extends MY_Controller {
 
               //akumulasi
             $obj->akum_bruto = $this->akum_bruto($obj->idpelamar,$obj->penerimaanbruto);
-            $obj->akum_utt = $this->akum_uttm($obj->idpelamar,$obj->totalUTT,$startdateArr[2].'-01-01',$startdateArr[2].'-'.$startdateArr[1].'-01');
+            
+            $obj->akum_utt = $this->akum_uttm($obj->idpelamar,$obj->totalUTT,$startdateArr[0].'-01-01',$startdateArr[0].'-'.$startdateArr[1].'-01');
             $obj->akum_tunjpajak = $this->akum_tunjpajak($obj->idpelamar,$data[$i]['tunjanganpajak']);
             $obj->akum_benefit_kary = $this->akum_benefit_kary($obj->idpelamar,$tot_pengurang_pajak);
             // echo $obj->akum_benefit_kary;
@@ -2089,7 +2100,7 @@ class kompensasi extends MY_Controller {
                         // } else {
                         //     $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
                         // }
-                         $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
+                         $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0],$startdateArr[1]);
                          // echo $obj->pajakjantonov;
                         $obj->pajakterbayar = $obj->pajakjantonov-$obj->pphterminasi;
                         // $obj->pajakterutangdes = $obj->pphsettahun-$obj->pajakterbayar;
@@ -2239,7 +2250,8 @@ class kompensasi extends MY_Controller {
                         "nilaiptkp" =>$data[$i]['nilaiptkp'],
                         "kodeptkp" =>$data[$i]['kodeptkp'],
                         "totalut" =>$data[$i]['totalUT'],
-                        "totalutt" =>$data[$i]['totalUTT'],
+                        // "totalutt" =>$data[$i]['totalUTT'],
+                        "totalut" =>$obj->totalUTT,
                         "upahlemburpajak" =>$data[$i]['upahlemburPajak'],
                         "upahlemburnopajak" =>$data[$i]['upahlemburNoPajak'],
                         "upahlemburtambahpajak" =>$data[$i]['upahlemburTambahPajak'],
@@ -2255,6 +2267,7 @@ class kompensasi extends MY_Controller {
                         "nilaipotongan" =>$data[$i]['nilaiPotongan'],
                         "totalpendapatan" =>$data[$i]['totalpendapatan'],
                         "penerimaanbruto" =>$data[$i]['penerimaanbruto'],
+                        "penerimaanbruto_total"=>$obj->penerimaanbruto_total,
                         "tunjanganpajak" =>$data[$i]['tunjanganpajak'],
                         "biayajabatan" => intval($enddateArr[1]) == 12 ? 0 : $data[$i]['biayajabatan'],
                         "penerimaannet" =>$data[$i]['penerimaannet'],
@@ -5666,7 +5679,7 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         //     return 0;
         // }
     $sql = "select sum(a.nilai)
-            from upahhistory a
+            from upahhistoryx a
             join payroll b ON a.idpayroll = b.idpayroll
             join upahkaryawan c ON a.idupahkaryawan = a.idupahkaryawan
             where a.idpelamar  = $idpelamar and jenisupah = 'tidaktetap' 
