@@ -605,7 +605,7 @@ class kompensasi extends MY_Controller {
         }
 
 
-          $sqlpeg = "select a.idpelamar,idptkp,namalengkap,aaa.tglmasuk,aa.tglberakhir,punyanpwp,biayajabatan,
+          $sqlpeg = "select a.idpelamar,idptkp,namalengkap,aaa.tglmasuk,aa.tglberakhir,punyanpwp,biayajabatan,a.idcompany,
                     jenispotonganpph,bb.idpergerakan,b.nik,c.companycode,e.kodeorg,f.namajabatan,bb.idpergerakan
                     from pelamar a
                     join calonpelamar b ON a.idpelamar = b.idpelamar
@@ -1135,6 +1135,8 @@ class kompensasi extends MY_Controller {
                        
                     }
                 }
+
+
             } else {
                 // echo 'upload '.$rpeg->idpelamar.' ';
                  //UPLOAD
@@ -1566,7 +1568,6 @@ class kompensasi extends MY_Controller {
                 }
 
             } //END foreach ($qbk->result() as $rb)
-
             $data[$i]['benefitCmpBruto'] = $benefitCmpBruto;
             $data[$i]['benefitCmpNet'] = $benefitCmpNet;
             $data[$i]['benefitEmpBruto'] = $benefitEmpBruto;
@@ -1760,12 +1761,23 @@ class kompensasi extends MY_Controller {
 
               //akumulasi
             $obj->akum_bruto = $this->akum_bruto($obj->idpelamar,$obj->penerimaanbruto);
-            
-            $obj->akum_utt = $this->akum_uttm($obj->idpelamar,$obj->totalUTT,$startdateArr[0].'-01-01',$startdateArr[0].'-'.$startdateArr[1].'-01');
+
+            $obj->akum_utt = $this->akum_uttm($obj->idpelamar,$obj->totalUTTTahun,$startdateArr[0].'-01-01',$startdateArr[0].'-'.$startdateArr[1].'-01',$rpeg->idcompany,$startdateArr[1]);
             $obj->akum_tunjpajak = $this->akum_tunjpajak($obj->idpelamar,$data[$i]['tunjanganpajak']);
             $obj->akum_benefit_kary = $this->akum_benefit_kary($obj->idpelamar,$tot_pengurang_pajak);
             // echo $obj->akum_benefit_kary;
-            $selisih_sisa_bulan_pajak =   intval($tglakhirjabatanArr[1])-intval($startdateArr[1]);
+            // print_r($tglakhirjabatanArr);
+            // print_r($startdateArr);
+            // echo intval($tglakhirjabatanArr[1]).'-'.intval($startdateArr[1]);
+
+            if(intval($tglakhirjabatanArr[0])>$startdateArr[0])
+            {
+                $selisih_sisa_bulan_pajak =  12-intval($startdateArr[1]);    
+            } else {
+                $selisih_sisa_bulan_pajak =   intval($tglakhirjabatanArr[1])-intval($startdateArr[1]);
+            }
+            
+            // $selisih_sisa_bulan_pajak = 0;
             // $obj->bruto_th = (($obj->penerimaanbruto-$data[$i]['tunjanganpajak'])   * ($obj->masapajaksetahun-intval($startdateArr[1]))) +  $obj->akum_bruto + $obj->akum_utt + ( $data[$i]['tunjanganpajak'] * ($obj->masapajaksetahun-intval($startdateArr[1])) + $obj->akum_tunjpajak);
             // echo $selisih_sisa_bulan_pajak;
              $obj->bruto_th = (($obj->penerimaanbruto-$data[$i]['tunjanganpajak'])   * $selisih_sisa_bulan_pajak) +  $obj->akum_bruto + $obj->akum_utt + ( $data[$i]['tunjanganpajak'] * ($selisih_sisa_bulan_pajak) + $obj->akum_tunjpajak);
@@ -2047,12 +2059,12 @@ class kompensasi extends MY_Controller {
 
                         $tunjanganpajak = $data[$i]['pphsebulan'];
 
-                        if(intval($startdateArr[1])==12)
-                        { 
-                           //kalo udah bulan desember, ambil pajaknya dari pajakterutang bulan november
-                            $obj->pphsebulan = $this->pajakterutangdes($obj->idpelamar,$startdateArr[0]);
-                            $data[$i]['pphsebulan'] = $obj->pphsebulan;
-                        }
+                        // if(intval($startdateArr[1])==12)
+                        // { 
+                        //    //kalo udah bulan desember, ambil pajaknya dari pajakterutang bulan november
+                        //     $obj->pphsebulan = $this->pajakterutangdes($obj->idpelamar,$startdateArr[0]);
+                        //     $data[$i]['pphsebulan'] = $obj->pphsebulan;
+                        // }
                         
                        // echo $data[$i]['totalpendapatan'].'-('.$benefitCmp.'+'.$benefitEmp.')-'.$data[$i]['pphsebulan'].'+'.$obj->totalUTT;
                        // exit;
@@ -2066,6 +2078,7 @@ class kompensasi extends MY_Controller {
                        // {
                         //kalo ada isinya, ga usah ditambahin lagi, karena sudah ditambahkan sebelumnya
                          $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan'];
+                         // echo $data[$i]['totalpendapatan'].'-'.($benefitCmp+$benefitEmp).'-'.$data[$i]['pphsebulan'];
                        // } else {
                          // $data[$i]['takehomepay'] = $data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']+$obj->totalUTT;
                        // }
@@ -2079,12 +2092,13 @@ class kompensasi extends MY_Controller {
                         if (strpos($data[$i]['takehomepay'], '.') !== false) {
                              //24-8-16
                              $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']);
-
+                             // echo $data[$i]['takehomepay'];
                             //24-8-16
                             // $data[$i]['takehomepay'] = ceil($data[$i]['totalpendapatan']-($benefitCmp+$benefitEmp)-$data[$i]['pphsebulan']);
                         }
                         
                         $obj->takehomepay = $data[$i]['takehomepay'];
+                        // echo  $obj->takehomepay;
 
                         if($obj->idpelamar==150)
                         {
@@ -2107,6 +2121,17 @@ class kompensasi extends MY_Controller {
                         $obj->pajakterutangdes = $obj->pph_setahun2-$obj->pajakterbayar;
                         // echo $obj->pphsettahun.'-'.$obj->pajakterbayar;
                         // echo $obj->pphsettahun."+".$obj->pph_setahun2;
+
+                         if(intval($startdateArr[1])==12)
+                        { 
+                           //kalo udah bulan desember, ambil pajaknya dari pajakterutang bulan november
+                            $data[$i]['pphsebulan'] = $obj->pajakterutangdes;
+                            $obj->pphsebulan = $data[$i]['pphsebulan'];
+                            // echo ($utPengurangPajak+$utTPengurangPajak+$utTTahunPengurangPajak+$benefitPengurangPajak);
+                            $data[$i]['takehomepay'] = $obj->totalUT + $obj->totalUTTTahun + $obj->benefitCmp - ($obj->benefitCmp+$obj->benefitEmp) - $obj->pphsebulan;
+                            // echo $obj->totalUT.' + '.$obj->totalUTTTahun.' + '.$obj->benefitCmp.' - '.($obj->benefitCmp+$obj->benefitEmp);
+                            // $data[$i]['takehomepay'] = ceil($obj->totalUT-($benefitCmp+$benefitEmp)-$obj->pphsebulan);
+                        } 
                         
 
                         if($data[$i]['masapajaksetahun']<12 && diffInMonths($qtglmasuk->tglmasuk,$obj->tglakhirjabatan)<12)
@@ -2125,6 +2150,7 @@ class kompensasi extends MY_Controller {
                             $obj->takehomepay = $data[$i]['takehomepay'];
 
                             //$obj->pajakterutangdes = $obj->tunjanganpajak;
+
                         } 
 
                         //selisih pph
@@ -5665,7 +5691,7 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
    }
 
-   function akum_uttm($idpelamar,$utt,$startdate,$enddate)
+   function akum_uttm($idpelamar,$utttahun,$startdate,$enddate,$idcompany,$bulan)
    {
     //akumulasi upah tidak tetap tahunan
         // $q = $this->db->query("select sum(totalutt) from 
@@ -5678,21 +5704,40 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         // } else {
         //     return 0;
         // }
-    $sql = "select sum(a.nilai)
-            from upahhistoryx a
-            join payroll b ON a.idpayroll = b.idpayroll
-            join upahkaryawan c ON a.idupahkaryawan = a.idupahkaryawan
-            where a.idpelamar  = $idpelamar and jenisupah = 'tidaktetap' 
-            AND c.idkomponenupah IN (select idkomponenupah
-                        from komponenupah
-                        where jeniskomponen = 'Upah Tidak Tetap' and jangkawaktu = 'Tahunan')
-            AND (b.startdate between '$startdate' and '$enddate')";
+    // $sql = "select sum(a.nilai)
+    //         from upahhistoryx a
+    //         join payroll b ON a.idpayroll = b.idpayroll
+    //         join upahkaryawan c ON a.idupahkaryawan = a.idupahkaryawan
+    //         where a.idpelamar  = $idpelamar and jenisupah = 'tidaktetap' 
+    //         AND c.idkomponenupah IN (select idkomponenupah
+    //                     from komponenupah
+    //                     where jeniskomponen = 'Upah Tidak Tetap' and jangkawaktu = 'Tahunan')
+    //         AND (b.startdate between '$startdate' and '$enddate')";
 
+        $sql = "select sum(nilai)
+                from (
+                    select a.idpayroll,a.nilai,a.idpelamar,a.idupahkaryawan
+                    from upahhistory a
+                    join upahkaryawan b ON a .idupahkaryawan = b .idupahkaryawan
+                    join komponenupah c ON b.idkomponenupah = c.idkomponenupah
+                    where a.jenisupah = 'tidaktetap' and a.idpelamar = $idpelamar
+                    and c.jeniskomponen = 'Upah Tidak Tetap' and c.jangkawaktu = 'Tahunan'
+                    and a.idpayroll IN (select a.idpayroll
+                                        from (select idpayroll from payroll
+                                                where startdate between '$startdate'
+                                                and '$enddate' and idcompany = $idcompany) a) 
+                                        ) a";
         $q = $this->db->query($sql);
         if($q->num_rows()>0)
         {
             $r = $q->row();
-            return $r->sum == null ? 0 : $r->sum;
+            if(intval($bulan)==12)
+            {
+                return $r->sum == null ? 0 : $r->sum+$utttahun;
+            } else {
+                return $r->sum == null ? 0 : $r->sum;
+            }
+            
         } else {
             return 0;
         }
