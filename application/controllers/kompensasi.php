@@ -1763,6 +1763,10 @@ class kompensasi extends MY_Controller {
             $obj->akum_bruto = $this->akum_bruto($obj->idpelamar,$obj->penerimaanbruto);
 
             $obj->akum_utt = $this->akum_uttm($obj->idpelamar,$obj->totalUTTTahun,$startdateArr[0].'-01-01',$startdateArr[0].'-'.$startdateArr[1].'-01',$rpeg->idcompany,$startdateArr[1]);
+if($obj->idpelamar==257)
+{
+// echo $obj->akum_utt;
+}
             $obj->akum_tunjpajak = $this->akum_tunjpajak($obj->idpelamar,$data[$i]['tunjanganpajak']);
             $obj->akum_benefit_kary = $this->akum_benefit_kary($obj->idpelamar,$tot_pengurang_pajak);
             // echo $obj->akum_benefit_kary;
@@ -2128,8 +2132,14 @@ class kompensasi extends MY_Controller {
                             $data[$i]['pphsebulan'] = $obj->pajakterutangdes;
                             $obj->pphsebulan = $data[$i]['pphsebulan'];
                             // echo ($utPengurangPajak+$utTPengurangPajak+$utTTahunPengurangPajak+$benefitPengurangPajak);
-                            $data[$i]['takehomepay'] = $obj->totalUT + $obj->totalUTTTahun + $obj->benefitCmp - ($obj->benefitCmp+$obj->benefitEmp) - $obj->pphsebulan;
-                            // echo $obj->totalUT.' + '.$obj->totalUTTTahun.' + '.$obj->benefitCmp.' - '.($obj->benefitCmp+$obj->benefitEmp);
+                            $data[$i]['takehomepay'] = $obj->totalUT + $obj->totalUTTTahun - ($obj->benefitCmp+$obj->benefitEmp) - $obj->pphsebulan;
+
+                            $pendapatan =  $obj->totalUT+($obj->totalUTT - $obj->totalUTTTahun)+($obj->benefitCmp)+$obj->totallembur;
+                            $data[$i]['takehomepay'] = $pendapatan-($obj->benefitCmp+$obj->benefitEmp) - $obj->pphsebulan + $obj->totalUTTTahun;
+                            $obj->takehomepay = $data[$i]['takehomepay'];
+                            // echo $thp;
+                            // echo $obj->totalUT.'+'.($obj->totalUTT - $obj->totalUTTTahun).'+'.($obj->benefitCmp).'+'.$obj->totallembur;
+                            // echo $obj->totalUT.' + '.$obj->totalUTTTahun.' - '.$obj->pphsebulan.' - '.($obj->benefitCmp+$obj->benefitEmp);
                             // $data[$i]['takehomepay'] = ceil($obj->totalUT-($benefitCmp+$benefitEmp)-$obj->pphsebulan);
                         } 
                         
@@ -5691,7 +5701,7 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         }
    }
 
-   function akum_uttm($idpelamar,$utttahun,$startdate,$enddate,$idcompany,$bulan)
+   function akum_uttm($idpelamar,$utttahun=0,$startdate,$enddate,$idcompany,$bulan)
    {
     //akumulasi upah tidak tetap tahunan
         // $q = $this->db->query("select sum(totalutt) from 
@@ -5727,15 +5737,21 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
                                                 where startdate between '$startdate'
                                                 and '$enddate' and idcompany = $idcompany) a) 
                                         ) a";
+
         $q = $this->db->query($sql);
         if($q->num_rows()>0)
         {
             $r = $q->row();
             if(intval($bulan)==12)
             {
-                return $r->sum == null ? 0 : $r->sum+$utttahun;
+//                 if($idpelamar==257)
+// {
+//     echo $utttahun;
+// }
+
+                return $r->sum == null ? $utttahun : $r->sum+$utttahun;
             } else {
-                return $r->sum == null ? 0 : $r->sum;
+                return $r->sum == null ? $utttahun : $r->sum;
             }
             
         } else {

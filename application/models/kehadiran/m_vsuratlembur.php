@@ -11,7 +11,7 @@ class m_vsuratlembur extends CI_Model {
     }
 
     function searchField() {
-        $field = "namalengkap,nik";
+        $field = "a.namalengkap,nik";
         return explode(",", $field);
     }
 

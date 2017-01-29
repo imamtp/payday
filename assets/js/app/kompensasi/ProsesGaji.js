@@ -1,7 +1,7 @@
 
 Ext.define('GridProsesGajiModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpelamar','startdate','enddate','masapajaksetahun','namalengkap','kehadiran','punyanpwp','durasi','hitungpajak','tglgajipertama','masakerja','tglmasuk','nilaiptkp','kodeptkp','totalUT','totalUTT','upahlemburPajak','upahlemburNoPajak','totallembur','benefitCmpBruto','benefitCmpNet','benefitEmpBruto','benefitEmpNet','numdayswork','totalpendapatan','penerimaanbruto','tunjanganpajak','biayajabatan','penerimaannet','netosetahun','pkpsetahun','pph5tahun','pph15tahun','pph25tahun','pph35tahun','pphsettahun','pphsebulan','takehomepay','nilaiPotongan','totallembur','nilaiPotongan','benefitCmp','benefitEmp','tglakhirjabatan','pphterminasi','pajakjantonov','pajakterminasi','pajakterbayar','pajakterutangdes','pajaktotalbayarsetahun','nik','companycode','kodeorg','namajabatan','nilaiptkp','penerimaannetTT','pkpsetahunteratur','selisihpph'],
+    fields: ['idpelamar','startdate','enddate','masapajaksetahun','namalengkap','kehadiran','punyanpwp','durasi','hitungpajak','tglgajipertama','masakerja','tglmasuk','nilaiptkp','kodeptkp','totalUT','totalUTT','upahlemburPajak','upahlemburNoPajak','totallembur','benefitCmpBruto','benefitCmpNet','benefitEmpBruto','benefitEmpNet','numdayswork','totalpendapatan','penerimaanbruto','tunjanganpajak','biayajabatan','penerimaannet','netosetahun','pkpsetahun','pph5tahun','pph15tahun','pph25tahun','pph35tahun','pphsettahun','pphsebulan','takehomepay','nilaiPotongan','totallembur','nilaiPotongan','benefitCmp','benefitEmp','tglakhirjabatan','pphterminasi','pajakjantonov','pajakterminasi','pajakterbayar','pajakterutangdes','pajaktotalbayarsetahun','nik','companycode','kodeorg','namajabatan','nilaiptkp','penerimaannetTT','pkpsetahunteratur','selisihpph','penerimaanbruto_total'],
     idProperty: 'id'
 });
 
@@ -102,7 +102,7 @@ Ext.define('GridProsesGaji', {
         {header: 'Benefit (karyawan)', dataIndex: 'benefitEmp', minWidth: 170, xtype:'numbercolumn',align:'right'},
         {header: 'Total Potongan Lainnya', dataIndex: 'nilaiPotongan', minWidth: 170, xtype:'numbercolumn',align:'right'},
         {header: 'Total pendapatan', dataIndex: 'totalpendapatan', minWidth: 150, xtype:'numbercolumn',align:'right'},
-        {header: 'Penerimaan Bruto', dataIndex: 'penerimaanbruto', minWidth: 150, xtype:'numbercolumn',align:'right'},
+        {header: 'Total Bruto', dataIndex: 'penerimaanbruto_total', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Tunjangan Pajak', dataIndex: 'tunjanganpajak', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Biaya Jabatan', dataIndex: 'biayajabatan', minWidth: 150, xtype:'numbercolumn',align:'right'},
         {header: 'Neto Sebulan', dataIndex: 'penerimaannet', minWidth: 150, xtype:'numbercolumn',align:'right'},
