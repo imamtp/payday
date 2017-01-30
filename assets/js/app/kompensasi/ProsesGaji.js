@@ -373,10 +373,31 @@ Ext.define('GridProsesGaji', {
                                         Ext.getCmp('namajabatan_filterProsesGaji').setValue(null);
                                         Ext.getCmp('startdate_ProsesGaji').setValue(null);
                                         Ext.getCmp('enddate_ProsesGaji').setValue(null);
-                                        storeGridProsesGaji.reload();
+                                        
+                                          storeGridProsesGaji.load({
+                                                                // params:{'id':d.data.category_id},
+                                                                scope: this,
+                                                                callback: function(records, operation, success) {
+                                                                    var resp = Ext.decode(operation.response.responseText);
+                                                                    // console.log(resp.summary);
+                                                                    var footer = resp.summary;
+                                                                    // console.log(footer);
+                                                                    Ext.getCmp('footerUT').setValue(footer.footerUT);
+                                                                    Ext.getCmp('footerUTT').setValue(footer.footerUTT);
+                                                                    Ext.getCmp('footerLembur').setValue(footer.footerLembur);
+                                                                    Ext.getCmp('footerBenefitCmp').setValue(footer.footerBenefitCmp);
+                                                                    Ext.getCmp('footerBenefitEmp').setValue(footer.footerBenefitEmp);
+                                                                    Ext.getCmp('footerPotongan').setValue(footer.footerPotongan);
+                                                                    Ext.getCmp('footerPendapatan').setValue(footer.footerPendapatan);
+                                                                    Ext.getCmp('footerBruto').setValue(footer.footerBruto);
+                                                                    Ext.getCmp('footerPajak').setValue(footer.footerPajak);
+                                                                    Ext.getCmp('footerTHP').setValue(footer.footerTHP);
+                                                                    Ext.getCmp('footerPPH').setValue(footer.footerPPH);
+                                                                }
+                                                            });
 
-                                        Ext.getCmp('footerPPH').hide();
-                                        Ext.getCmp('footerTHP').hide();
+                                        // Ext.getCmp('footerPPH').hide();
+                                        // Ext.getCmp('footerTHP').hide();
                                     }
                             }
                 ]
@@ -512,7 +533,28 @@ Ext.define('GridProsesGaji', {
                                                 success: function(form, action) {
                                                     var d = Ext.decode(form.responseText);
                                                     Ext.Msg.alert('Info', d.message);
-                                                    storeGridProsesGaji.load();
+                                                    
+                                                     storeGridProsesGaji.load({
+                                                                // params:{'id':d.data.category_id},
+                                                                scope: this,
+                                                                callback: function(records, operation, success) {
+                                                                    var resp = Ext.decode(operation.response.responseText);
+                                                                    // console.log(resp.summary);
+                                                                    var footer = resp.summary;
+                                                                    // console.log(footer);
+                                                                    Ext.getCmp('footerUT').setValue(footer.footerUT);
+                                                                    Ext.getCmp('footerUTT').setValue(footer.footerUTT);
+                                                                    Ext.getCmp('footerLembur').setValue(footer.footerLembur);
+                                                                    Ext.getCmp('footerBenefitCmp').setValue(footer.footerBenefitCmp);
+                                                                    Ext.getCmp('footerBenefitEmp').setValue(footer.footerBenefitEmp);
+                                                                    Ext.getCmp('footerPotongan').setValue(footer.footerPotongan);
+                                                                    Ext.getCmp('footerPendapatan').setValue(footer.footerPendapatan);
+                                                                    Ext.getCmp('footerBruto').setValue(footer.footerBruto);
+                                                                    Ext.getCmp('footerPajak').setValue(footer.footerPajak);
+                                                                    Ext.getCmp('footerTHP').setValue(footer.footerTHP);
+                                                                    Ext.getCmp('footerPPH').setValue(footer.footerPPH);
+                                                                }
+                                                            });
                                                 },
                                                 failure: function(form, action) {
                                                     Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');

@@ -486,6 +486,7 @@ Ext.define('GridConfigUpahTTTahun', {
 
                                         var TabItemConfigTTTahun = Ext.getCmp('TabItemConfigTTTahun');
                                         TabItemConfigTTTahun.items.getAt(1).setDisabled(false);    
+                                        TabItemConfigTTTahun.setActiveTab(0);
                                     }
                                 } else {
                                      Ext.Msg.alert("Info", d.message);

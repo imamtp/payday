@@ -656,7 +656,7 @@ class kompensasi extends MY_Controller {
             $obj->enddate = $enddate;
 
             //cek tanggal masuk pegawai > dari tanggal periode awal gaji
-            if($startdate<=$rpeg->tglmasuk)
+            if($startdate<$rpeg->tglmasuk)
             {
                 //belum waktunya
                 continue;
@@ -2290,9 +2290,9 @@ if($obj->idpelamar==257)
                         "tglmasuk" =>$data[$i]['tglmasuk'],
                         "nilaiptkp" =>$data[$i]['nilaiptkp'],
                         "kodeptkp" =>$data[$i]['kodeptkp'],
-                        "totalut" =>$data[$i]['totalUT'],
-                        // "totalutt" =>$data[$i]['totalUTT'],
-                        "totalut" =>$obj->totalUTT,
+                        "totalut" =>$obj->totalUT,
+                        "totalutt" =>$obj->totalUTT+$obj->totalUTTTahun,
+                        // "totalut" =>$obj->totalUTT,
                         "upahlemburpajak" =>$data[$i]['upahlemburPajak'],
                         "upahlemburnopajak" =>$data[$i]['upahlemburNoPajak'],
                         "upahlemburtambahpajak" =>$data[$i]['upahlemburTambahPajak'],
@@ -2462,34 +2462,34 @@ if($obj->idpelamar==257)
         $sql = $this->m_riwayatgaji->query()." WHERE ".$this->m_riwayatgaji->whereQuery($sd,$nd,$idcompany,$idorg,$idjab);
         // echo $sql; die;
         //komponen UT
-        $qut = $this->db->query("select idkomponenupah,namakomponen
-                                    from komponenupah
-                                    where jeniskomponen='Upah Tetap' and idcompany=$idcompany and display is null");
-        $data['komponenut'] = $qut;
+        // $qut = $this->db->query("select idkomponenupah,namakomponen
+        //                             from komponenupah
+        //                             where jeniskomponen='Upah Tetap' and idcompany=$idcompany and display is null");
+        // $data['komponenut'] = $qut;
 
-        //komponen UTT
-        $qutt = $this->db->query("select idkomponenupah,namakomponen
-                                    from komponenupah
-                                    where jeniskomponen='Upah Tidak Tetap' and idcompany=$idcompany and display is null");
-        // echo $this->db->last_query();
-        $data['komponenutt'] = $qutt;
+        // //komponen UTT
+        // $qutt = $this->db->query("select idkomponenupah,namakomponen
+        //                             from komponenupah
+        //                             where jeniskomponen='Upah Tidak Tetap' and idcompany=$idcompany and display is null");
+        // // echo $this->db->last_query();
+        // $data['komponenutt'] = $qutt;
 
-        //benefit
-        $qbenefit = $this->db->query("select idbenefit,namabenefit
-                                    from komponenbenefit
-                                    where idcompany=$idcompany and display is null");
-        $data['benefit'] = $qbenefit;
+        // //benefit
+        // $qbenefit = $this->db->query("select idbenefit,namabenefit
+        //                             from komponenbenefit
+        //                             where idcompany=$idcompany and display is null");
+        // $data['benefit'] = $qbenefit;
 
-        $qbenefite = $this->db->query("select idbenefit,namabenefit
-                                    from komponenbenefit
-                                    where idcompany=$idcompany and display is null and ditanggungkaryawan='t'");
-        $data['benefite'] = $qbenefite;
+        // $qbenefite = $this->db->query("select idbenefit,namabenefit
+        //                             from komponenbenefit
+        //                             where idcompany=$idcompany and display is null and ditanggungkaryawan='t'");
+        // $data['benefite'] = $qbenefite;
 
-        //potongan
-        $qpotongan = $this->db->query("select idpengurangupah,namapengurangupah
-                                    from pengurangupah
-                                    where idcompany=$idcompany and display is null");
-        $data['potongan'] = $qpotongan;
+        // //potongan
+        // $qpotongan = $this->db->query("select idpengurangupah,namapengurangupah
+        //                             from pengurangupah
+        //                             where idcompany=$idcompany and display is null");
+        // $data['potongan'] = $qpotongan;
 
         // echo $sql;
         $data['data'] = $this->db->query($sql);

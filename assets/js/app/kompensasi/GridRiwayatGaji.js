@@ -376,7 +376,28 @@ Ext.define('GridRiwayatGaji', {
                                         Ext.getCmp('namajabatan_filterRiwayatGaji').setValue(null);
                                         Ext.getCmp('startdate_RiwayatGaji').setValue(null);
                                         Ext.getCmp('enddate_RiwayatGaji').setValue(null);
-                                        storeGridRiwayatGaji.reload();
+
+                                         storeGridRiwayatGaji.load({
+                                                                // params:{'id':d.data.category_id},
+                                                                scope: this,
+                                                                callback: function(records, operation, success) {
+                                                                    var resp = Ext.decode(operation.response.responseText);
+                                                                    // console.log(resp.summary);
+                                                                    var footerRiwayat = resp.summary;
+                                                                    // console.log(footer);
+                                                                        Ext.getCmp('footerRiwayatUT').setValue(footerRiwayat.footerUT);
+                                                                        Ext.getCmp('footerRiwayatUTT').setValue(footerRiwayat.footerUTT);
+                                                                        Ext.getCmp('footerRiwayatLembur').setValue(footerRiwayat.footerLembur);
+                                                                        Ext.getCmp('footerRiwayatBenefitCmp').setValue(footerRiwayat.footerBenefitCmp);
+                                                                        Ext.getCmp('footerRiwayatBenefitEmp').setValue(footerRiwayat.footerBenefitEmp);
+                                                                        Ext.getCmp('footerRiwayatPotongan').setValue(footerRiwayat.footerPotongan);
+                                                                        Ext.getCmp('footerRiwayatPendapatan').setValue(footerRiwayat.footerPendapatan);
+                                                                        Ext.getCmp('footerRiwayatBruto').setValue(footerRiwayat.footerBruto);
+                                                                        Ext.getCmp('footerRiwayatPajak').setValue(footerRiwayat.footerPajak);
+                                                                        Ext.getCmp('footerRiwayatTHP').setValue(footerRiwayat.footerTHP);
+                                                                        Ext.getCmp('footerRiwayatPPH').setValue(footerRiwayat.footerPPH);
+                                                                }
+                                                            });
                                     }
                             }
                 ]
@@ -498,11 +519,52 @@ Ext.define('GridRiwayatGaji', {
                                                                         params: {postdata: Ext.encode(selected)},
                                                                         success: function(form, action) {
                                                                             // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                                                            storeGridRiwayatGaji.load();
+                                                                            storeGridRiwayatGaji.load({
+                                                                                    // params:{'id':d.data.category_id},
+                                                                                    scope: this,
+                                                                                    callback: function(records, operation, success) {
+                                                                                        var resp = Ext.decode(operation.response.responseText);
+                                                                                        // console.log(resp.summary);
+                                                                                        var footerRiwayat = resp.summary;
+                                                                                        // console.log(footer);
+                                                                                            Ext.getCmp('footerRiwayatUT').setValue(footerRiwayat.footerUT);
+                                                                                            Ext.getCmp('footerRiwayatUTT').setValue(footerRiwayat.footerUTT);
+                                                                                            Ext.getCmp('footerRiwayatLembur').setValue(footerRiwayat.footerLembur);
+                                                                                            Ext.getCmp('footerRiwayatBenefitCmp').setValue(footerRiwayat.footerBenefitCmp);
+                                                                                            Ext.getCmp('footerRiwayatBenefitEmp').setValue(footerRiwayat.footerBenefitEmp);
+                                                                                            Ext.getCmp('footerRiwayatPotongan').setValue(footerRiwayat.footerPotongan);
+                                                                                            Ext.getCmp('footerRiwayatPendapatan').setValue(footerRiwayat.footerPendapatan);
+                                                                                            Ext.getCmp('footerRiwayatBruto').setValue(footerRiwayat.footerBruto);
+                                                                                            Ext.getCmp('footerRiwayatPajak').setValue(footerRiwayat.footerPajak);
+                                                                                            Ext.getCmp('footerRiwayatTHP').setValue(footerRiwayat.footerTHP);
+                                                                                            Ext.getCmp('footerRiwayatPPH').setValue(footerRiwayat.footerPPH);
+                                                                                    }
+                                                                                });
                                                                         },
                                                                         failure: function(form, action) {
                                                                             Ext.Msg.alert("Load failed", action.result.errorMessage);
-                                                                            storeGridRiwayatGaji.load();
+                                                                             
+                                                                             storeGridRiwayatGaji.load({
+                                                                                    // params:{'id':d.data.category_id},
+                                                                                    scope: this,
+                                                                                    callback: function(records, operation, success) {
+                                                                                        var resp = Ext.decode(operation.response.responseText);
+                                                                                        // console.log(resp.summary);
+                                                                                        var footerRiwayat = resp.summary;
+                                                                                        // console.log(footer);
+                                                                                            Ext.getCmp('footerRiwayatUT').setValue(footerRiwayat.footerUT);
+                                                                                            Ext.getCmp('footerRiwayatUTT').setValue(footerRiwayat.footerUTT);
+                                                                                            Ext.getCmp('footerRiwayatLembur').setValue(footerRiwayat.footerLembur);
+                                                                                            Ext.getCmp('footerRiwayatBenefitCmp').setValue(footerRiwayat.footerBenefitCmp);
+                                                                                            Ext.getCmp('footerRiwayatBenefitEmp').setValue(footerRiwayat.footerBenefitEmp);
+                                                                                            Ext.getCmp('footerRiwayatPotongan').setValue(footerRiwayat.footerPotongan);
+                                                                                            Ext.getCmp('footerRiwayatPendapatan').setValue(footerRiwayat.footerPendapatan);
+                                                                                            Ext.getCmp('footerRiwayatBruto').setValue(footerRiwayat.footerBruto);
+                                                                                            Ext.getCmp('footerRiwayatPajak').setValue(footerRiwayat.footerPajak);
+                                                                                            Ext.getCmp('footerRiwayatTHP').setValue(footerRiwayat.footerTHP);
+                                                                                            Ext.getCmp('footerRiwayatPPH').setValue(footerRiwayat.footerPPH);
+                                                                                    }
+                                                                                });
                                                                         }
                                                                     });
                                                                     // storeGridConfigBenefit.remove(sm.getSelection());
