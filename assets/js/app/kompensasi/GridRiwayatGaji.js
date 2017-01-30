@@ -610,6 +610,49 @@ Ext.define('GridRiwayatGaji', {
                     }
                 },
                 '->',
+                {
+                        text: 'Show Summary',
+                        hidden:true,
+                        id:'showRiwayatSummary',
+                        // iconCls: 'refresh',
+                        handler: function() {
+                            Ext.getCmp('hideRiwayatSummary').show();
+                            Ext.getCmp('showRiwayatSummary').hide();
+
+                            Ext.getCmp('footerRiwayatBenefitCmp').show();
+                            Ext.getCmp('footerRiwayatBenefitEmp').show();
+                            Ext.getCmp('footerRiwayatPotongan').show();
+                            Ext.getCmp('footerRiwayatLembur').show();
+                            Ext.getCmp('footerRiwayatUTT').show();
+                            Ext.getCmp('footerRiwayatUT').show();
+                            Ext.getCmp('footerRiwayatPajak').show();
+                            Ext.getCmp('footerRiwayatBruto').show();
+                            Ext.getCmp('footerRiwayatPendapatan').show();
+                            Ext.getCmp('footerRiwayatPPH').show();
+                            Ext.getCmp('footerRiwayatTHP').show();
+                        }
+                },
+                {
+                        text: 'Hide Summary',
+                        id:'hideRiwayatSummary',
+                        // iconCls: 'refresh',
+                        handler: function() {
+                            Ext.getCmp('showRiwayatSummary').show();
+                            Ext.getCmp('hideRiwayatSummary').hide();
+
+                            Ext.getCmp('footerRiwayatBenefitCmp').hide();
+                            Ext.getCmp('footerRiwayatBenefitEmp').hide();
+                            Ext.getCmp('footerRiwayatPotongan').hide();
+                            Ext.getCmp('footerRiwayatLembur').hide();
+                            Ext.getCmp('footerRiwayatUTT').hide();
+                            Ext.getCmp('footerRiwayatUT').hide();
+                            Ext.getCmp('footerRiwayatPajak').hide();
+                            Ext.getCmp('footerRiwayatBruto').hide();
+                            Ext.getCmp('footerRiwayatPendapatan').hide();
+                            Ext.getCmp('footerRiwayatPPH').hide();
+                            Ext.getCmp('footerRiwayatTHP').hide();
+                        }
+                },
                 'Pencarian Nama Karyawan: ', ' ',
                 {
                     xtype: 'searchGridRiwayatGaji',

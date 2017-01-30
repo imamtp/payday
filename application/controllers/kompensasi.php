@@ -630,7 +630,7 @@ class kompensasi extends MY_Controller {
                     ) as xx ON a.idpelamar = xx.idpelamar
                     join pekerjaan aaa ON xx.idpekerjaan = aaa.idpekerjaan
                     left join pergerakanpersonil bb ON aa.idpergerakanpersonil = bb.idpergerakanpersonil
-                    where a.idcompany=$idcompany and a.idptkp is not null $wernama
+                    where a.idcompany=$idcompany and a.idptkp is not null $wernama 
                     and ('$startdate' >= aaa.tglmasuk OR aaa.tglmasuk >= '$startdate')"
                 . " order by b.nik";
        // echo $sqlpeg; exit;
@@ -999,17 +999,17 @@ class kompensasi extends MY_Controller {
  
                  //
 
-                if($commit=='true')
-                {
-                    $dupahhistory = array(
-                            'idpayroll'=>$idpayroll,
-                            'idpelamar'=>$rpeg->idpelamar,
-                            'idupahkaryawan'=>$rUT->idupahkaryawan,
-                            'jenisupah'=>'tetap',
-                            'nilai'=>$rUT->nilai
-                        );
-                    $this->db->insert('upahhistory',$dupahhistory);
-                }
+                // if($commit=='true')
+                // {
+                //     $dupahhistory = array(
+                //             'idpayroll'=>$idpayroll,
+                //             'idpelamar'=>$rpeg->idpelamar,
+                //             'idupahkaryawan'=>$rUT->idupahkaryawan,
+                //             'jenisupah'=>'tetap',
+                //             'nilai'=>$rUT->nilai
+                //         );
+                //     $this->db->insert('upahhistory',$dupahhistory);
+                // }
             }
             // echo $totalUT;
             $data[$i]['totalUT'] = $totalUT;
@@ -1113,27 +1113,27 @@ class kompensasi extends MY_Controller {
 
                     }
 
-                    if($commit=='true')
-                    {
-                        $dupahhistory = array(
-                                'idpayroll'=>$idpayroll,
-                                'idpelamar'=>$rpeg->idpelamar,
-                                'jenisupah'=>'tidaktetap',
-                                'idupahkaryawan'=>$rUT->idupahkaryawan,
-                                'nilai'=>$nilai
-                            );
+                    // if($commit=='true')
+                    // {
+                    //     $dupahhistory = array(
+                    //             'idpayroll'=>$idpayroll,
+                    //             'idpelamar'=>$rpeg->idpelamar,
+                    //             'jenisupah'=>'tidaktetap',
+                    //             'idupahkaryawan'=>$rUT->idupahkaryawan,
+                    //             'nilai'=>$nilai
+                    //         );
 
-                        $wer = array('idpayroll'=>$idpayroll, 'idupahkaryawan'=>$rUT->idupahkaryawan, 'idpelamar'=>$rpeg->idpelamar);
-                        $cek = $this->db->get_where('upahhistory',$wer);
-                        if($cek->num_rows()>0)
-                        {
-                            $this->db->where($wer);
-                            $this->db->update('upahhistory',$dupahhistory);
-                        } else {
-                             $this->db->insert('upahhistory',$dupahhistory);     
-                        }
+                    //     $wer = array('idpayroll'=>$idpayroll, 'idupahkaryawan'=>$rUT->idupahkaryawan, 'idpelamar'=>$rpeg->idpelamar);
+                    //     $cek = $this->db->get_where('upahhistory',$wer);
+                    //     if($cek->num_rows()>0)
+                    //     {
+                    //         $this->db->where($wer);
+                    //         $this->db->update('upahhistory',$dupahhistory);
+                    //     } else {
+                    //          $this->db->insert('upahhistory',$dupahhistory);     
+                    //     }
                        
-                    }
+                    // }
                 }
 
 
@@ -1261,17 +1261,17 @@ class kompensasi extends MY_Controller {
 
                     $totalUTTTahun+=$nilai;
 
-                    if($commit=='true')
-                    {
-                        $dupahhistory = array(
-                                'idpayroll'=>$idpayroll,
-                                'idpelamar'=>$rpeg->idpelamar,
-                                'jenisupah'=>'tidaktetap',
-                                'idupahkaryawan'=>$rUTTTahun->idupahkaryawan,
-                                'nilai'=>$nilai
-                            );
-                        $this->db->insert('upahhistory',$dupahhistory);
-                    }
+                    // if($commit=='true')
+                    // {
+                    //     $dupahhistory = array(
+                    //             'idpayroll'=>$idpayroll,
+                    //             'idpelamar'=>$rpeg->idpelamar,
+                    //             'jenisupah'=>'tidaktetap',
+                    //             'idupahkaryawan'=>$rUTTTahun->idupahkaryawan,
+                    //             'nilai'=>$nilai
+                    //         );
+                    //     $this->db->insert('upahhistory',$dupahhistory);
+                    // }
                 }
             } else {
                 $totalUTTTahun = 0;
@@ -1440,17 +1440,17 @@ class kompensasi extends MY_Controller {
                                 
                                
 
-                        if($commit=='true')
-                        {
-                            $dbenefithistory = array(
-                                    'idpayroll'=>$idpayroll,
-                                    'idpelamar'=>$rpeg->idpelamar,
-                                    'idbenefit'=>$rb->idbenefit,
-                                    'ditanggung'=>'perusahaan',
-                                    'nilaibenefit'=>$nilaiBenefit
-                                );
-                            $this->db->insert('benefithistory',$dbenefithistory);
-                        }
+                        // if($commit=='true')
+                        // {
+                        //     $dbenefithistory = array(
+                        //             'idpayroll'=>$idpayroll,
+                        //             'idpelamar'=>$rpeg->idpelamar,
+                        //             'idbenefit'=>$rb->idbenefit,
+                        //             'ditanggung'=>'perusahaan',
+                        //             'nilaibenefit'=>$nilaiBenefit
+                        //         );
+                        //     $this->db->insert('benefithistory',$dbenefithistory);
+                        // }
 
   // print_r($dbenefithistory);
                                  // echo $nilaiBenefit.'<br>';
@@ -1551,17 +1551,17 @@ class kompensasi extends MY_Controller {
 //                                        }
                                 }
 
-                        if($commit=='true')
-                        {
-                            $dbenefithistory = array(
-                                    'idpayroll'=>$idpayroll,
-                                    'idpelamar'=>$rpeg->idpelamar,
-                                    'idbenefit'=>$rb->idbenefit,
-                                    'ditanggung'=>'karyawan',
-                                    'nilaibenefit'=>$nilaiBenefit
-                                );
-                            $this->db->insert('benefithistory',$dbenefithistory);
-                        }
+                        // if($commit=='true')
+                        // {
+                        //     $dbenefithistory = array(
+                        //             'idpayroll'=>$idpayroll,
+                        //             'idpelamar'=>$rpeg->idpelamar,
+                        //             'idbenefit'=>$rb->idbenefit,
+                        //             'ditanggung'=>'karyawan',
+                        //             'nilaibenefit'=>$nilaiBenefit
+                        //         );
+                        //     $this->db->insert('benefithistory',$dbenefithistory);
+                        // }
                         
                          
                     }
@@ -1643,16 +1643,16 @@ class kompensasi extends MY_Controller {
                                         // }
                                 }
 
-                if($commit=='true')
-                {
-                    $dpengurangupahhistory = array(
-                            'idpayroll'=>$idpayroll,
-                            'idpelamar'=>$rpeg->idpelamar,
-                            'idpengurangupah'=>$rPotongan->idpengurangupah,
-                            'nilai'=>$nilaipot
-                        );
-                    $this->db->insert('pengurangupahhistory',$dpengurangupahhistory);
-                }               
+                // if($commit=='true')
+                // {
+                //     $dpengurangupahhistory = array(
+                //             'idpayroll'=>$idpayroll,
+                //             'idpelamar'=>$rpeg->idpelamar,
+                //             'idpengurangupah'=>$rPotongan->idpengurangupah,
+                //             'nilai'=>$nilaipot
+                //         );
+                //     $this->db->insert('pengurangupahhistory',$dpengurangupahhistory);
+                // }               
             }
             $obj->nilaiPotongan = $nilaiPotongan;
             $data[$i]['nilaiPotongan'] = $nilaiPotongan; 
@@ -1754,6 +1754,7 @@ class kompensasi extends MY_Controller {
             $obj->penghasilanbrutoTT = $penghasilanbrutoTT;
             $obj->penerimaanbruto =  $data[$i]['penerimaanbruto'];
             $obj->penerimaanbruto_total = $obj->penerimaanbruto + $data[$i]['totalUTTTahun'];
+            $data[$i]['penerimaanbruto_total'] = $obj->penerimaanbruto_total;
 
 // echo $utPengurangPajak.','.$utTPengurangPajak;
             $tot_pengurang_pajak = ceil($utPengurangPajak)+ceil($utTPengurangPajak)+ceil($data[$i]['upahlemburKurangPajak'])+ceil($benefitPengurangPajak);
@@ -2119,11 +2120,14 @@ if($obj->idpelamar==257)
                         //     $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0]);
                         // }
                          $obj->pajakjantonov = $this->pajakjantonov($data[$i]['idpelamar'],($obj->pphsebulantakteratur+$obj->pphsebulanteratur),$enddateArr[0],$startdateArr[1]);
+                         $data[$i]['pajakjantonov'] = $obj->pajakjantonov;
                          // echo $obj->pajakjantonov;
                         $obj->pajakterbayar = $obj->pajakjantonov-$obj->pphterminasi;
+                        $data[$i]['pajakterbayar'] = $obj->pajakterbayar;
                         // $obj->pajakterutangdes = $obj->pphsettahun-$obj->pajakterbayar;
                         $obj->pajakterutangdes = $obj->pph_setahun2-$obj->pajakterbayar;
-                        // echo $obj->pphsettahun.'-'.$obj->pajakterbayar;
+                        $data[$i]['pajakterutangdes'] = $obj->pajakterutangdes;
+                         // echo $obj->pphsettahun.'-'.$obj->pajakterbayar;
                         // echo $obj->pphsettahun."+".$obj->pph_setahun2;
 
                          if(intval($startdateArr[1])==12)
@@ -2173,7 +2177,7 @@ if($obj->idpelamar==257)
                             $obj->selisihpph = 0;
                         }
                         $obj->pajaktotalbayarsetahun = $obj->pajakterutangdes+$obj->pajakterbayar;
-
+                        $data[$i]['pajaktotalbayarsetahun'] = $obj->pajaktotalbayarsetahun;
             // echo '<pre>';
             // print_r($data);
             // echo '</pre>';
@@ -2259,6 +2263,7 @@ if($obj->idpelamar==257)
             //     $obj->takehomepay = 0;
             // } else {
                 $obj->takehomepay = $data[$i]['takehomepay'];
+                // echo $obj->takehomepay;
             // }
 
             
@@ -2303,7 +2308,7 @@ if($obj->idpelamar==257)
                         "nilaipotongan" =>$data[$i]['nilaiPotongan'],
                         "totalpendapatan" =>$data[$i]['totalpendapatan'],
                         "penerimaanbruto" =>$data[$i]['penerimaanbruto'],
-                        "penerimaanbruto_total"=>$obj->penerimaanbruto_total,
+                        "penerimaanbruto_total"=>$data[$i]['penerimaanbruto_total'],
                         "tunjanganpajak" =>$data[$i]['tunjanganpajak'],
                         "biayajabatan" => intval($enddateArr[1]) == 12 ? 0 : $data[$i]['biayajabatan'],
                         "penerimaannet" =>$data[$i]['penerimaannet'],
@@ -2314,15 +2319,16 @@ if($obj->idpelamar==257)
                         "pph25tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph25%tahun'],
                         "pph35tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph35%tahun'],
                         "pphsettahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pphsettahun'],
-                        "pphsebulan" =>$data[$i]['pphsebulan'],
-                        "pajakjantonov"=>$obj->pajakjantonov,
-                        "pajakterbayar"=>$obj->pajakterbayar,
-                        "pajakterutangdes"=>$obj->pajakterutangdes,
-                        "pajaktotalbayarsetahun"=>$obj->pajaktotalbayarsetahun,
-                        "takehomepay" =>$data[$i]['takehomepay'],
+                        "pphsebulan" =>$obj->pphsebulan,
+                        "pajakjantonov"=>$data[$i]['pajakjantonov'],
+                        "pajakterbayar"=>$data[$i]['pajakterbayar'],
+                        "pajakterutangdes"=>$data[$i]['pajakterutangdes'],
+                        "pajaktotalbayarsetahun"=>$data[$i]['pajaktotalbayarsetahun'],
+                        "takehomepay" =>$obj->takehomepay,
                         "prevtakehomepay" => $PrevPay,
                     );
                 $this->db->insert('payrolldata',$datapayroll);
+                // echo '   '.$obj->takehomepay;
             }
 
             $footerUT+=$data[$i]['totalUT'];
@@ -3126,17 +3132,17 @@ if($obj->idpelamar==257)
 
                 $totalUT+=$rUT->nilai;
 
-                if($commit=='true')
-                {
-                    $dupahhistory = array(
-                            'idpayroll'=>$idpayroll,
-                            'idpelamar'=>$rpeg->idpelamar,
-                            'idupahkaryawan'=>$rUT->idupahkaryawan,
-                            'jenisupah'=>'tetap',
-                            'nilai'=>$rUT->nilai
-                        );
-                    $this->db->insert('upahhistory',$dupahhistory);
-                }
+                // if($commit=='true')
+                // {
+                //     $dupahhistory = array(
+                //             'idpayroll'=>$idpayroll,
+                //             'idpelamar'=>$rpeg->idpelamar,
+                //             'idupahkaryawan'=>$rUT->idupahkaryawan,
+                //             'jenisupah'=>'tetap',
+                //             'nilai'=>$rUT->nilai
+                //         );
+                //     $this->db->insert('upahhistory',$dupahhistory);
+                // }
             }
             // echo $totalUT;
             $data[$i]['totalUT'] = $totalUT;
@@ -3208,17 +3214,17 @@ if($obj->idpelamar==257)
 
                     $totalUTT+=$nilai;
 
-                    if($commit=='true')
-                    {
-                        $dupahhistory = array(
-                                'idpayroll'=>$idpayroll,
-                                'idpelamar'=>$rpeg->idpelamar,
-                                'jenisupah'=>'tidaktetap',
-                                'idupahkaryawan'=>$rUT->idupahkaryawan,
-                                'nilai'=>$nilai
-                            );
-                        $this->db->insert('upahhistory',$dupahhistory);
-                    }
+                    // if($commit=='true')
+                    // {
+                    //     $dupahhistory = array(
+                    //             'idpayroll'=>$idpayroll,
+                    //             'idpelamar'=>$rpeg->idpelamar,
+                    //             'jenisupah'=>'tidaktetap',
+                    //             'idupahkaryawan'=>$rUT->idupahkaryawan,
+                    //             'nilai'=>$nilai
+                    //         );
+                    //     $this->db->insert('upahhistory',$dupahhistory);
+                    // }
                 }
             } else {
                 $totalUTT = 0;
@@ -3281,17 +3287,17 @@ if($obj->idpelamar==257)
 
                     $totalUTTTahun+=$nilai;
 
-                    if($commit=='true')
-                    {
-                        $dupahhistory = array(
-                                'idpayroll'=>$idpayroll,
-                                'idpelamar'=>$rpeg->idpelamar,
-                                'jenisupah'=>'tidaktetap',
-                                'idupahkaryawan'=>$rUTTTahun->idupahkaryawan,
-                                'nilai'=>$nilai
-                            );
-                        $this->db->insert('upahhistory',$dupahhistory);
-                    }
+                    // if($commit=='true')
+                    // {
+                    //     $dupahhistory = array(
+                    //             'idpayroll'=>$idpayroll,
+                    //             'idpelamar'=>$rpeg->idpelamar,
+                    //             'jenisupah'=>'tidaktetap',
+                    //             'idupahkaryawan'=>$rUTTTahun->idupahkaryawan,
+                    //             'nilai'=>$nilai
+                    //         );
+                    //     $this->db->insert('upahhistory',$dupahhistory);
+                    // }
                 }
             } else {
                 $totalUTTTahun = 0;
@@ -3439,17 +3445,17 @@ if($obj->idpelamar==257)
                                         $benefitCmp+=$nilaiBenefit;
                                 }
 
-                        if($commit=='true')
-                        {
-                            $dbenefithistory = array(
-                                    'idpayroll'=>$idpayroll,
-                                    'idpelamar'=>$rpeg->idpelamar,
-                                    'idbenefit'=>$rb->idbenefit,
-                                    'ditanggung'=>'perusahaan',
-                                    'nilaibenefit'=>$nilaiBenefit
-                                );
-                            $this->db->insert('benefithistory',$dbenefithistory);
-                        }
+                        // if($commit=='true')
+                        // {
+                        //     $dbenefithistory = array(
+                        //             'idpayroll'=>$idpayroll,
+                        //             'idpelamar'=>$rpeg->idpelamar,
+                        //             'idbenefit'=>$rb->idbenefit,
+                        //             'ditanggung'=>'perusahaan',
+                        //             'nilaibenefit'=>$nilaiBenefit
+                        //         );
+                        //     $this->db->insert('benefithistory',$dbenefithistory);
+                        // }
 
   // print_r($dbenefithistory);
                                  // echo $nilaiBenefit.'<br>';
@@ -3532,17 +3538,17 @@ if($obj->idpelamar==257)
                                         $benefitEmp += $nilaiBenefit;
                                 }
 
-                        if($commit=='true')
-                        {
-                            $dbenefithistory = array(
-                                    'idpayroll'=>$idpayroll,
-                                    'idpelamar'=>$rpeg->idpelamar,
-                                    'idbenefit'=>$rb->idbenefit,
-                                    'ditanggung'=>'karyawan',
-                                    'nilaibenefit'=>$nilaiBenefit
-                                );
-                            $this->db->insert('benefithistory',$dbenefithistory);
-                        }
+                        // if($commit=='true')
+                        // {
+                        //     $dbenefithistory = array(
+                        //             'idpayroll'=>$idpayroll,
+                        //             'idpelamar'=>$rpeg->idpelamar,
+                        //             'idbenefit'=>$rb->idbenefit,
+                        //             'ditanggung'=>'karyawan',
+                        //             'nilaibenefit'=>$nilaiBenefit
+                        //         );
+                        //     $this->db->insert('benefithistory',$dbenefithistory);
+                        // }
                     }
                 }
 
@@ -3618,16 +3624,16 @@ if($obj->idpelamar==257)
                                         // }
                                 }
 
-                if($commit=='true')
-                {
-                    $dpengurangupahhistory = array(
-                            'idpayroll'=>$idpayroll,
-                            'idpelamar'=>$rpeg->idpelamar,
-                            'idpengurangupah'=>$rPotongan->idpengurangupah,
-                            'nilai'=>$nilaipot
-                        );
-                    $this->db->insert('pengurangupahhistory',$dpengurangupahhistory);
-                }               
+                // if($commit=='true')
+                // {
+                //     $dpengurangupahhistory = array(
+                //             'idpayroll'=>$idpayroll,
+                //             'idpelamar'=>$rpeg->idpelamar,
+                //             'idpengurangupah'=>$rPotongan->idpengurangupah,
+                //             'nilai'=>$nilaipot
+                //         );
+                //     $this->db->insert('pengurangupahhistory',$dpengurangupahhistory);
+                // }               
             }
             $obj->nilaiPotongan = $nilaiPotongan;
             $data[$i]['nilaiPotongan'] = $nilaiPotongan; 
@@ -3957,7 +3963,7 @@ if($obj->idpelamar==257)
                         "pajakterbayar"=>$obj->pajakterbayar,
                         "pajakterutangdes"=>$obj->pajakterutangdes,
                         "pajaktotalbayarsetahun"=>$obj->pajaktotalbayarsetahun,
-                        "takehomepay" =>$data[$i]['takehomepay']
+                        "takehomepay" =>$obj->takehomepay
                     );
                 $this->db->insert('payrolldata',$datapayroll);
             }
