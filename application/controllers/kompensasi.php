@@ -656,10 +656,30 @@ class kompensasi extends MY_Controller {
             $obj->enddate = $enddate;
 
             //cek tanggal masuk pegawai > dari tanggal periode awal gaji
-            if($startdate<$rpeg->tglmasuk)
+
+            // 2017-01-01<2017-01-15 
+            // if($startdate<$rpeg->tglmasuk)
+            // {
+            //     //belum waktunya
+            //     echo $startdate.'<'.$rpeg->tglmasuk.' ';
+            //     continue;
+            // }
+
+            if (($rpeg->tglmasuk <= $obj->startdate))
             {
-                //belum waktunya
-                continue;
+              // echo "is between";
+
+            }
+            else
+            {
+                // echo '('.$rpeg->tglmasuk.' > '.$obj->startdate.') && ('.$rpeg->tglmasuk.' < '.$obj->enddate.') ----- ';
+                if(($rpeg->tglmasuk>=$obj->startdate) && ($rpeg->tglmasuk<=$obj->enddate))
+                {
+
+                } else {
+                    continue;   
+                }
+                           
             }
             // if($)
 
