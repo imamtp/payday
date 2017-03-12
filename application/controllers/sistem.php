@@ -424,6 +424,7 @@ class sistem extends MY_Controller {
         } else {
             $json = array('success' => false, 'message' => 'Insufficient Rights!');
         }
+       // echol $this->db->last_query();
         echo json_encode($json);
     }
 

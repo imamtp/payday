@@ -527,13 +527,15 @@ var formPergerakanPersonel = Ext.create('Ext.form.Panel', {
                     emptyText: 'Pilih Level Individu...',
                     onTriggerClick: function() {
                         wGridLevelIndividuListPopup.show();
-                        storeGridLevelIndividuList.load(
-                            {
-                                params:{
-                                    pergerakan: Ext.getCmp('comboxpergerakan_fPergerakanP').getValue(),
-                                    idlevelindividu: Ext.getCmp('idlevelindividu_fPergerakanP_from').getValue()
-                                }
-                            });
+
+                        storeGridLevelIndividuList.on('beforeload',function(store, operation,eOpts){
+                                        operation.params={
+                                                        pergerakan: Ext.getCmp('comboxpergerakan_fPergerakanP').getValue(),
+                                                        idlevelindividu: Ext.getCmp('idlevelindividu_fPergerakanP_from').getValue()
+                                                  };
+                                              });
+
+                        storeGridLevelIndividuList.load();
                     }
                 }), {
                     xtype: 'comboxlokasi',

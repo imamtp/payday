@@ -2307,7 +2307,7 @@ if($obj->idpelamar==257)
                          // echo $obj->pphsettahun.'-'.$obj->pajakterbayar;
                         // echo $obj->pphsettahun."+".$obj->pph_setahun2;
 
-                         if(intval($startdateArr[1])==12)
+                         if(intval($startdateArr[1])==122)
                         { 
                            //kalo udah bulan desember, ambil pajaknya dari pajakterutang bulan november
                             $data[$i]['pphsebulan'] = $obj->pajakterutangdes;
@@ -2512,8 +2512,8 @@ if($obj->idpelamar==257)
             $footerUT+=$data[$i]['totalUT'];
             $footerUTT+=$data[$i]['totalUTT'];
             $footerLembur+=$data[$i]['totallembur'];
-            $footerBenefitCmp+=$data[$i]['benefitCmpBruto']+$data[$i]['benefitCmpNet'];
-            $footerBenefitEmp+=$data[$i]['benefitEmpBruto']+$data[$i]['benefitEmpNet'];
+            $footerBenefitCmp+=$data[$i]['benefitCmp'];
+            $footerBenefitEmp+=$data[$i]['benefitEmp'];
             $footerPotongan+=$data[$i]['nilaiPotongan'];
             $footerPendapatan+=$data[$i]['totalpendapatan'];
             $footerBruto+=$data[$i]['penerimaanbruto'];
@@ -5716,7 +5716,18 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
         {
             $status = false;
             $message = 'Error data NO ' . $d['0'] . ': Kode Komponen Upah tidak boleh kosong';
+        } else {
+            $qemp = $this->db->query("select kodekomponen from komponenupah a WHERE TRUE 
+                                     ".$this->m_data->whereCompany()." AND kodekomponen = '".str_replace(' ', '', $d['2'])."' ");
+             if($qemp->num_rows()>0)
+            {
+
+            } else {
+                $status = false;
+                $message = 'Error data NO ' . $d['0'] . ': Kode Komponen Upah tidak ada di dalam database ';
+            }
         }
+
 
          ///////////////////////////////////////
         // if($d['3']=='')
@@ -5890,7 +5901,7 @@ $dataparsed = substr($curldata, strpos($curldata, "?>") - 36);
 
    function akum_bruto($idpelamar,$bruto)
    {
-        $q = $this->db->query("select sum(penerimaanbruto) from 
+        $q = $this->db->query("select sum(penerimaanbruto_total) from 
             payrolldata
             where idpelamar  = $idpelamar");
         if($q->num_rows()>0)

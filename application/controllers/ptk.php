@@ -316,7 +316,7 @@ class ptk extends MY_Controller {
             $file = $this->upload->data()['full_path'];
             $orig_name = $this->upload->data()['orig_name'];
 
-            require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+            require_once DOCUMENTROOTAPP . "/application/libraries/simplexlsx.class.php";
             $xlsx = new SimpleXLSX($file);
             $getWorksheetName = $xlsx->getWorksheetName();
 
@@ -352,6 +352,8 @@ class ptk extends MY_Controller {
 
             // $start-=1;
             if ($oke) {
+               
+
                 $this->db->trans_begin();
 
                 $start = 1;
@@ -368,17 +370,26 @@ class ptk extends MY_Controller {
 
                         // $qjab = $this->db->get_where('jabatan', array('kodejabatan' => $d['4'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')))->row();
 
-                        $qjab = $this->db->query("select a.idjabatan,a.idorganisasi,a.idjabatanatasan
-                                                    from strukturjabatan a
-                                                    join jabatan b ON a.idjabatan = b.idjabatan
-                                                    where b.kodejabatan='".$d['4']."' and (b.idcompany = ".$qcmp->idcompany." OR b.idcompany = ".$qcmp->parent.") and b.display is null")->row();
+                     
 
                         //lokasi
                         $this->db->select('idcompany,parent');
                         $qemp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
 
+                         if(isset($qemp->parent))
+                        {
+                            $wercmp = " (a.idcompany = $qemp->idcompany OR a.idcompany = $qemp->parent)";
+                        } else {
+                            $wercmp = " (a.idcompany = $qemp->idcompany)";
+                        }
+
+                           $qjab = $this->db->query("select a.idjabatan,a.idorganisasi,a.idjabatanatasan
+                                                    from strukturjabatan a
+                                                    join jabatan b ON a.idjabatan = b.idjabatan
+                                                    where b.kodejabatan='".$d['4']."' and $wercmp and b.display is null")->row();
+
                          // $q = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$qemp->idcompany));
-                        $qlok = $this->db->query("SELECT kodebudgelokasi,idlokasiorg FROM lokasi_org WHERE kodebudgelokasi = '".$d['5']."' AND display IS NULL AND (idcompany = $qemp->idcompany OR idcompany = $qemp->parent)")->row();
+                        $qlok = $this->db->query("SELECT kodebudgelokasi,idlokasiorg FROM lokasi_org a WHERE kodebudgelokasi = '".$d['5']."' AND display IS NULL AND $wercmp")->row();
 
                         // $qlok = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$this->session->userdata('idcompany')))->row();
                         //end lokasi
@@ -491,7 +502,13 @@ class ptk extends MY_Controller {
             $qemp = $this->db->get_where('company', array('companycode' => "".$d['1']."",'display'=>null))->row();
 
              // $q = $this->db->get_where('lokasi_org', array('kodebudgelokasi' => $d['5'],'display'=>null,'idcompany'=>$qemp->idcompany));
-            $q = $this->db->query("SELECT kodebudgelokasi FROM lokasi_org WHERE kodebudgelokasi = '".$d['5']."' AND display IS NULL AND (idcompany = $qemp->idcompany OR idcompany = $qemp->parent)");
+            if(isset($qemp->parent))
+            {
+                $wercmp = " (idcompany = $qemp->idcompany OR idcompany = $qemp->parent)";
+            } else {
+                $wercmp = " (idcompany = $qemp->idcompany)";
+            }
+            $q = $this->db->query("SELECT kodebudgelokasi FROM lokasi_org WHERE kodebudgelokasi = '".$d['5']."' AND display IS NULL AND $wercmp");
             if ($q->num_rows() > 0) {
             } else {
                 $status = false;

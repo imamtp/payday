@@ -78,6 +78,12 @@ class m_user extends CI_Model {
             // echo $this->db->last_query();
             // var_dump($qunit);
             $firsttime = false;
+
+             if(!isset($r->group_id))
+            {
+                return array('success' => false, 'msg' => 'Login Gagal <br><br>Pesan : User Group belum terdefinisi. Harap hubungi Administrator');
+                exit;
+            }
             
             $dataSession = array(
                 'userid' => $r->user_id,

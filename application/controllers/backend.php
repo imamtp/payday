@@ -1021,7 +1021,7 @@ class Backend extends MY_Controller {
         {
             //ambil summary buat ditaro di footer
             $sql = "select sum(totalut) as footerUT,sum(a.totalutt) as footerUTT,sum(a.totallembur) as footerLembur,
-                    sum(benefitCmpBruto+benefitCmpNet) as footerBenefitCmp,sum(benefitEmpBruto+benefitEmpNet) as footerBenefitEmp,
+                    sum(benefitcmp) as footerBenefitCmp,sum(benefitemp) as footerBenefitEmp,
                     sum(nilaiPotongan) as footerPotongan,sum(totalpendapatan) as footerPendapatan,sum(penerimaanbruto) as footerBruto,
                     sum(tunjanganpajak) as footerPajak, sum(takehomepay) as footerTHP, sum(pphsebulan) as footerPPH
                     from payrolldata a

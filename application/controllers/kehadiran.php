@@ -511,10 +511,14 @@ class kehadiran extends MY_Controller {
             $error = $this->upload->display_errors();
             echo "{success:false, message:'" . $error . "'}";
         } else {
+        	// echo json_encode($this->upload->data());die;
+
+        	 // echo "{success:false, message:'dsadsa'}"; die;
+
             $file = $this->upload->data()['full_path'];
             $orig_name = $this->upload->data()['orig_name'];
 
-            require_once DOCUMENTROOT . "/application/libraries/simplexlsx.class.php";
+            require_once DOCUMENTROOTAPP . "/application/libraries/simplexlsx.class.php";
             $xlsx = new SimpleXLSX($file);
             $getWorksheetName = $xlsx->getWorksheetName();
 

@@ -62,7 +62,7 @@ Ext.define('TabItemKaryawan', {
                     } else if(i.title=='Benefit')
                         {
                             Ext.getCmp('formBenefit').getForm().reset();
-                                            // Ext.getCmp('TabBenefit').setActiveTab(1);
+                                            Ext.getCmp('TabBenefit').setActiveTab(0);
                             storeGridBenefitKaryawan.removeAll();
 
                             var formBenefit = Ext.getCmp('formBenefit');

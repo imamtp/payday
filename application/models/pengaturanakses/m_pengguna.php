@@ -32,7 +32,7 @@ class m_pengguna extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join sys_group b ON a.group_id = b.group_id
+                    left join sys_group b ON a.group_id = b.group_id
                     left join company c ON a.idcompany = c.idcompany";
 
         return $query;
@@ -111,7 +111,7 @@ class m_pengguna extends CI_Model {
 
         $data = array(
             'user_id' => $this->input->post('user_id') == '' ? $this->m_data->getSeqVal('seq_user_id') : $this->input->post('user_id'),
-            'group_id' => $this->m_data->getID('sys_group', 'group_name', 'group_id', $this->input->post('group_name')),
+            'group_id' => $this->m_data->getID('sys_group', 'group_name', 'group_id', $this->input->post('group_name'),$idcompany),
             'idcompany' => $idcompany,
             'username' => $username,
             'usercode' => $usercode,

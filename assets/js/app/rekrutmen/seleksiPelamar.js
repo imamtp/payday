@@ -312,25 +312,40 @@ var formSeleksiPelamar = Ext.create('Ext.form.Panel', {
             id: 'BtnSeleksiPelamarSimpan',
             text: 'Simpan',
             handler: function() {
-                kotakLoading();
-                var form = this.up('form').getForm();
-                if (form.isValid()) {
-                    form.submit({
-                        success: function(form, action) {
 
-                            Ext.Msg.alert('Success', action.result.message);
-                            Ext.getCmp('formSeleksiPelamar').getForm().reset();
-                            Ext.getCmp('windowPopupSeleksiPelamar').hide();
-                            storeGridSeleksiPelamar.load();
-                        },
-                        failure: function(form, action) {
-                            Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
-//                            storeGridSeleksiPelamar.load();
-                        }
-                    });
+                if(Ext.getCmp('comboxstatusCalonPelamar_fSeleksiPelamar').getValue()=='Disetujui')
+                {
+
+                        Ext.Ajax.request({
+                            url: SITE_URL + 'sistem/cekakses',
+                            method: 'POST',
+                            params: {
+                                roleid: 178
+                            },
+                            success: function(form, action) {
+                                var d = Ext.decode(form.responseText);
+                                if(d.success)
+                                {
+                                    // alert('auth');
+                                     // kirimSeleksi(this.up('form').getForm());
+                                     kirimSeleksi(Ext.getCmp('formSeleksiPelamar').getForm());
+                                } else {
+                                     Ext.Msg.alert("Info", d.message);
+                                }
+                            },
+                            failure: function(form, action) {
+                                Ext.Msg.alert("Load failed",Ext.decode(action.responseText));
+                            }
+                        });
+
                 } else {
-                    Ext.Msg.alert("Error!", "Your form is invalid!");
+                    // alert('no auth');
+                    //langsung saja kalau statusnya masih diajukan/tanpa pengecekan akses
+                    kirimSeleksi(Ext.getCmp('formSeleksiPelamar').getForm());
                 }
+
+
+
             }
         }]
 });
@@ -641,3 +656,27 @@ Ext.define('GridSeleksiPelamar', {
         }
     }
 });
+
+
+function kirimSeleksi(form)
+{
+     kotakLoading();
+   
+    if (form.isValid()) {
+        form.submit({
+            success: function(form, action) {
+
+                Ext.Msg.alert('Success', action.result.message);
+                Ext.getCmp('formSeleksiPelamar').getForm().reset();
+                Ext.getCmp('windowPopupSeleksiPelamar').hide();
+                storeGridSeleksiPelamar.load();
+            },
+            failure: function(form, action) {
+                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+            //                            storeGridSeleksiPelamar.load();
+            }
+        });
+    } else {
+        Ext.Msg.alert("Error!", "Your form is invalid!");
+    }
+}
