@@ -69,7 +69,8 @@ class m_permintaantk extends CI_Model {
 
         $data = array(
             'idpermintaantk' => $this->input->post('idpermintaantk') == '' ? $this->m_data->getSeqVal('seq_permintaantk') : $this->input->post('idpermintaantk'),
-            'idcompany' =>  $this->m_data->getID('company', 'companyname', 'idcompany', $this->input->post('companyname')),
+            // 'idcompany' =>  $this->m_data->getID('company', 'companyname', 'idcompany', $this->input->post('companyname')),
+            'idcompany' => $this->input->post('idcompany'),
             'idstrukturjabatan' => $this->input->post('idstrukturjabatan'),
             // 'idjabatan' => $this->input->post('idjabatan'),
             // 'idorganisasi' => $this->input->post('idorganisasi'),

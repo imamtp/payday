@@ -31,13 +31,13 @@ class m_jadwalkerja extends CI_Model {
     function query() {
         $query = "select " . $this->selectField() . "
                     from " . $this->tableName()." a 
-                    join jamkerjaharian b ON a.idjamkerjaharian_1 = b.idjamkerjaharian
-                    join jamkerjaharian c ON a.idjamkerjaharian_2 = c.idjamkerjaharian
-                    join jamkerjaharian d ON a.idjamkerjaharian_3 = d.idjamkerjaharian
-                    join jamkerjaharian e ON a.idjamkerjaharian_4 = e.idjamkerjaharian
-                    join jamkerjaharian f ON a.idjamkerjaharian_5 = f.idjamkerjaharian
-                    join jamkerjaharian g ON a.idjamkerjaharian_6 = g.idjamkerjaharian
-                    join jamkerjaharian h ON a.idjamkerjaharian_7 = h.idjamkerjaharian
+                    left join jamkerjaharian b ON a.idjamkerjaharian_1 = b.idjamkerjaharian
+                    left join jamkerjaharian c ON a.idjamkerjaharian_2 = c.idjamkerjaharian
+                    left join jamkerjaharian d ON a.idjamkerjaharian_3 = d.idjamkerjaharian
+                    left join jamkerjaharian e ON a.idjamkerjaharian_4 = e.idjamkerjaharian
+                    left join jamkerjaharian f ON a.idjamkerjaharian_5 = f.idjamkerjaharian
+                    left join jamkerjaharian g ON a.idjamkerjaharian_6 = g.idjamkerjaharian
+                    left join jamkerjaharian h ON a.idjamkerjaharian_7 = h.idjamkerjaharian
                     join company i ON a.idcompany = i.idcompany";
 
         return $query;
@@ -72,13 +72,13 @@ class m_jadwalkerja extends CI_Model {
         $data = array(
             "idjadwalkerja" => $this->input->post('idjadwalkerja') == '' ? $this->m_data->getSeqVal('seq_kehadiranconfig') : $this->input->post('idjadwalkerja'),
             // "idjamkerjaharian" int4 NOT NULL,
-            "idjamkerjaharian_1" =>$this->input->post('idjamkerjaharian_1'),
-            "idjamkerjaharian_2" =>$this->input->post('idjamkerjaharian_2'),
-            "idjamkerjaharian_3" =>$this->input->post('idjamkerjaharian_3'),
-            "idjamkerjaharian_4" =>$this->input->post('idjamkerjaharian_4'),
-            "idjamkerjaharian_5" =>$this->input->post('idjamkerjaharian_5'),
-            "idjamkerjaharian_6" =>$this->input->post('idjamkerjaharian_6'),
-            "idjamkerjaharian_7" =>$this->input->post('idjamkerjaharian_7'),
+            "idjamkerjaharian_1" =>$this->input->post('idjamkerjaharian_1') != '' ? $this->input->post('idjamkerjaharian_1') : null,
+            "idjamkerjaharian_2" =>$this->input->post('idjamkerjaharian_2') != '' ? $this->input->post('idjamkerjaharian_2') : null,
+            "idjamkerjaharian_3" =>$this->input->post('idjamkerjaharian_3') != '' ? $this->input->post('idjamkerjaharian_3') : null,
+            "idjamkerjaharian_4" =>$this->input->post('idjamkerjaharian_4') != '' ? $this->input->post('idjamkerjaharian_4') : null,
+            "idjamkerjaharian_5" =>$this->input->post('idjamkerjaharian_5') != '' ? $this->input->post('idjamkerjaharian_5') : null,
+            "idjamkerjaharian_6" =>$this->input->post('idjamkerjaharian_6') != '' ? $this->input->post('idjamkerjaharian_6') : null,
+            "idjamkerjaharian_7" =>$this->input->post('idjamkerjaharian_7') != '' ? $this->input->post('idjamkerjaharian_7') : null,
             "kodejadwalkerja"=>$this->input->post('kodejadwalkerja'),
             "namajadwalkerja"=>$this->input->post('namajadwalkerja'),
             "status" => $this->input->post('status'),

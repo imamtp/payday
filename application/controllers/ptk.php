@@ -171,7 +171,8 @@ class ptk extends MY_Controller {
     function getNumPerencanaan()
     {
         $tahun = $this->input->post('tahun');
-        $idcompany = $this->m_data->getID('company', 'companyname', 'idcompany', $this->input->post('companyname'));
+        // $idcompany = $this->m_data->getID('company', 'companyname', 'idcompany', $this->input->post('companyname'));
+        $idcompany = $this->input->post('idcompany');
         $namabulan = $this->input->post('namabulan');
         $idlokasiorg = $this->input->post('idlokasiorg');
         $idstrukturjabatan = $this->input->post('idstrukturjabatan');

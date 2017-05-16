@@ -1,7 +1,7 @@
 <?php
 
 //require_once($_SERVER['DOCUMENT_ROOT'].'/bablast/assets/libs/Smarty.class.php');
-require_once(DOCUMENTROOT.'kopi/assets/libs/SmartyBC.class.php');
+require_once(DOCUMENTROOTAPP.'/assets/libs/SmartyBC.class.php');
         
 class MY_Controller extends CI_Controller{
     

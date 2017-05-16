@@ -72,7 +72,7 @@ class m_pelamar extends CI_Model {
         {
             //cek no KTP sama
             $this->db->select('noktp');
-            $q = $this->db->get_where('pelamar',array('noktp'=>$this->input->post('noktp'),'display'=>null));
+            $q = $this->db->get_where('pelamar',array('noktp'=>$this->input->post('noktp'),'idcompany'=>$this->session->userdata('idcompany'),'display'=>null));
             if($q->num_rows()>0)
             {
                 $json = array('success' => false, 'message' => 'No KTP '.$this->input->post('noktp').' sudah ada di dalam database');
@@ -94,7 +94,7 @@ class m_pelamar extends CI_Model {
                 $r = $q->row();
                 if($r->noktp!=$this->input->post('noktp'))
                 {
-                    $q2 = $this->db->query("select noktp from pelamar where noktp ='".$this->input->post('noktp')."' and idpelamar!=$idpelamar and display is null");
+                    $q2 = $this->db->query("select noktp from pelamar where noktp ='".$this->input->post('noktp')."' and idpelamar!=$idpelamar and idcompany = ".$this->session->userdata('idcompany')." and display is null");
                     if($q2->num_rows()>0)
                     {
                         $json = array('success' => false, 'message' => 'No KTP '.$this->input->post('noktp').' sudah ada di dalam database');

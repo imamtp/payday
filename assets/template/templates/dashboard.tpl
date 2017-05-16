@@ -281,10 +281,103 @@
                 //         renderTo: 'bloggout'
                 //     });
                 // }
+                var formKataSandi = Ext.create('Ext.form.Panel', {
+                                        id: 'formKataSandi',
+                                        // width: 450,
+                                        // height: 330,
+                                        url: SITE_URL + 'backend/change_password',
+                                        bodyStyle: 'padding:5px',
+                                        labelAlign: 'top',
+                                        autoScroll: true,
+                                        fieldDefaults: {
+                                            msgTarget: 'side',
+                                            blankText: 'Tidak Boleh Kosong',
+                                            labelWidth: 160,
+                                            width: 400
+                                        },
+                                        items: [
+                                             {
+                                                xtype: 'textfield',
+                                                inputType:'password',
+                                                anchor: '100%',
+                                                fieldLabel: 'Kata sandi baru',
+                                                name: 'katasandi1'
+                                            },
+                                            {
+                                                xtype: 'textfield',
+                                                inputType:'password',
+                                                anchor: '100%',
+                                                fieldLabel: 'Ulangi kata sandi baru',
+                                                name: 'katasandi2'
+                                            },
+                                            {
+                                                xtype: 'hiddenfield',
+                                                anchor: '100%',
+                                                fieldLabel: 'idpelamar',
+                                                name: 'idpelamar'
+                                            }
+                                        ],
+                                        buttons: [{
+                                                text: 'Batal',
+                                                handler: function() {
+                                                    var win = Ext.getCmp('windowPopupKataSandi');
+                                                    Ext.getCmp('formKataSandi').getForm().reset();
+                                                    win.hide();
+                                                }
+                                            }, {
+                                                // id: 'BtnSetupTaxSimpan',
+                                                text: 'Simpan',
+                                                handler: function() {
+                                                    var form = this.up('form').getForm();
+                                                    if (form.isValid()) {
+                                                        form.submit({
+                                                            success: function(form, action) {
+
+                                                                if(action.result.success)
+                                                                {
+                                                                    Ext.Msg.alert('Success', action.result.message);
+                                                                    Ext.getCmp('formKataSandi').getForm().reset();
+                                                                    Ext.getCmp('windowPopupKataSandi').hide();
+                                                                }
+                                                               
+                                                            },
+                                                            failure: function(form, action) {
+                                                                Ext.Msg.alert('Failed', action.result ? action.result.message : 'No response');
+                                    //                            storeGridSetupTax.load();
+                                                            }
+                                                        });
+                                                    } else {
+                                                        Ext.Msg.alert("Error!", "Your form is invalid!");
+                                                    }
+                                                }
+                                            }]
+
+                                    });
+
+                var windowPass =  Ext.create('widget.window', {
+                                    id: 'windowPopupKataSandi',
+                                    title: 'Ubah Kata Sandi',
+                                    header: {
+                                        titlePosition: 2,
+                                        titleAlign: 'center'
+                                    },
+                                    closable: true,
+                                    closeAction: 'hide',
+                                    autoWidth: true,
+                                    modal:true,
+                                    autoHeight: true,
+                                    layout: 'fit',
+                                    border: false,
+                                    items: [formKataSandi]
+                                });
 
                 Ext.create('Ext.Button', {
                     text: 'Anda sebagai {$username}',
-                    renderTo: 'bloggout'
+                    renderTo: 'bloggout',
+                    handler:function(){
+                        windowPass.show();
+                    }
+
                 });
 
 

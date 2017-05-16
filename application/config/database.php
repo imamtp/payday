@@ -49,8 +49,8 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'imm';
-$db['default']['password'] = 'imm';
+$db['default']['username'] = 'natdb';
+$db['default']['password'] = 'natadaya!@#';
 $db['default']['database'] = 'natadaya10';
 $db['default']['dbdriver'] = 'postgre';
 $db['default']['dbprefix'] = '';

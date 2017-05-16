@@ -92,10 +92,11 @@ var formPermintaan = Ext.create('Ext.form.Panel', {
                     // },                     
                     {
                         xtype: 'comboxcompany',
-                        // valueField:'idcompany',
+                        valueField:'idcompany',
                         id: 'companyname_fPermintaan',
                         allowBlank:false,
-                        name: 'companyname',
+                        name:'idcompany',
+                        // name: 'companyname',
                         listeners: {
                         select: function() { 
                                 // storeGridPermintaan.load();
@@ -1001,7 +1002,7 @@ Ext.define('GridPermintaan', {
 function getNumPerencanaan()
 {
     var tahun = Ext.getCmp('tahun_fPermintaan').getValue();
-    var companyname = Ext.getCmp('companyname_fPermintaan').getValue();
+    var idcompany = Ext.getCmp('companyname_fPermintaan').getValue();
     var namabulan = Ext.getCmp('namabulan_fPermintaan').getValue();
     var idstrukturjabatan = Ext.getCmp('idstrukturjabatan_fPermintaan').getValue();
     var idlokasiorg = Ext.getCmp('idlokasiorg_fPermintaan').getValue();    
@@ -1040,7 +1041,7 @@ function getNumPerencanaan()
                         method: 'POST',
                         params: {
                             tahun: tahun,
-                            companyname: companyname,
+                            idcompany: idcompany,
                             namabulan: namabulan,
                             idlokasiorg: idlokasiorg,
                             idstrukturjabatan: idstrukturjabatan

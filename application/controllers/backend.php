@@ -22,6 +22,22 @@ class Backend extends MY_Controller {
         echo json_encode(array('success' => true, 'message' => $q->noseq + 1));
     }
 
+    function change_password()
+    {   
+        $katasandi1 = $this->input->post('katasandi1');
+        $katasandi2 = $this->input->post('katasandi2');
+
+        if($katasandi1!=$katasandi2)
+        {
+            echo json_encode(array('success' => false, 'message' => 'Kata sandi tidak sama'));
+        } else {
+            $this->db->where('user_id',$this->session->userdata('userid'));
+            $this->db->update('sys_user',array('password'=>$katasandi1));
+
+            echo json_encode(array('success' => true, 'message' => 'Kata sandi berhasil diubah'));
+        }
+    }
+
     function definition($table) {
         
     }

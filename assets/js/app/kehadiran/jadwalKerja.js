@@ -160,7 +160,8 @@ var formJadwalKerja = Ext.create('Ext.form.Panel', {
             }
         }),   
         {
-            xtype:'comboxstatus'
+            xtype:'comboxstatus',
+            allowBlank:false
         }],
     buttons: [{
             text: 'Batal',
@@ -212,7 +213,7 @@ var wJadwalKerja = Ext.create('widget.window', {
 
 Ext.define('GridJadwalKerjaModel', {
     extend: 'Ext.data.Model',
-    fields: ['idjadwalkerja','idpolakerja','kodejadwalkerja','namajadwalkerja','idjamkerjaharian_1','idjamkerjaharian_2','idjamkerjaharian_3','idjamkerjaharian_4','idjamkerjaharian_5','idjamkerjaharian_6','idjamkerjaharian_7','namajamkerja1','namajamkerja2','namajamkerja3','namajamkerja4','namajamkerja5','namajamkerja6','namajamkerja7','companyname'],
+    fields: ['idjadwalkerja','idpolakerja','kodejadwalkerja','namajadwalkerja','idjamkerjaharian_1','idjamkerjaharian_2','idjamkerjaharian_3','idjamkerjaharian_4','idjamkerjaharian_5','idjamkerjaharian_6','idjamkerjaharian_7','namajamkerja1','namajamkerja2','namajamkerja3','namajamkerja4','namajamkerja5','namajamkerja6','namajamkerja7','companyname','status'],
     idProperty: 'id'
 });
 
