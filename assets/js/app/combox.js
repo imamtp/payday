@@ -842,7 +842,7 @@ var companyStore = Ext.create('Ext.data.Store', {
                 root: 'dat'
             }
         },
-        autoLoad: false
+        autoLoad: true
     });
 
 Ext.define('comboxcompany', {
@@ -856,6 +856,32 @@ Ext.define('comboxcompany', {
     triggerAction: 'all',
     valueField: 'companyname',
     store: companyStore
+});
+
+var companyStore2 = Ext.create('Ext.data.Store', {
+        fields: ['idcompany','companyname'],
+        proxy: {
+            type: 'ajax',
+            url: SITE_URL + 'backend/comboxcompany',
+            reader: {
+                type: 'json',
+                root: 'dat'
+            }
+        },
+        autoLoad: true
+    });
+
+Ext.define('comboxcompany2', {
+    extend: 'Ext.form.field.ComboBox',
+    alias: 'widget.comboxcompany2',
+    displayField: 'companyname',
+    fieldLabel: 'Perusahaan',
+    queryMode: 'local',
+    name: 'idcompany',
+    editable: false,
+    triggerAction: 'all',
+    valueField: 'idcompany',
+    store: companyStore2
 });
 
 var tahunTKStore = Ext.create('Ext.data.Store', {

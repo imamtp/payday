@@ -16,7 +16,7 @@ class m_pelamar extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,namalengkap,tgllahir,a.idsex,b.sexname,noktp,alamat,notelp,nohandphone,jabatandituju,tgllamaran,a.status,a.userin,a.datein,tempatlahir,a.idstatuskawin,a.email,daerahrekrut,alamatktp,d.idjenjangpendidikan,d.namajenjang,fakultas,jurusan,foto,cv,referensi,sumberlamaran,namastatuskawin,keterangan,e.statuscalon,f.companyname";
+        return "a.idpelamar,a.idcompany,namalengkap,tgllahir,a.idsex,b.sexname,noktp,alamat,notelp,nohandphone,jabatandituju,tgllamaran,a.status,a.userin,a.datein,tempatlahir,a.idstatuskawin,a.email,daerahrekrut,alamatktp,d.idjenjangpendidikan,d.namajenjang,fakultas,jurusan,foto,cv,referensi,sumberlamaran,namastatuskawin,keterangan,e.statuscalon,f.companyname";
     }
 
     function fieldCek()
@@ -67,7 +67,7 @@ class m_pelamar extends CI_Model {
     }
 
     function updateField() {
-        $status = $this->input->post('status');
+        $status = $this->input->post('statuscalon');
         if($this->input->post('statusformPelamar')=='input')
         {
             //cek no KTP sama
@@ -158,12 +158,18 @@ class m_pelamar extends CI_Model {
             'idjenjangpendidikan' => $this->m_data->getID('jenjangpendidikan', 'namajenjang', 'idjenjangpendidikan', $this->input->post('namajenjang')),
             'fakultas' => $this->input->post('fakultas'),
             'jurusan' => $this->input->post('jurusan'),
-            'idcompany' => $this->session->userdata('idcompany'),
+            // 'idcompany' => $this->session->userdata('idcompany'),
             // 'foto' => $this->input->post('status'),
             // 'cv' => $this->input->post('status'),
             'referensi' => $this->input->post('referensi'),
             'sumberlamaran' => $this->input->post('sumberlamaran')
         );
+
+        // if($this->input->post('statusformPelamar')=='input')
+        // {
+            // $data['idcompany'] = $this->session->userdata('idcompany');
+            $data['idcompany'] = $this->input->post('idcompany');
+        // } 
 
         $config['upload_path'] = './upload/foto';
         $config['allowed_types'] = 'gif|jpg|png';

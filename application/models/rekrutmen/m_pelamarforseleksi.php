@@ -16,7 +16,7 @@ class m_pelamarforseleksi extends CI_Model {
     }
 
     function selectField() {
-        return "a.idpelamar,namalengkap,tgllahir,a.idsex,b.sexname,noktp,alamat,notelp,nohandphone,jabatandituju,tgllamaran,a.status,a.userin,a.datein,tempatlahir,a.idstatuskawin,email,daerahrekrut,alamatktp,d.idjenjangpendidikan,d.namajenjang,fakultas,jurusan,foto,cv,referensi,sumberlamaran,namastatuskawin,keterangan";
+        return "a.idpelamar,e.statuscalon,a.namalengkap,tgllahir,a.idsex,b.sexname,a.noktp,a.alamat,a.notelp,a.nohandphone,a.jabatandituju,tgllamaran,a.status,a.userin,a.datein,tempatlahir,a.idstatuskawin,a.email,daerahrekrut,alamatktp,d.idjenjangpendidikan,d.namajenjang,fakultas,jurusan,foto,cv,referensi,sumberlamaran,namastatuskawin,keterangan,f.companyname";
     }
     
     function fieldCek()
@@ -34,7 +34,8 @@ class m_pelamarforseleksi extends CI_Model {
                     left join sextype b ON a.idsex = b.idsex
                     left join statuskawin c ON a.idstatuskawin = c.idstatuskawin
                     left join jenjangpendidikan d ON a.idjenjangpendidikan = d.idjenjangpendidikan
-                    left join calonpelamar e ON a.idpelamar = e.idpelamar";
+                    left join calonpelamar e ON a.idpelamar = e.idpelamar
+                    join company f ON a.idcompany = f.idcompany";
 
         return $query;
     }
@@ -52,7 +53,13 @@ class m_pelamarforseleksi extends CI_Model {
                 // $wer = "AND a.status!='Aktif' and a.status!='Belum Ada Status' and a.idpelamar not in (select idpelamar from calonpelamar where statuscalon!='Disetujui' or statuscalon!='Tindak Lanjut')";
         //     }
          $wer = null;
-         return "a.display is null ".$this->m_data->whereCompany('a',false)." and e.statuscalon='Diajukan'";
+         if($this->input->post('option')=='seleksi_pelamar_list'){
+            $wer = " and a.idpelamar not in (select idpelamar from pekerjaan)";
+         } else {
+            // $wer = " and e.statuscalon='Diajukan'";
+         }
+          $wer .= " and e.statuscalon='Diajukan'";
+         return "a.display is null ".$this->m_data->whereCompany('a',false)." $wer";
     }
 
     function orderBy() {

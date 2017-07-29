@@ -72,21 +72,28 @@ Ext.define('GridPermintaanTkList', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
-                    Ext.getCmp('idpermintaantk_fSeleksiPelamar').setValue(selectedRecord.get('idpermintaantk'));
-                    Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').setValue(selectedRecord.get('nomorpermintaantk'));
-                    Ext.getCmp('namajabatan_fSeleksiPelamar').setValue(selectedRecord.get('namajabatan'));
-                    Ext.getCmp('levelname_fSeleksiPelamar').setValue(selectedRecord.get('levelname'));
-                    Ext.getCmp('namaorg_fSeleksiPelamar').setValue(selectedRecord.get('namaorg'));
-                    Ext.getCmp('namajabatanatasan_fSeleksiPelamar').setValue(selectedRecord.get('namajabatanatasan'));
-                    Ext.getCmp('namaatasan_fSeleksiPelamar').setValue(selectedRecord.get('namaatasan'));
-                    Ext.getCmp('idpelamaratasan_fSeleksiPelamar').setValue(selectedRecord.get('idpelamaratasan'));
-                    Ext.getCmp('kekaryaanname_fSeleksiPelamar').setValue(selectedRecord.get('kekaryaanname'));
+                  
 
+                    if(Ext.getCmp('companyname_fSeleksiPelamar').getValue()!=selectedRecord.get('companyname')){
+                        Ext.Msg.alert("Seleksi Pelamar", 'PTK terpilih tidak sama dengan perusahaan pelamar');
+                    } else {
+                        Ext.getCmp('idpermintaantk_fSeleksiPelamar').setValue(selectedRecord.get('idpermintaantk'));
+                        Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').setValue(selectedRecord.get('nomorpermintaantk'));
+                        Ext.getCmp('namajabatan_fSeleksiPelamar').setValue(selectedRecord.get('namajabatan'));
+                        Ext.getCmp('levelname_fSeleksiPelamar').setValue(selectedRecord.get('levelname'));
+                        Ext.getCmp('namaorg_fSeleksiPelamar').setValue(selectedRecord.get('namaorg'));
+                        Ext.getCmp('namajabatanatasan_fSeleksiPelamar').setValue(selectedRecord.get('namajabatanatasan'));
+                        Ext.getCmp('namaatasan_fSeleksiPelamar').setValue(selectedRecord.get('namaatasan'));
+                        Ext.getCmp('idpelamaratasan_fSeleksiPelamar').setValue(selectedRecord.get('idpelamaratasan'));
+                        Ext.getCmp('kekaryaanname_fSeleksiPelamar').setValue(selectedRecord.get('kekaryaanname'));
+                         Ext.getCmp('wGridPermintaanTkListPopup').hide();
+                    }
 
-                    Ext.getCmp('wGridPermintaanTkListPopup').hide();
+                   
             }
         },
         {header: 'idpermintaantk', dataIndex: 'idpermintaantk', hidden: true},
+        {header: 'Perusahaan', dataIndex: 'companyname', minWidth: 190},
         {header: 'No PTK', dataIndex: 'nomorpermintaantk', minWidth: 190},
         {header: 'Tgl PTK', dataIndex: 'rencanatglmasuk', minWidth: 150},
         {header: 'Jabatan', dataIndex: 'namajabatan', minWidth: 150},

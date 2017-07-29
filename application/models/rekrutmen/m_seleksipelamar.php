@@ -11,7 +11,7 @@ class m_seleksipelamar extends CI_Model {
     }
 
     function searchField() {
-        $field = "namalengkap,nomorpermintaantk";
+        $field = "b.namalengkap,nomorpermintaantk";
         return explode(",", $field);
     }
 

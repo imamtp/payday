@@ -132,9 +132,9 @@ class Backend extends MY_Controller {
                     $vas = explode(" as ", $vas);
                     if (count($vas) > 1) {
                         //pake alias
-                        $json .="$vas[1]: \"" . rtrim($r->$vas[1]) . "\",";
+                        $json .="$vas[1]: \"" . str_replace(array("\r\n", "\n", "\r"), '', rtrim($r->$vas[1])) . "\",";
                     } else {
-                        $json .="$v[1]: \"" . rtrim($r->$v[1]) . "\",";
+                        $json .="$v[1]: \"" . str_replace(array("\r\n", "\n", "\r"), '', rtrim($r->$v[1])) . "\",";
                     }
                     //                    $json .="$v[1]: \"" . $r->$v[1] . "\",";
                 } else {
@@ -151,7 +151,7 @@ class Backend extends MY_Controller {
                                 $json .="$value: \"" . null . "\",";
                             }
                         } else {
-                            $json .="$value: \"" . rtrim($r->$value) . "\",";
+                            $json .="$value: \"" . str_replace(array("\r\n", "\n", "\r"), '', rtrim($r->$value)) . "\",";
                         }
                     }
                 }

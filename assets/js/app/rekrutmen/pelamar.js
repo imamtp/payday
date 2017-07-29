@@ -1,3 +1,133 @@
+Ext.define('GridPelamarCompanyListModel', {
+   extend: 'Ext.data.Model',
+    fields: ['idcompany','companyaddress','companyname','email','companycode','aggrementno','startdate','enddate','status','productcode','productname'],
+    idProperty: 'id'
+});
+
+var storeGridPelamarCompanyList = Ext.create('Ext.data.Store', {
+    pageSize: 100,
+    model: 'GridPelamarCompanyListModel',
+    //remoteSort: true,
+    // autoload:true,
+    proxy: {
+        type: 'ajax',
+        // url: SITE_URL + 'backend/ext_get_all/Organisasi/desainorg',
+        url: SITE_URL + 'backend/ext_get_all/Perusahaan_ModulOrg/modulorg',
+        actionMethods: 'POST',
+        reader: {
+            root: 'rows',
+            totalProperty: 'results'
+        },
+        //simpleSortMode: true
+    },
+    sorters: [{
+            property: 'menu_name',
+            direction: 'DESC'
+        }]
+});
+
+// storeGridAccount.on('beforeload',function(store, operation,eOpts){
+//         operation.params={
+//                     'extraparams': 'b.namesupplier:'+Ext.getCmp('supplierPurchase').getValue()
+//                   };
+//               });
+              
+Ext.define('MY.searchPelamarCompanyList', {
+    extend: 'Ext.ux.form.SearchField',
+    alias: 'widget.searchPelamarCompanyList',
+    store: storeGridPelamarCompanyList,
+    width: 180
+});
+
+var smGridPelamarCompanyList = Ext.create('Ext.selection.CheckboxModel', {
+    allowDeselect: true,
+    mode: 'SINGLE',
+    listeners: {
+        deselect: function(model, record, index) {
+            var selectedLen = smGridItemPurchase.getSelection().length;
+            if (selectedLen == 0) {
+                console.log(selectedLen);
+                Ext.getCmp('btnDeleteItemPurchase').disable();
+            }
+        },
+        select: function(model, record, index) {
+            Ext.getCmp('btnDeleteItemPurchase').enable();
+        }
+    }
+});
+
+Ext.define('GridPelamarCompanyList', {
+    itemId: 'GridPelamarCompanyList',
+    id: 'GridPelamarCompanyList',
+    extend: 'Ext.grid.Panel',
+    alias: 'widget.GridPelamarCompanyList',
+    store: storeGridPelamarCompanyList,
+    loadMask: true,
+    columns: [
+    {
+            text: 'Pilih',
+            width: 45,
+            // menuDisabled: true,
+            xtype: 'actioncolumn',
+            tooltip: 'Pilih Ini',
+            align: 'center',
+            icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
+            handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                    Ext.getCmp('idcompany_fPelamar').setValue(selectedRecord.get('idcompany'));
+                    Ext.getCmp('companyname_fPelamar').setValue(selectedRecord.get('companyname'));
+
+                    Ext.getCmp('wGridPelamarCompanyListPopup').hide();
+            }
+        },
+        {header: 'idcompany', dataIndex: 'idcompany', hidden: true},
+        {header: 'Kode Perusahaan', dataIndex: 'companycode', minWidth: 150},
+        {header: 'Nama Perusahaan', dataIndex: 'companyname', minWidth: 200,flex:1},
+        {header: 'Tgl Aktivasi', dataIndex: 'startdate', minWidth: 150},
+        {header: 'Status', dataIndex: 'status', minWidth: 80}
+    ]
+    , dockedItems: [
+        {
+            xtype: 'toolbar',
+            dock: 'top',
+            items: [
+                '->',
+                'Pencarian: ', ' ',
+                {
+                    xtype: 'searchPelamarCompanyList',
+                    text: 'Left Button'
+                }
+
+            ]
+        }, {
+            xtype: 'pagingtoolbar',displayMsg:'Menampilkan {0} - {1} dari {2}',
+            store: storeGridPelamarCompanyList, // same store GridPanel is using
+            dock: 'bottom',
+            displayInfo: true
+                    // pageSize:20
+        }
+    ]
+});
+
+var wGridPelamarCompanyListPopup = Ext.create('widget.window', {
+    id: 'wGridPelamarCompanyListPopup',
+    title: 'Pilih Perusahaan',
+    header: {
+        titlePosition: 2,
+        titleAlign: 'center'
+    },
+    closable: true,
+    closeAction: 'hide',
+//    autoWidth: true,
+    width: 680,
+    height: 450,
+    layout: 'fit',
+    border: false,
+    items: [{
+            xtype:'GridPelamarCompanyList'
+    }]
+});
+//end company list
+
 Ext.define('fotopelamarthumb', {
     extend: 'Ext.Component',
     // id:'formpegdata',
@@ -37,6 +167,25 @@ var formPelamar = Ext.create('Ext.form.Panel', {
             id: 'idpelamar_fPelamar',
             fieldLabel: 'idpelamar',
             name: 'idpelamar'
+        },
+        {
+            xtype: 'hiddenfield',
+            id: 'idcompany_fPelamar',
+            name: 'idcompany'
+        },
+         {
+            xtype: 'textfield',
+            fieldLabel: 'Nama Perusahaan',
+            id: 'companyname_fPelamar',
+            name: 'companyname',
+            listeners: {
+                render: function(component) {
+                    component.getEl().on('click', function(event, el) {
+                        wGridPelamarCompanyListPopup.show();
+                        storeGridPelamarCompanyList.load();
+                    });
+                }
+            }
         },
         {
             xtype: 'textfield',
@@ -234,6 +383,7 @@ var formPelamar = Ext.create('Ext.form.Panel', {
                }),
                 {
                     xtype:'comboxstatusPelamar',
+                    name:'statuscalon',
                     id:'comboxstatusPelamarPengajuan',
                     allowBlank: false
                 }
@@ -522,6 +672,15 @@ Ext.define('GridPelamar', {
                                     cbStatus.setValue('Diajukan');
                                     cbStatus.setReadOnly(true);
                                     Ext.getCmp('btnDownloadCV').hide();
+
+                                    var cbCompany = Ext.getCmp('companyname_fPelamar');
+                                    if(group_id*1>2){
+                                        cbCompany.setReadOnly(true);
+                                        cbCompany.setValue(companyname);
+                                        Ext.getCmp('idcompany_fPelamar').setValue(idcompany);
+                                    } else {    
+                                        cbCompany.setReadOnly(false);
+                                    }
                                 } else {
                                      //melebihi kuota
                                      Ext.Msg.alert("Info", d.message);
@@ -581,6 +740,13 @@ Ext.define('GridPelamar', {
 
                                                 var cbStatus = Ext.getCmp('comboxstatusPelamarPengajuan');
                                                 cbStatus.setReadOnly(true);
+
+                                                var cbCompany = Ext.getCmp('companyname_fPelamar');
+                                                if(group_id*1>2){
+                                                    cbCompany.setReadOnly(true);
+                                                } else {    
+                                                    cbCompany.setReadOnly(false);
+                                                }
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert("Load failed", action.result.errorMessage);
@@ -686,26 +852,36 @@ Ext.define('GridPelamar', {
             }
         },
         itemdblclick: function(dv, record, item, index, e) {
+            // companyStore2.load();
 
-            // var formAgama = Ext.create('formAgama');
-            var formPelamar = Ext.getCmp('formPelamar');
-            wPelamar.show();
-            formPelamar.getForm().load({
-                url: SITE_URL + 'backend/loadFormData/Pelamar/1/rekrutmen',
-                params: {
-                    extraparams: 'a.idpelamar:' + record.data.idpelamar
-                },
-                success: function(form, action) {
-                    // Ext.Msg.alert("Load failed", action.result.errorMessage);
-                    getFotoPelamar()
-                     getCVPelamar()
-                },
-                failure: function(form, action) {
-                    Ext.Msg.alert("Load failed", action.result.errorMessage);
-                }
-            })
+            // // var formAgama = Ext.create('formAgama');
+            // var formPelamar = Ext.getCmp('formPelamar');
+            // wPelamar.show();
+            // formPelamar.getForm().load({
+            //     url: SITE_URL + 'backend/loadFormData/Pelamar/1/rekrutmen',
+            //     params: {
+            //         extraparams: 'a.idpelamar:' + record.data.idpelamar
+            //     },
+            //     success: function(form, action) {
+            //         var d = Ext.decode(action.response.responseText);
+            //         // Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //         getFotoPelamar()
+            //          getCVPelamar()
 
-            Ext.getCmp('statusformPelamar').setValue('edit');
+            //         var cbCompany = Ext.getCmp('companyname_fPelamar');
+            //         if(group_id*1>2){
+            //             cbCompany.setReadOnly(true);
+            //         } else {    
+            //             cbCompany.setReadOnly(false);
+            //         }
+            //         // cbCompany.setValue(d.data.companyname);
+            //     },
+            //     failure: function(form, action) {
+            //         Ext.Msg.alert("Load failed", action.result.errorMessage);
+            //     }
+            // })
+
+            // Ext.getCmp('statusformPelamar').setValue('edit');
 
         }
     }

@@ -1,6 +1,6 @@
 Ext.define('GridPelamarListModel', {
     extend: 'Ext.data.Model',
-    fields: ['idpelamar','namalengkap','tgllahir','idsex','sexname','noktp','alamat','notelp','nohandphone','jabatandituju','tgllamaran','status','userin','datein','tempatlahir','idstatuskawin','email','daerahrekrut','alamatktp','idjenjangpendidikan','fakultas','jurusan','foto','cv','referensi','sumberlamaran','namastatuskawin'],
+    fields: ['idpelamar','namalengkap','tgllahir','idsex','sexname','noktp','alamat','notelp','nohandphone','jabatandituju','tgllamaran','status','userin','datein','tempatlahir','idstatuskawin','email','daerahrekrut','alamatktp','idjenjangpendidikan','fakultas','jurusan','foto','cv','referensi','sumberlamaran','namastatuskawin','companyname'],
     idProperty: 'id'
 });
 
@@ -25,11 +25,11 @@ var storeGridPelamarList = Ext.create('Ext.data.Store', {
         }]
 });
 
-// storeGridPelamarList.on('beforeload',function(store, operation,eOpts){
-//         operation.params={
-//                     'extraparams': 'a.statuscalon:'+Ext.getCmp('comboxstatusPelamar_seleksiPelamar').getValue()
-//                   };
-//               });
+storeGridPelamarList.on('beforeload',function(store, operation,eOpts){
+        operation.params={
+                    'option': 'seleksi_pelamar_list'
+                  };
+              });
 
 Ext.define('MY.searchPelamarList', {
     extend: 'Ext.ux.form.SearchField',
@@ -72,15 +72,26 @@ Ext.define('GridPelamarList', {
             align: 'center',
             icon: BASE_URL + 'assets/icons/fam/arrow_right.png',
             handler: function(grid, rowIndex, colIndex, actionItem, event, selectedRecord, row) {
+                    Ext.getCmp('idpermintaantk_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('namajabatan_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('levelname_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('namaorg_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('namajabatanatasan_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('namaatasan_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('idpelamaratasan_fSeleksiPelamar').setValue(null);
+                    Ext.getCmp('kekaryaanname_fSeleksiPelamar').setValue(null);
 
                     Ext.getCmp('idpelamar_fSeleksiPelamar').setValue(selectedRecord.get('idpelamar'));
                     Ext.getCmp('namalengkap_fSeleksiPelamar').setValue(selectedRecord.get('namalengkap'));
-
+                    Ext.getCmp('companyname_fSeleksiPelamar').setValue(selectedRecord.get('companyname'));
+                    Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').show();
 
                     Ext.getCmp('wGridPelamarListPopup').hide();
             }
         },
         {header: 'idpelamar', dataIndex: 'idpelamar', hidden: true},
+        {header: 'Perusahaan', dataIndex: 'companyname', minWidth: 150},
         {header: 'Nama Lengkap', dataIndex: 'namalengkap', minWidth: 150},
         {header: 'Tgl Lahir', dataIndex: 'tgllahir', minWidth: 150},
         {header: 'Jenis Kelamin', dataIndex: 'sexname', minWidth: 150},

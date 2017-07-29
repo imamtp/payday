@@ -59,6 +59,11 @@ var formSeleksiPelamar = Ext.create('Ext.form.Panel', {
             id: 'idpelamar_fSeleksiPelamar',
             name: 'idpelamar'
         },
+        {
+            xtype: 'hiddenfield',
+            id: 'companyname_fSeleksiPelamar',
+            name: 'companyname'
+        },
         Ext.define('Ext.ux.namajabatan_fPermintaan', {
             extend: 'Ext.form.field.Trigger',
             alias: 'widget.namajabatan_fPermintaan',
@@ -482,6 +487,7 @@ Ext.define('GridSeleksiPelamar', {
                                     Ext.getCmp('BtnSeleksiPelamarSimpan').setDisabled(false);
                                     Ext.getCmp('comboxstatusCalonPelamar_fSeleksiPelamar').setReadOnly(false);
                                     
+                                    Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').hide();
                                 } else {
                                      Ext.Msg.alert("Info", d.message);
                                 }
@@ -533,6 +539,8 @@ Ext.define('GridSeleksiPelamar', {
                                                     Ext.getCmp('comboxstatusCalonPelamar_fSeleksiPelamar').setReadOnly(false);
                                                 }
                                                 // Ext.Msg.alert("Load failed", action.result.errorMessage);
+
+                                                Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').show();
                                             },
                                             failure: function(form, action) {
                                                 Ext.Msg.alert("Load failed", action.result.errorMessage);
@@ -638,6 +646,7 @@ Ext.define('GridSeleksiPelamar', {
                 },
                 success: function(form, action) {
                     // Ext.Msg.alert("Load failed", action.result.errorMessage);
+                    Ext.getCmp('nomorpermintaantk_fSeleksiPelamar').show();
                 },
                 failure: function(form, action) {
                     Ext.Msg.alert("Load failed", action.result.errorMessage);
