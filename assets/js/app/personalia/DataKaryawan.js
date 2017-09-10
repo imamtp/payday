@@ -1,4 +1,9 @@
 
+if(group_id=='2'){
+    var hapusDataBtn = false;
+} else {
+    var hapusDataBtn = true;
+}
 
 Ext.define('GridDataKaryawanModel', {
     extend: 'Ext.data.Model',
@@ -694,6 +699,47 @@ Ext.define('GridDataKaryawan', {
                             }
                         }
                     ]
+                },
+                {
+                    text: 'Hapus Data',
+                    hidden:hapusDataBtn,
+                    iconCls: 'delete-icon',
+                    handler: function () {
+                        var grid = Ext.ComponentQuery.query('GridDataKaryawan')[0];
+                        var selectedRecord = grid.getSelectionModel().getSelection()[0];
+                        var data = grid.getSelectionModel().getSelection();
+                        if (data.length == 0)
+                        {
+                            Ext.Msg.alert('Failure', 'Pilih data terlebih dahulu!');
+                        } else {
+                            Ext.Msg.show({
+                                title: 'Konfirmasi',
+                                msg: 'Apakah anda yakin untuk menghapus data secara permanen ?',
+                                buttons: Ext.Msg.YESNO,
+                                fn: function(btn) {
+                                    if (btn == 'yes') {
+                                        Ext.Ajax.request({
+                                            url: SITE_URL + 'personalia/hapus',
+                                            method: 'POST',
+                                            params: {
+                                                idpelamar: selectedRecord.data.idpelamar
+                                            },
+                                            success: function (form, action) {
+                                                var d = Ext.decode(form.responseText);
+                                                Ext.Msg.alert("Info", d.message);
+            
+                                                Ext.getCmp('GridDataKaryawanID').getStore().load();
+                                            },
+                                            failure: function (form, action) {
+                                                Ext.Msg.alert("Load failed", Ext.decode(action.responseText));
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                            
+                        }
+                    }
                 },
                 // {
 //                     id: 'btnDeleteDataKaryawan',

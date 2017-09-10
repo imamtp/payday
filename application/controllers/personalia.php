@@ -1212,5 +1212,47 @@ class personalia extends MY_Controller {
             echo json_encode(array('success' => true, 'namaptkp' => '','punyanpwp'=>0,'jumlahhari'=>0,'nonpwp'=>'','biayajabatan'=>0,'jenispotonganpph'=>0));
         }
     }
+
+    function hapus(){
+        $this->db->trans_start();
+        
+        $idpelamar = $this->input->post('idpelamar');
+
+        $tables = array(
+            'benefitkaryawan', 
+            'benefithistory',
+            'cuticounter',
+            'identitas',
+            'kehadiran',
+            'keluarga',
+            'lembur',
+            'lemburhistory',
+            'payrolldata',
+            'pelatihan',
+            'pendidikan',
+            'pengajuancuti',
+            'pengajuanizin',
+            'pengalamankerja',
+            'pengurangupahhistory',
+            'pengurangupahkaryawan',
+            'penyesuaian',
+            'pergerakanpersonil',
+            'pergerakanpersonilbawahan',
+            'upahhistory',
+            'upahkaryawan',
+            'upload_upahtt',
+             'calonpelamar',
+            'pelamar');
+        $this->db->where('idpelamar', $idpelamar);
+        $this->db->delete($tables);
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            echo json_encode(array('success' => false, 'message' => 'Hapus data gagal'));
+        } else {
+            $this->db->trans_commit();
+            echo json_encode(array('success' => true, 'message' => 'Hapus data berhasil'));
+        }
+    }
 }
 ?>
