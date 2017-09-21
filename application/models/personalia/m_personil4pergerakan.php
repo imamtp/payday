@@ -11,7 +11,7 @@ class m_personil4pergerakan extends CI_Model {
     }
 
     function searchField() {
-        $field = "a.namalengkap,namajabatan,namaorg,kodeorg,namalokasi";
+        $field = "a.namalengkap,c.namajabatan,e.namaorg,e.kodeorg,namalokasi";
         return explode(",", $field);
     }
 
