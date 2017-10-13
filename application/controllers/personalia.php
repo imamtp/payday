@@ -1254,5 +1254,39 @@ class personalia extends MY_Controller {
             echo json_encode(array('success' => true, 'message' => 'Hapus data berhasil'));
         }
     }
+
+    function export_benefit($idpelamar){
+
+        $sqldt = "select a.idpelamar,a.idbenefit,a.nomorrekening,
+        a.namaakunrekening,a.namabank,a.cabangbank,
+        a.nopolisasuransi,a.nobpjskesehatan,a.nobpjstenagakerja,
+        b.nik,
+        c.namalengkap
+        from benefit a
+        join calonpelamar b ON a.idpelamar = b.idpelamar
+        join pelamar c ON a.idpelamar = c.idpelamar
+        where a.idpelamar = $idpelamar";
+
+        $sqldt_list = "select b.kodebenefit,b.namabenefit
+        from benefitkaryawan a
+        join komponenbenefit b ON a.idbenefit = b.idbenefit
+        where a.idpelamar = $idpelamar";
+
+        $data['dt'] = $this->db->query($sqldt)->result_array()[0];
+        $data['dt_list'] = $this->db->query($sqldt_list)->result_array();
+
+        // $this->load->view('report/data_benefit', $data);
+
+
+        $html = $this->load->view('report/data_benefit', $data,true);
+        $filename = "data_benefit_". $data['dt']['namalengkap'].".xls";
+        header("Content-Type:   application/vnd.ms-excel; charset=utf-8");
+        header("Content-type:   application/x-msexcel; charset=utf-8");
+        header("Content-Disposition: attachment;filename=".$filename.".xls"); //tell browser what's the file name
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Cache-Control: max-age=0");
+        echo $html;
+    }
 }
 ?>

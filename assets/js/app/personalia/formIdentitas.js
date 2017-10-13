@@ -56,7 +56,8 @@ var formIdentitas = Ext.create('Ext.form.Panel', {
             // allowBlank: false,
             name: 'nonpwp'
         },{
-            xtype:'comboxjenisptkp'
+            xtype:'comboxjenisptkp',
+            hidden:true
         }]
     }, {
         items: [

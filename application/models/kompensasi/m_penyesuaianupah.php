@@ -11,7 +11,7 @@ class m_penyesuaianupah extends CI_Model {
     }
 
     function searchField() {
-        $field = "namalengkap";
+        $field = "a.namalengkap,c.namajabatan,e.namaorg,kodeorg,d.namalokasi,k.statuscalon,g.namalengkap,i.levelname,j.levelname,f.kekaryaanname,companyname,a.ni,nik";
         return explode(",", $field);
     }
 

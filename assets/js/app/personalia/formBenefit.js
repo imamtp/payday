@@ -72,7 +72,13 @@ var formBenefit = Ext.create('Ext.form.Panel', {
             name: 'nobpjstenagakerja'
         }]
     }],
-    buttons: [{
+    buttons: [
+    {
+        text: 'Export',
+        handler: function() {
+            window.location = SITE_URL+"personalia/export_benefit/" + Ext.getCmp('idpelamar_dkaryawan').getValue();
+        }
+    }, '->',{
         text: 'Batal',
         handler: function() {
             var win = Ext.getCmp('WindowKaryawan');
