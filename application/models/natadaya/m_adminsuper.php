@@ -41,7 +41,7 @@ class m_adminsuper extends CI_Model {
     }
 
     function whereQuery() {
-        return " c.group_id=2 and a.display is null";
+        return " (c.group_id=2 OR c.group_id is null ) and a.display is null";
     }
 
     function orderBy() {

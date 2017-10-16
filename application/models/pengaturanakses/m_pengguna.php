@@ -107,11 +107,15 @@ class m_pengguna extends CI_Model {
             }
         }
 
-       
+        if($this->input->post('group_name')=='Super Admin'){
+            $group_id = 2;
+        } else {
+            $group_id = $this->m_data->getID('sys_group', 'group_name', 'group_id', $this->input->post('group_name'),$idcompany);
+        }
 
         $data = array(
             'user_id' => $this->input->post('user_id') == '' ? $this->m_data->getSeqVal('seq_user_id') : $this->input->post('user_id'),
-            'group_id' => $this->m_data->getID('sys_group', 'group_name', 'group_id', $this->input->post('group_name'),$idcompany),
+            'group_id' => $group_id,
             'idcompany' => $idcompany,
             'username' => $username,
             'usercode' => $usercode,

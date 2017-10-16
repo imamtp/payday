@@ -1865,9 +1865,17 @@ class Backend extends MY_Controller {
             } else {
                 $wer = null;
             }
+
+
             $where = "display is null $wer";
 
+            if($this->session->userdata('group_id')==2){
+                //superadmin
+                 $where .= " OR group_id = 2";
+            }
+
             $q = $this->db->query("select * from $data where $where");
+            // echo $this->db->last_query();
         } else if ($company) {
             if ($display) {
                 
