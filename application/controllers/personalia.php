@@ -877,6 +877,8 @@ class personalia extends MY_Controller {
           );
         }
 
+
+
       if($state=='insert')
       {
             if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
@@ -923,6 +925,13 @@ class personalia extends MY_Controller {
 
        if($statuspergerakan=='Disetujui')
        {
+            if($idpergerakan==130){
+              //MUTASI ANTAR PERUSAHAAN
+              $q = $this->db->get_where('strukturjabatan',array('idstrukturjabatan'=>$idstrukturjabatan))->row();
+              $this->db->where('idpelamar',$idpelamar);
+              $this->db->update('pelamar',array('idcompany'=>$q->idcompany));
+            }
+
             if($this->input->post('penyesuaianstatus')!='true') //jenis pergerakan penyesuaian upah
             {
                      //update semua bawahan
