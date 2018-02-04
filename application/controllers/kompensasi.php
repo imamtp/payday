@@ -1031,6 +1031,7 @@ class kompensasi extends MY_Controller {
                 //     $this->db->insert('upahhistory',$dupahhistory);
                 // }
             }
+            // echo $proporsionalDays;
             // echo $totalUT;
             $data[$i]['totalUT'] = $totalUT;
             $obj->totalUT = $totalUT;
@@ -1840,7 +1841,7 @@ if($obj->idpelamar==257)
 
             //pph21 cell CA:CF)
             $obj->pph_setahun2 = $this->pph_setahun($obj->ph_kena_pajak,$data[$i]['punyanpwp']);
-            // echo $pph_setahun;
+            // echo $obj->pph_setahun2;
             //end //pph21 cell CA:CF)
 
             $obj->tunjanganpajak = $data[$i]['tunjanganpajak'];
@@ -1951,10 +1952,12 @@ if($obj->idpelamar==257)
 
                         $data[$i]['pkpsetahun'] = $pkpsetahun;
                         $obj->pkpsetahun = $data[$i]['pkpsetahun'];
+                        $arrPKP = explode('.', $obj->pkpsetahun);
                         // echo ' '.$obj->pkpsetahun;
                         // $obj->pkpsetahunteratur =  $obj->pkpsetahun-$penghasilanTT;
                         // $num = intval(substr(($obj->pkpsetahun-$obj->penerimaannetTT), -3));
-                        $num = intval(substr(($obj->pkpsetahun), -3));
+                        $num = intval(substr(($arrPKP[0]), -3));
+                        // echo $num;
                         if($num>=500)
                         {
                             $plus = 1000;
@@ -1962,7 +1965,7 @@ if($obj->idpelamar==257)
                             $plus = 0;
                         }
 
-                        $obj->pkpsetahunteratur = substr(($obj->pkpsetahun), 0, -3) . '000';
+                        $obj->pkpsetahunteratur = substr(($arrPKP[0]), 0, -3) . '000';
                         $obj->pkpsetahunteratur +=$plus;
              
                         ///////////// pph5%tahun
@@ -2167,7 +2170,8 @@ if($obj->idpelamar==257)
                             // $data[$i]['takehomepay'] = ceil($obj->totalUT-($benefitCmp+$benefitEmp)-$obj->pphsebulan);
                         } 
                         
-
+                        // echo $qtglmasuk->tglmasuk.','.$obj->tglakhirjabatan;
+                        // echo $data[$i]['masapajaksetahun'].'<12 && '.diffInMonths($qtglmasuk->tglmasuk,$obj->tglakhirjabatan).'<12';
                         if($data[$i]['masapajaksetahun']<12 && diffInMonths($qtglmasuk->tglmasuk,$obj->tglakhirjabatan)<12)
                         {
                             if($obj->hitungpajak=='GROSS')

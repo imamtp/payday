@@ -195,7 +195,7 @@ var formSuratLembur = Ext.create('Ext.form.Panel', {
         },
         {
             xtype:'numberfield',
-            minValue:30,
+            minValue:0,
             fieldLabel:'Durasi Istirahat (Menit)',
             name:'durasi_istirahat',
             allowBlank:false
