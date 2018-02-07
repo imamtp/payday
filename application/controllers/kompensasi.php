@@ -15,6 +15,69 @@ class kompensasi extends MY_Controller {
         return substr(number_format($num, $precision+1, '.', ''), 0, -1);
     }
 
+      function calc_pph($data,$i,$pkpsetahun)
+    {
+        $obj=new stdClass();
+
+           ///////////// pph5%tahun
+        $pph5tahun = $pkpsetahun <= 50000000 ? $pkpsetahun*0.05 : 50000000*0.05;
+        $data[$i]['pph5%tahun'] = $data[$i]['punyanpwp']==1 ? $pph5tahun : $pph5tahun*1.2; 
+        $obj->pph5tahun = $data[$i]['pph5%tahun'];
+        ///////////// pph5%tahun
+
+        $data[$i]['pph10%tahun'] = 0;
+
+        ///////////// pph15%tahun
+        if($pkpsetahun<=50000000)
+        {
+            $pph15tahun = 0;
+        } else if($pkpsetahun>50000000 && $pkpsetahun<250000000) {
+            $pph15tahun = ($pkpsetahun-50000000)*0.15;
+        } else {
+            $pph15tahun = 200000000*0.15;
+        }
+
+        $data[$i]['pph15%tahun'] = $data[$i]['punyanpwp']==1 ? $pph15tahun : $pph15tahun*1.2; 
+        $obj->pph15tahun = $data[$i]['pph15%tahun'];
+        ///////////////// pph15%tahun
+
+        ///////////// pph25%tahun
+        if($pkpsetahun<=250000000)
+        {
+            $pph25tahun = 0;
+        } else if($pkpsetahun>250000000 && $pkpsetahun<500000000) {
+            $pph25tahun = ($pkpsetahun-250000000)*0.25;
+        } else {
+            $pph25tahun = 250000000*0.25;
+        }
+
+        $data[$i]['pph25%tahun'] = $data[$i]['punyanpwp']==1 ? $pph25tahun : $pph25tahun*1.2; 
+        $obj->pph25tahun = $data[$i]['pph25%tahun'];
+        ///////////////// pph25%tahun
+
+        ///////////// pph30%tahun
+        if($pkpsetahun<=500000000)
+        {
+            $pph30tahun = 0;
+        } else if($pkpsetahun>500000000) {
+            $pph30tahun = ($pkpsetahun-500000000)*0.30;
+        } else {
+            $pph30tahun = 500000000*0.30;
+        }
+
+        $data[$i]['pph30%tahun'] = $data[$i]['punyanpwp']==1 ? $pph30tahun : $pph30tahun*1.2; 
+        $obj->pph25tahun = $data[$i]['pph30%tahun'];
+        ///////////////// pph30%tahun
+
+        // $data[$i]['pph30%tahun'] = ($pkpsetahun*0.30)/12;
+        $data[$i]['pph35%tahun'] = 0;
+        $obj->pph35tahun = $data[$i]['pph35%tahun'];
+
+        $data[$i]['pphsettahun'] = $data[$i]['pph5%tahun']+$data[$i]['pph10%tahun']+$data[$i]['pph15%tahun']+$data[$i]['pph25%tahun']+$data[$i]['pph30%tahun']+$data[$i]['pph35%tahun'];
+        $obj->pphsettahun = $data[$i]['pphsettahun'];
+        return $obj->pphsettahun;
+    }
+
     function cek_terminasi($startdate,$enddate,$terminate_date)
     {
         // echo $startdate.','.$enddate;
@@ -1264,7 +1327,7 @@ class kompensasi extends MY_Controller {
                             if($rUTTTahun->fungsipajak=='Penambah')
                             {
                                 $utTTahunPenambahPajak+=$nilai;
-                                $penghasilanbruto+=$nilai;
+                                // $penghasilanbruto+=$nilai;
                                 $penghasilanbrutoTT+=$nilai;
                             } else if($rUTTTahun->fungsipajak=='Pengurang')
                             {
@@ -1774,6 +1837,7 @@ class kompensasi extends MY_Controller {
             $obj->penghasilanbrutoT = $penghasilanbrutoT;
             $obj->penghasilanbrutoTT = $penghasilanbrutoTT;
             $obj->penerimaanbruto =  $data[$i]['penerimaanbruto'];
+            // echo $obj->penerimaanbruto.' + '.$data[$i]['totalUTTTahun'];
             $obj->penerimaanbruto_total = $obj->penerimaanbruto + $data[$i]['totalUTTTahun'];
             $data[$i]['penerimaanbruto_total'] = $obj->penerimaanbruto_total;
 
@@ -1847,49 +1911,72 @@ if($obj->idpelamar==257)
             $obj->tunjanganpajak = $data[$i]['tunjanganpajak'];
 
             // $biayajabatan = ceil($data[$i]['penerimaanbruto']*0.05);
-            $obj->biayajabatanT = $penghasilanbrutoT*0.05;
-            
+            $obj->biayajabatanT = $data[$i]['penerimaanbruto']*0.05;
+            // echo $data[$i]['penerimaanbruto'].' : '.$penghasilanbrutoT;
+                // =IF(
+            //     500000<=AU4,
+            //     0,
+            //     IF(
+            //             AS4*0.05+AU4>500000,
+            //             (500000)-AU4,
+            //             AS4*0.05
+            //         )
+            // )
+
+            // echo $obj->biayajabatanT.'  -   ';
+            //start biaya jabatan tidak teratur/ utt tahunan
+            $obj->biayajabatanTT = 0;
             if(500000<=$obj->biayajabatanT)
             {
                 $obj->biayajabatanTT = 0;
-            } else if((($obj->totalUTT*0.05)+$obj->biayajabatanT) > 500000)
+            } else if((($obj->totalUTTTahun*0.05)+$obj->biayajabatanT) > 500000)
                 {
                     $obj->biayajabatanTT = 500000-$obj->biayajabatanT;
+                    // echo '500000 -'.$obj->biayajabatanT;
                 } else {
-                        $obj->biayajabatanTT = $obj->totalUTT*0.05;
+                        $obj->biayajabatanTT = $obj->totalUTTTahun*0.05;
                 }   
+            // $obj->biayajabatanTT = $obj->biayajabatanTT>500000 ? 500000 : $obj->biayajabatanTT;
+            // $obj->biayajabatanTT = $penghasilanbrutoTT*0.05; //biaya jabatan tidak teratur,tidak teteap tahunan
 
-            // $obj->biayajabatanTT = $penghasilanbrutoTT*0.05; //biaya jabatan tidak teratur
+            $biayajabatan = ($data[$i]['penerimaanbruto']*0.05)+$obj->biayajabatanTT;
 
-            $biayajabatan = $data[$i]['penerimaanbruto']*0.05;
+            // echo $biayajabatan;
+            $data[$i]['numdayswork'] = $numdayswork;
+            // echo 'biayajabatan'.$rpeg->biayajabatan;
+            if($rpeg->biayajabatan==1 || $rpeg->biayajabatan==null || $rpeg->biayajabatan==0)
+            {
+                if($bulanGaji!='12')
+                {
+                    $data[$i]['biayajabatan'] = $biayajabatan<=500000 ? $biayajabatan : 500000;
+                } else {
+                    $data[$i]['biayajabatan'] = 0;
+                }
+            } else {
+                $data[$i]['biayajabatan'] = 0;
+            }
+            $obj->biayajabatan = $data[$i]['biayajabatan'];
 
-                        $data[$i]['numdayswork'] = $numdayswork;
-                        // echo 'biayajabatan'.$rpeg->biayajabatan;
-                        if($rpeg->biayajabatan==1 || $rpeg->biayajabatan==null || $rpeg->biayajabatan==0)
-                        {
-                            if($bulanGaji!='12')
-                            {
-                                $data[$i]['biayajabatan'] = $biayajabatan<=500000 ? $biayajabatan : 500000;
-                            } else {
-                                $data[$i]['biayajabatan'] = 0;
-                            }
-                        } else {
-                            $data[$i]['biayajabatan'] = 0;
-                        }
-                        $obj->biayajabatan = $data[$i]['biayajabatan'];
+            $obj->biayajabatanT = $obj->biayajabatanT>500000 ? 500000 : $obj->biayajabatanT; //biaya jabatan teratur ga boleh lebih dari 500rb
                         // echo 'biayajabatan:'+$obj->biayajabatan;
                         // exit;
                         $totalPengurangPajak = ($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
 
                         // echo $penghasilanbrutoT.'-'.$obj->biayajabatanT.'-'.$totalPengurangPajak;
-                        $obj->penerimaannetT = $penghasilanbrutoT-$obj->biayajabatanT-$totalPengurangPajak; //neto sebulan teratur
-                        $obj->penerimaannetTT = $penghasilanTT-$obj->biayajabatanTT; //neto sebulan tidak teratur
+                        // echo $obj->penerimaanbruto_total.'-'.$obj->biayajabatanT.'-'.$totalPengurangPajak;
+                        $obj->penerimaannet_sebulan = $obj->penerimaanbruto_total-$obj->biayajabatan-$totalPengurangPajak; //neto sebulan
+                        // echo $obj->penerimaannet_sebulan;
+                        // echo $obj->penerimaanbruto.'-'.$obj->biayajabatanT.'-'.$totalPengurangPajak;
+                        $obj->penerimaannetT = $obj->penerimaanbruto-$obj->biayajabatanT-$totalPengurangPajak; //neto sebulan teratur
+                        // echo $obj->penerimaannetT.' - ';
+                        $obj->penerimaannetTT = $totalUTTTahun-$obj->biayajabatanTT; //neto sebulan tidak teratur
+                        // echo $obj->penerimaannetTT;
                         // $obj->penerimaannetTT = $obj->biayajabatanTT; //tanpa penghasilan bulanan tidak teratur
 
                         // $obj->penghasilannetTT = 
                         $penghasilannet = $data[$i]['penerimaanbruto']-($data[$i]['biayajabatan'])-$totalPengurangPajak;
                          // $penghasilannet = $pengha-($data[$i]['biayajabatan'])-($utPengurangPajak+$utTPengurangPajak+$data[$i]['upahlemburKurangPajak']+$benefitPengurangPajak);
-                        // echo $benefitPengurangPajak;
+                        // echo $penghasilannet;
 
                         // echo $obj->totalUTT;                        
                         $totalpendapatan =  $data[$i]['totalUT']+$obj->totalUTT+$obj->totallembur+$obj->benefitCmp+ $data[$i]['tunjanganpajak'];
@@ -1922,8 +2009,12 @@ if($obj->idpelamar==257)
                         // $data[$i]['netosetahun'] = ($obj->penerimaannetT*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT;
                         // $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT;//update
                         // echo $obj->penerimaannet;
-                        $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun']); //tanpa upah bulanan tidak teratur
+                        // $data[$i]['netosetahun'] = ($obj->penerimaannet*$data[$i]['masapajaksetahun']); //tanpa upah bulanan tidak teratur
+                        // $obj->netosetahun = $data[$i]['netosetahun'];
+                        // echo '('.$obj->penerimaannetT.'*'.$data[$i]['masapajaksetahun'].')'.'+'.$obj->penerimaannetTT;
+                         $data[$i]['netosetahun'] = ($obj->penerimaannetT*$data[$i]['masapajaksetahun'])+$obj->penerimaannetTT; //tanpa upah bulanan tidak teratur
                         $obj->netosetahun = $data[$i]['netosetahun'];
+
                         // echo $obj->netosetahun ;
                         // echo  $netsetahun.'<'.$nilaiptkp;
 
@@ -1950,6 +2041,8 @@ if($obj->idpelamar==257)
                             // print_r($pkpsetArr);
                         }
 
+                      
+
                         $data[$i]['pkpsetahun'] = $pkpsetahun;
                         $obj->pkpsetahun = $data[$i]['pkpsetahun'];
                         $arrPKP = explode('.', $obj->pkpsetahun);
@@ -1965,65 +2058,105 @@ if($obj->idpelamar==257)
                             $plus = 0;
                         }
 
+                        $obj->pkpsetahun = substr(($arrPKP[0]), 0, -3) . '000';
+                        $obj->pkpsetahun +=$plus;
+
+                        
+                        //pkp teratur
+                        if(($obj->netosetahun-$obj->penerimaannetTT)<=$nilaiptkp)
+                        {
+                            $pkpsetahunteratur = 0;
+                        } else {
+                            $pkpsetahunteratur = round((($obj->netosetahun-$obj->penerimaannetTT)-$nilaiptkp),3);
+
+                            if($pkpsetahunteratur>10000000)
+                            {
+                                $pkpsetArr = explode(',', number_format($pkpsetahunteratur));
+                                $pkpsetahunteratur = $pkpsetArr[0].$pkpsetArr[1].'000';
+                            }
+                        }
+                        
+                        $data[$i]['pkpsetahunteratur'] = $pkpsetahunteratur;
+                        $obj->pkpsetahunteratur = $data[$i]['pkpsetahunteratur'];
+                        $arrPKP = explode('.', $obj->pkpsetahunteratur);
+                        // echo ' '.$obj->pkpsetahun;
+                        // $obj->pkpsetahunteratur =  $obj->pkpsetahun-$penghasilanTT;
+                        // $num = intval(substr(($obj->pkpsetahun-$obj->penerimaannetTT), -3));
+                        $num = intval(substr(($arrPKP[0]), -3));
+                        // echo $num;
+                        if($num>=500)
+                        {
+                            $plus = 1000;
+                        } else {
+                            $plus = 0;
+                        }
+
                         $obj->pkpsetahunteratur = substr(($arrPKP[0]), 0, -3) . '000';
                         $obj->pkpsetahunteratur +=$plus;
+
+                        // echo $obj->pkpsetahun-$obj->pkpsetahunteratur;
+                         //end pkp teatur
              
                         ///////////// pph5%tahun
-                        $pph5tahun = $pkpsetahun <= 50000000 ? $pkpsetahun*0.05 : 50000000*0.05;
-                        $data[$i]['pph5%tahun'] = $data[$i]['punyanpwp']==1 ? $pph5tahun : $pph5tahun*1.2; 
-                        $obj->pph5tahun = $data[$i]['pph5%tahun'];
-                        ///////////// pph5%tahun
+                        // $pph5tahun = $pkpsetahun <= 50000000 ? $pkpsetahun*0.05 : 50000000*0.05;
+                        // $data[$i]['pph5%tahun'] = $data[$i]['punyanpwp']==1 ? $pph5tahun : $pph5tahun*1.2; 
+                        // $obj->pph5tahun = $data[$i]['pph5%tahun'];
+                        // ///////////// pph5%tahun
 
-                        $data[$i]['pph10%tahun'] = 0;
+                        // $data[$i]['pph10%tahun'] = 0;
 
-                        ///////////// pph15%tahun
-                        if($pkpsetahun<=50000000)
-                        {
-                            $pph15tahun = 0;
-                        } else if($pkpsetahun>50000000 && $pkpsetahun<250000000) {
-                            $pph15tahun = ($pkpsetahun-50000000)*0.15;
-                        } else {
-                            $pph15tahun = 200000000*0.15;
-                        }
+                        // ///////////// pph15%tahun
+                        // if($pkpsetahun<=50000000)
+                        // {
+                        //     $pph15tahun = 0;
+                        // } else if($pkpsetahun>50000000 && $pkpsetahun<250000000) {
+                        //     $pph15tahun = ($pkpsetahun-50000000)*0.15;
+                        // } else {
+                        //     $pph15tahun = 200000000*0.15;
+                        // }
 
-                        $data[$i]['pph15%tahun'] = $data[$i]['punyanpwp']==1 ? $pph15tahun : $pph15tahun*1.2; 
-                        $obj->pph15tahun = $data[$i]['pph15%tahun'];
-                        ///////////////// pph15%tahun
+                        // $data[$i]['pph15%tahun'] = $data[$i]['punyanpwp']==1 ? $pph15tahun : $pph15tahun*1.2; 
+                        // $obj->pph15tahun = $data[$i]['pph15%tahun'];
+                        // ///////////////// pph15%tahun
 
-                        ///////////// pph25%tahun
-                        if($pkpsetahun<=250000000)
-                        {
-                            $pph25tahun = 0;
-                        } else if($pkpsetahun>250000000 && $pkpsetahun<500000000) {
-                            $pph25tahun = ($pkpsetahun-250000000)*0.25;
-                        } else {
-                            $pph25tahun = 250000000*0.25;
-                        }
+                        // ///////////// pph25%tahun
+                        // if($pkpsetahun<=250000000)
+                        // {
+                        //     $pph25tahun = 0;
+                        // } else if($pkpsetahun>250000000 && $pkpsetahun<500000000) {
+                        //     $pph25tahun = ($pkpsetahun-250000000)*0.25;
+                        // } else {
+                        //     $pph25tahun = 250000000*0.25;
+                        // }
 
-                        $data[$i]['pph25%tahun'] = $data[$i]['punyanpwp']==1 ? $pph25tahun : $pph25tahun*1.2; 
-                        $obj->pph25tahun = $data[$i]['pph25%tahun'];
-                        ///////////////// pph25%tahun
+                        // $data[$i]['pph25%tahun'] = $data[$i]['punyanpwp']==1 ? $pph25tahun : $pph25tahun*1.2; 
+                        // $obj->pph25tahun = $data[$i]['pph25%tahun'];
+                        // ///////////////// pph25%tahun
 
-                        ///////////// pph30%tahun
-                        if($pkpsetahun<=500000000)
-                        {
-                            $pph30tahun = 0;
-                        } else if($pkpsetahun>500000000) {
-                            $pph30tahun = ($pkpsetahun-500000000)*0.30;
-                        } else {
-                            $pph30tahun = 500000000*0.30;
-                        }
+                        // ///////////// pph30%tahun
+                        // if($pkpsetahun<=500000000)
+                        // {
+                        //     $pph30tahun = 0;
+                        // } else if($pkpsetahun>500000000) {
+                        //     $pph30tahun = ($pkpsetahun-500000000)*0.30;
+                        // } else {
+                        //     $pph30tahun = 500000000*0.30;
+                        // }
 
-                        $data[$i]['pph30%tahun'] = $data[$i]['punyanpwp']==1 ? $pph30tahun : $pph30tahun*1.2; 
-                        $obj->pph25tahun = $data[$i]['pph30%tahun'];
-                        ///////////////// pph30%tahun
+                        // $data[$i]['pph30%tahun'] = $data[$i]['punyanpwp']==1 ? $pph30tahun : $pph30tahun*1.2; 
+                        // $obj->pph25tahun = $data[$i]['pph30%tahun'];
+                        // ///////////////// pph30%tahun
 
-                        // $data[$i]['pph30%tahun'] = ($pkpsetahun*0.30)/12;
-                        $data[$i]['pph35%tahun'] = 0;
-                        $obj->pph35tahun = $data[$i]['pph35%tahun'];
+                        // // $data[$i]['pph30%tahun'] = ($pkpsetahun*0.30)/12;
+                        // $data[$i]['pph35%tahun'] = 0;
+                        // $obj->pph35tahun = $data[$i]['pph35%tahun'];
 
-                        $data[$i]['pphsettahun'] = $data[$i]['pph5%tahun']+$data[$i]['pph10%tahun']+$data[$i]['pph15%tahun']+$data[$i]['pph25%tahun']+$data[$i]['pph30%tahun']+$data[$i]['pph35%tahun'];
-                        $obj->pphsettahun = $data[$i]['pphsettahun'];
+                        // $data[$i]['pphsettahun'] = $data[$i]['pph5%tahun']+$data[$i]['pph10%tahun']+$data[$i]['pph15%tahun']+$data[$i]['pph25%tahun']+$data[$i]['pph30%tahun']+$data[$i]['pph35%tahun'];
+                        // // $obj->pphsettahun = $data[$i]['pphsettahun'];
+                        $obj->pphsettahun = $this->calc_pph($data,$i,$obj->pkpsetahun);
+                        $data[$i]['pphsettahun'] = $obj->pphsettahun;
+
+                        $obj->pphsettahunteratur = $this->calc_pph($data,$i,$obj->pkpsetahunteratur); 
                         // echo $obj->pphsettahun;
 
                         // $pphsetsebulan = $data[$i]['pphsettahun']/$data[$i]['masapajaksetahun'];
@@ -2038,7 +2171,7 @@ if($obj->idpelamar==257)
 
                         // $obj->pphsettahunteratur =  round($obj->pphsebulanteratur*$obj->masapajaksetahun,-1);
                         // echo $obj->pphsebulanteratur.'*'.$obj->masapajaksetahun;
-                        $obj->pphsettahunteratur =  $obj->pphsettahun;
+                        // $obj->pphsettahunteratur =  $obj->pphsettahun;
                        // echo $pphsetsebulan .' ';
 // echo $obj->pphsettahun-$obj->pphsettahunteratur;
                         // if($obj->pphsettahun>$obj->pphsettahunteratur)
@@ -2338,10 +2471,10 @@ if($obj->idpelamar==257)
                         "penerimaannet" =>$data[$i]['penerimaannet'],
                         "netosetahun" => intval($enddateArr[1]) == 12 ? 0 : $data[$i]['netosetahun'],
                         "pkpsetahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pkpsetahun'],
-                        "pph5tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph5%tahun'],
-                        "pph15tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph15%tahun'],
-                        "pph25tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph25%tahun'],
-                        "pph35tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph35%tahun'],
+                        // "pph5tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph5%tahun'],
+                        // "pph15tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph15%tahun'],
+                        // "pph25tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph25%tahun'],
+                        // "pph35tahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pph35%tahun'],
                         "pphsettahun" =>intval($enddateArr[1]) == 12 ? 0 : $data[$i]['pphsettahun'],
                         "pphsebulan" =>$obj->pphsebulan,
                         "pajakjantonov"=>$data[$i]['pajakjantonov'],

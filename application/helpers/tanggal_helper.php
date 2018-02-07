@@ -193,8 +193,46 @@ function endCycle($d1, $months)
     return $dateReturned;
 }
 
+function validateDateTime($date, $format)
+{
+    /*  validateDateTime('2001-03-10 17:16:18', 'Y-m-d H:i:s');                             // true
+        validateDateTime('2001-03-10', 'Y-m-d');                                            // true
+        validateDateTime('2001', 'Y');                                                      // true
+        validateDateTime('Mon', 'D');                                                       // true
+        validateDateTime('March 10, 2001, 5:16 pm', 'F j, Y, g:i a');                       // true
+        validateDateTime('March 10, 2001, 5:16 pm', 'F j, Y, g:i a');                       // true
+        validateDateTime('03.10.01', 'm.d.y');                                              // true
+        validateDateTime('10, 3, 2001', 'j, n, Y');                                         // true
+        validateDateTime('20010310', 'Ymd');                                                // true
+        validateDateTime('05-16-18, 10-03-01', 'h-i-s, j-m-y');                             // true
+        validateDateTime('Monday 8th of August 2005 03:12:46 PM', 'l jS \of F Y h:i:s A');  // true
+        validateDateTime('Wed, 25 Sep 2013 15:28:57', 'D, d M Y H:i:s');                    // true
+        validateDateTime('17:03:18 is the time', 'H:m:s \i\s \t\h\e \t\i\m\e');             // true
+        validateDateTime('17:16:18', 'H:i:s');                                              // true
+
+        // Will fail
+        validateDateTime('2001-03-10 17:16:18', 'Y-m-D H:i:s'); // false
+        validateDateTime('2001', 'm');                          // false
+        validateDateTime('Mon', 'D-m-y');                       // false
+        validateDateTime('Mon', 'D-m-y');                       // false
+        validateDateTime('2001-13-04', 'Y-m-d');                // false
+    */
+
+    date_default_timezone_set('UTC');
+    $d = DateTime::createFromFormat($format, $date);
+    if($d && $d->format($format) === $date) {
+
+        return true;
+    } else {
+
+        return false;
+    }
+}
+
 function validasitgl($no,$jenis,$date)
     {
+        // print_r($date); //01.04.2017
+
         $tgl = explode(".", $date);
 
         $bulan = isset($tgl[1]) ? intval($tgl[1]) : null;
@@ -204,12 +242,15 @@ function validasitgl($no,$jenis,$date)
         {
             $status = false;            
         } else if($bulan>12) {
-            $status = false;
-        } 
-        else {
-            $status = true;
-            $message = null;
-        }
+                $status = false;
+            } else if(!validateDateTime($tgl[2].'-'.$tgl[1].'-'.$tgl[0], 'Y-m-d'))
+                {
+                    $message = 'Error data NO ' . $no .' Tanggal Salah: ';
+                     $status = false;
+                } else {
+                        $status = true;
+                        $message = null;
+                    }
         return array('message'=>$message,'status'=>$status);
     }
 
