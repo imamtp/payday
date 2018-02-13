@@ -703,6 +703,9 @@ class kompensasi extends MY_Controller {
         $data=array();
         $arrJson=array();
         $i=0;
+
+        $data[$i]['durasi'] = $numdayswork;
+        $obj->durasi = $numdayswork;
         
         // $this->load->library('../controllers/kehadiran');
         $this->load->model('kompensasi/m_configdasarupahtt');
@@ -952,7 +955,24 @@ class kompensasi extends MY_Controller {
           
             //end query tgl akhir kerja
 
+              //hitung durasi kalo dalam bulan yg sama
+            // $paymentDate=date('Y-m-d', strtotime($tglakhirjabatan));
+            // $contractDateBegin = date('Y-m-d', strtotime($obj->startdate));
+            // $contractDateEnd = date('Y-m-d', strtotime($obj->enddate));
 
+            // // echo $paymentDate.' '.$contractDateBegin.'-'.$contractDateEnd;
+            // // $terminateInSameMonth = false;
+            // if (($paymentDate > $contractDateBegin) && ($paymentDate < $contractDateEnd))
+            // {
+            //   // echo "is between";
+            //     $obj->durasi = countDaysMonth($obj->startdate,$tglakhirjabatan)->days+1;
+            //     // $numdayswork = $obj->durasi;
+            //     // var_dump($obj->durasi);
+            // }
+            // else
+            // {
+            //   // echo "NO GO!";  
+            // }
 
             //cek udah terminate apa belum
             $qterminateYet = $this->db->query("select max(a.tglmasuk) as tglberakhir
@@ -1052,6 +1072,7 @@ class kompensasi extends MY_Controller {
                     $totalUT+=$nilaiUT;
                     // echo round(($rUT->nilai/$numdayswork)*$proporsionalDays,2).' ';
                     // echo '('.$rUT->nilai.'/'.$numdayswork.'*'.$proporsionalDays.') ';
+                    // echo round($rUT->nilai/$numdayswork).'  ';
                 } else {
                     $nilaiUT = $rUT->nilai;
                     $totalUT+=$nilaiUT;
@@ -3049,6 +3070,9 @@ if($obj->idpelamar==257)
         $arrJson=array();
         $i=0;
         
+        $data[$i]['durasi'] = $numdayswork;
+        $obj->durasi = $numdayswork;
+
         // $this->load->library('../controllers/kehadiran');
         $this->load->model('kompensasi/m_configdasarupahtt');
         foreach ($qpeg->result() as $rpeg) {
@@ -3117,8 +3141,7 @@ if($obj->idpelamar==257)
             $data[$i]['kehadiran'] = $absen[0]->hadir;
             $obj->kehadiran = $absen[0]->hadir;
             
-            $data[$i]['durasi'] = $numdayswork;
-            $obj->durasi = $numdayswork;
+           
 
             if($rpeg->jenispotonganpph==1 || $rpeg->jenispotonganpph==0 || $rpeg->jenispotonganpph==null)
             {
@@ -3201,7 +3224,22 @@ if($obj->idpelamar==257)
             }
             $data[$i]['tglakhirjabatan'] = $tglakhirjabatan;
             $obj->tglakhirjabatan = $tglakhirjabatan;
-            //end query tgl akhir kerja
+            //end query tgl akhir kerja 
+
+            //hitung durasi kalo dalam bulan yg sama
+            $paymentDate=date('Y-m-d', strtotime($tglakhirjabatan));
+            $contractDateBegin = date('Y-m-d', strtotime($obj->startdate));
+            $contractDateEnd = date('Y-m-d', strtotime($obj->startdate));
+
+            echo $paymentDate.' '.$contractDateBegin.'-'.$contractDateEnd;
+            if (($paymentDate > $contractDateBegin) && ($paymentDate < $contractDateEnd))
+            {
+              echo "is between";
+            }
+            else
+            {
+              echo "NO GO!";  
+            }
 
             //cek udah terminate apa belum
             $qterminateYet = $this->db->query("select max(a.tglmasuk) as tglberakhir
